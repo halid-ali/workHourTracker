@@ -38,3 +38,5 @@ app.*.symbols
 app.*.map.json
 ssh-key-guess-game.txt.pub
 ssh-key-guess-game.txt
+
+/lib/generated
