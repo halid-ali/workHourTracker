@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:work_hour_tracker/classes/work_hour_slot.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
+import 'package:work_hour_tracker/widgets/track_button.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({Key key, this.title}) : super(key: key);
@@ -89,16 +90,33 @@ class _MainScreen extends State<MainScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _getButton(Icons.play_arrow_sharp, Colors.green,
-                          _startFunc, _isStarted),
+                      TrackButton(
+                        icon: Icons.play_arrow_sharp,
+                        color: Colors.green,
+                        onPressCallback: _startFunc,
+                        isActiveCallback: () => _isStarted,
+                      ),
                       SizedBox(width: 20),
-                      _getButton(Icons.pause_sharp, Colors.blue, _breakFunc,
-                          _isPaused),
+                      TrackButton(
+                        icon: Icons.pause_sharp,
+                        color: Colors.blue,
+                        onPressCallback: _breakFunc,
+                        isActiveCallback: () => _isPaused,
+                      ),
                       SizedBox(width: 20),
-                      _getButton(
-                          Icons.stop_sharp, Colors.red, _stopFunc, _isStopped),
+                      TrackButton(
+                        icon: Icons.stop_sharp,
+                        color: Colors.red,
+                        onPressCallback: _stopFunc,
+                        isActiveCallback: () => _isStopped,
+                      ),
                       SizedBox(width: 20),
-                      _getButton(Icons.save_sharp, Colors.amber, () {}, true),
+                      TrackButton(
+                        icon: Icons.save_sharp,
+                        color: Colors.amber,
+                        onPressCallback: () {},
+                        isActiveCallback: () => true,
+                      ),
                     ],
                   ),
                 ),
@@ -134,34 +152,6 @@ class _MainScreen extends State<MainScreen> {
           ),
         ),
         drawer: Drawer(),
-      ),
-    );
-  }
-
-  Widget _getButton(IconData icon, Color color, Function func, bool status) {
-    return Expanded(
-      child: FittedBox(
-        fit: BoxFit.fitWidth,
-        child: ElevatedButton(
-          onPressed: () => func(),
-          child: Icon(icon),
-          style: ButtonStyle(
-            elevation: MaterialStateProperty.all(0),
-            backgroundColor:
-                MaterialStateProperty.all(status ? color : Colors.grey),
-            padding: MaterialStateProperty.all(
-              EdgeInsets.symmetric(
-                vertical: 10,
-                horizontal: 20,
-              ),
-            ),
-            shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero,
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
