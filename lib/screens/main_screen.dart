@@ -85,41 +85,7 @@ class _MainScreen extends State<MainScreen> {
                   ),
                 ),
                 SizedBox(height: 20),
-                FractionallySizedBox(
-                  widthFactor: 1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TrackButton(
-                        icon: Icons.play_arrow_sharp,
-                        color: Colors.green,
-                        onPressCallback: _startFunc,
-                        isActiveCallback: () => _isStarted,
-                      ),
-                      SizedBox(width: 20),
-                      TrackButton(
-                        icon: Icons.pause_sharp,
-                        color: Colors.blue,
-                        onPressCallback: _breakFunc,
-                        isActiveCallback: () => _isPaused,
-                      ),
-                      SizedBox(width: 20),
-                      TrackButton(
-                        icon: Icons.stop_sharp,
-                        color: Colors.red,
-                        onPressCallback: _stopFunc,
-                        isActiveCallback: () => _isStopped,
-                      ),
-                      SizedBox(width: 20),
-                      TrackButton(
-                        icon: Icons.save_sharp,
-                        color: Colors.amber,
-                        onPressCallback: () {},
-                        isActiveCallback: () => true,
-                      ),
-                    ],
-                  ),
-                ),
+                _buildButtons(),
                 SizedBox(height: 20),
                 _buildListHeader(),
                 SizedBox(height: 2),
@@ -151,7 +117,59 @@ class _MainScreen extends State<MainScreen> {
             ),
           ),
         ),
-        drawer: Drawer(),
+        drawer: Drawer(
+          child: Column(
+            children: [
+              DrawerHeader(
+                child: Icon(
+                  Icons.timer_sharp,
+                  size: 90,
+                ),
+              ),
+              Container(
+                child: Text('My drawer'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButtons() {
+    return FractionallySizedBox(
+      widthFactor: 1,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          TrackButton(
+            icon: Icons.play_arrow_sharp,
+            color: Colors.green,
+            onPressCallback: _startFunc,
+            isActiveCallback: () => _isStarted,
+          ),
+          SizedBox(width: 20),
+          TrackButton(
+            icon: Icons.pause_sharp,
+            color: Colors.blue,
+            onPressCallback: _breakFunc,
+            isActiveCallback: () => _isPaused,
+          ),
+          SizedBox(width: 20),
+          TrackButton(
+            icon: Icons.stop_sharp,
+            color: Colors.red,
+            onPressCallback: _stopFunc,
+            isActiveCallback: () => _isStopped,
+          ),
+          SizedBox(width: 20),
+          TrackButton(
+            icon: Icons.save_sharp,
+            color: Colors.amber,
+            onPressCallback: () {},
+            isActiveCallback: () => true,
+          ),
+        ],
       ),
     );
   }
