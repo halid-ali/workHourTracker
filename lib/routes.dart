@@ -10,7 +10,7 @@ class RouteGenerator {
     switch (settings.name) {
       case homePage:
         return MaterialPageRoute<MainScreen>(
-          builder: (_) => MainScreen(),
+          builder: (_) => MainScreen(title: 'Work Hour Tracker'),
         );
       default:
         throw RouteException("Route not found.");
