@@ -1,53 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:work_hour_tracker/routes.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(WorkHourTracker());
 }
 
-class MyApp extends StatelessWidget {
+class WorkHourTracker extends StatefulWidget {
+  @override
+  _WorkHourTrackerState createState() => _WorkHourTrackerState();
+}
+
+class _WorkHourTrackerState extends State<WorkHourTracker> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
+      initialRoute: RouteGenerator.homePage,
+      onGenerateRoute: RouteGenerator.generateRoute,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
