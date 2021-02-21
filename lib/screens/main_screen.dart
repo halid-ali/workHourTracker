@@ -6,15 +6,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:work_hour_tracker/classes/status.dart';
 import 'package:work_hour_tracker/classes/work_hour_slot.dart';
+import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
+import 'package:work_hour_tracker/widgets/app_drawer.dart';
 import 'package:work_hour_tracker/widgets/header_footer.dart';
 import 'package:work_hour_tracker/widgets/header_footer_column.dart';
 import 'package:work_hour_tracker/widgets/track_button.dart';
 
 class MainScreen extends StatefulWidget {
-  MainScreen({Key key, this.title}) : super(key: key);
-
-  final String title;
+  MainScreen({Key key}) : super(key: key);
 
   @override
   _MainScreen createState() => _MainScreen();
@@ -54,7 +54,7 @@ class _MainScreen extends State<MainScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-              '${widget.title} ${PlatformInfo.isWeb() ? 'Web' : 'Mobile'}'),
+              '${S.of(context).appTitle} ${PlatformInfo.isWeb() ? 'Web' : 'Mobile'}'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -79,7 +79,7 @@ class _MainScreen extends State<MainScreen> {
                     underline: Container(),
                     value: _selectedOption,
                     hint: Text(
-                      'Select an option',
+                      S.of(context).dropdownDefault,
                       style: GoogleFonts.openSans(fontSize: 19),
                     ),
                     items: _options.map((String option) {
@@ -132,21 +132,7 @@ class _MainScreen extends State<MainScreen> {
             ),
           ),
         ),
-        drawer: Drawer(
-          child: Column(
-            children: [
-              DrawerHeader(
-                child: Icon(
-                  Icons.timer_sharp,
-                  size: 90,
-                ),
-              ),
-              Container(
-                child: Text('My drawer'),
-              ),
-            ],
-          ),
-        ),
+        drawer: AppDrawer(),
       ),
     );
   }
@@ -248,22 +234,14 @@ class _MainScreen extends State<MainScreen> {
       columns: [
         HeaderFooterColumn(
           flex: 4,
-          text: 'Option',
+          text: S.of(context).listHeaderOption,
           textColor: textColor,
           borderColor: borderColor,
           backgroundColor: backgroundColor,
         ),
         HeaderFooterColumn(
           flex: 2,
-          text: 'Start',
-          textColor: textColor,
-          borderColor: borderColor,
-          backgroundColor: backgroundColor,
-          alignment: Alignment.center,
-        ),
-        HeaderFooterColumn(
-          flex: 2,
-          text: 'Break',
+          text: S.of(context).listHeaderStart,
           textColor: textColor,
           borderColor: borderColor,
           backgroundColor: backgroundColor,
@@ -271,7 +249,15 @@ class _MainScreen extends State<MainScreen> {
         ),
         HeaderFooterColumn(
           flex: 2,
-          text: 'Work',
+          text: S.of(context).listHeaderBreak,
+          textColor: textColor,
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
+          alignment: Alignment.center,
+        ),
+        HeaderFooterColumn(
+          flex: 2,
+          text: S.of(context).listHeaderWork,
           textColor: textColor,
           borderColor: borderColor,
           backgroundColor: backgroundColor,
@@ -383,7 +369,7 @@ class _MainScreen extends State<MainScreen> {
       columns: [
         HeaderFooterColumn(
           flex: 6,
-          text: 'Totals',
+          text: S.of(context).footerTotal,
           textColor: textColor,
           borderColor: borderColor,
           backgroundColor: backgroundColor,

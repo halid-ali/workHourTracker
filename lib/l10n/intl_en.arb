@@ -1,1 +1,31 @@
-{}
+{
+    "@@locale": "en",
+    "appTitle": "Work Hour Tracker",
+    "@appTitle": {
+        "description": "Application title"
+    },
+    "dropdownDefault": "Select an option",
+    "@dropdownDefault": {
+        "description": "Default text in dropdown menu"
+    },
+    "listHeaderOption": "Option",
+    "@listHeaderOption": {
+        "description": "Option column header"
+    },
+    "listHeaderStart": "Start",
+    "@listHeaderStart": {
+        "description": "Start column header"
+    },
+    "listHeaderBreak": "Break",
+    "@listHeaderBreak": {
+        "description": "Break column header"
+    },
+    "listHeaderWork": "Work",
+    "@listHeaderWork": {
+        "description": "Work column header"
+    },
+    "footerTotal": "Total",
+    "@footerTotal": {
+        "description": "Footer total column"
+    }
+}

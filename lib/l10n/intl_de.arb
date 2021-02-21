@@ -1,1 +1,10 @@
-{}
+{
+    "@@locale": "de",
+    "appTitle": "Arbeitszeit Tracker",
+    "dropdownDefault": "Wähle eine Option",
+    "listHeaderOption": "Option",
+    "listHeaderStart": "Start",
+    "listHeaderBreak": "Pause",
+    "listHeaderWork": "Arbeit",
+    "footerTotal": "Gesamt"
+}

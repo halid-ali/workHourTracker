@@ -1,1 +1,10 @@
-{}
+{
+    "@@locale": "tr",
+    "appTitle": "Çalışma Saat Takibi",
+    "dropdownDefault": "Opsiyon seçiniz",
+    "listHeaderOption": "Opsiyon",
+    "listHeaderStart": "Başlangıç",
+    "listHeaderBreak": "Mola",
+    "listHeaderWork": "Çalışma",
+    "footerTotal": "Toplam"
+}
