@@ -21,9 +21,11 @@ class HeaderFooter extends StatelessWidget {
   List<Widget> _buildColumns() {
     List<Widget> widgetList = [];
 
-    for (var column in columns) {
-      widgetList.add(column);
-      widgetList.add(SizedBox(width: 2));
+    for (var i = 0; i < columns.length; i++) {
+      widgetList.add(columns[i]);
+      if (i < columns.length - 1) {
+        widgetList.add(SizedBox(width: 2));
+      }
     }
 
     return widgetList;
