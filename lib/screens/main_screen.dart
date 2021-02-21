@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:work_hour_tracker/classes/work_hour_slot.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
+import 'package:work_hour_tracker/widgets/header_footer.dart';
+import 'package:work_hour_tracker/widgets/header_footer_column.dart';
 import 'package:work_hour_tracker/widgets/track_button.dart';
 
 class MainScreen extends StatefulWidget {
@@ -225,42 +227,44 @@ class _MainScreen extends State<MainScreen> {
   }
 
   Widget _buildListHeader() {
-    return Container(
-      child: Row(
-        children: [
-          _buildColumn('Option', 4),
-          SizedBox(width: 2),
-          _buildColumn('Start', 2),
-          SizedBox(width: 2),
-          _buildColumn('Break', 2),
-          SizedBox(width: 2),
-          _buildColumn('Total', 2),
-        ],
-      ),
-    );
-  }
+    var textColor = Colors.blue[800];
+    var borderColor = Colors.blue[700];
+    var backgroundColor = Colors.blue[300];
 
-  Widget _buildColumn(String text, int flex) {
-    return Expanded(
-      flex: flex,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.blue[300],
-          border: Border.all(
-            width: 1,
-            color: Colors.blue[700],
-          ),
+    return HeaderFooter(
+      columns: [
+        HeaderFooterColumn(
+          flex: 4,
+          text: 'Option',
+          textColor: textColor,
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
         ),
-        padding: EdgeInsets.all(5),
-        child: Text(
-          text,
-          style: GoogleFonts.openSans(
-            color: Colors.blue[800],
-            fontSize: 19,
-            fontWeight: FontWeight.bold,
-          ),
+        HeaderFooterColumn(
+          flex: 2,
+          text: 'Start',
+          textColor: textColor,
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
+          alignment: Alignment.center,
         ),
-      ),
+        HeaderFooterColumn(
+          flex: 2,
+          text: 'Break',
+          textColor: textColor,
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
+          alignment: Alignment.center,
+        ),
+        HeaderFooterColumn(
+          flex: 2,
+          text: 'Work',
+          textColor: textColor,
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
+          alignment: Alignment.center,
+        ),
+      ],
     );
   }
 
@@ -345,6 +349,8 @@ class _MainScreen extends State<MainScreen> {
   }
 
   Widget _buildFooter() {
+    int workHourLimit = 500;
+
     Duration totalWork = _workSlots
         .map<Duration>((e) => e.workDuration)
         .fold(Duration.zero, (p, e) => p + e);
@@ -353,65 +359,40 @@ class _MainScreen extends State<MainScreen> {
         .map<Duration>((e) => e.breakDuration)
         .fold(Duration.zero, (p, e) => p + e);
 
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 6,
-            child: Container(
-              child: Text(
-                'Totals',
-                style: GoogleFonts.openSans(
-                    fontSize: 21,
-                    fontWeight: FontWeight.bold,
-                    color: totalWork.inSeconds > 500
-                        ? Colors.red[900]
-                        : Colors.black),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Container(
-              alignment: Alignment.centerRight,
-              child: Text(
-                _formatDuration(totalBreak),
-                style: GoogleFonts.openSans(
-                    fontSize: 21,
-                    fontWeight: FontWeight.bold,
-                    color: totalWork.inSeconds > 500
-                        ? Colors.red[900]
-                        : Colors.black),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Container(
-              alignment: Alignment.centerRight,
-              child: Text(
-                _formatDuration(totalWork),
-                style: GoogleFonts.openSans(
-                    fontSize: 21,
-                    fontWeight: FontWeight.bold,
-                    color: totalWork.inSeconds > 500
-                        ? Colors.red[900]
-                        : Colors.black),
-              ),
-            ),
-          ),
-        ],
-      ),
-      decoration: BoxDecoration(
-        color: totalWork.inSeconds > 500
-            ? Colors.redAccent[100]
-            : Colors.grey[400],
-        border: Border.all(
-          width: 1,
-          color: totalWork.inSeconds > 500 ? Colors.red[900] : Colors.black,
+    var textColor =
+        totalWork.inSeconds > workHourLimit ? Colors.red[900] : Colors.black;
+    var borderColor =
+        totalWork.inSeconds > workHourLimit ? Colors.red[900] : Colors.black;
+    var backgroundColor = totalWork.inSeconds > workHourLimit
+        ? Colors.redAccent[100]
+        : Colors.grey[400];
+
+    return HeaderFooter(
+      columns: [
+        HeaderFooterColumn(
+          flex: 6,
+          text: 'Totals',
+          textColor: textColor,
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
         ),
-      ),
+        HeaderFooterColumn(
+          flex: 2,
+          text: _formatDuration(totalBreak),
+          textColor: textColor,
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
+          alignment: Alignment.centerRight,
+        ),
+        HeaderFooterColumn(
+          flex: 2,
+          text: _formatDuration(totalWork),
+          textColor: textColor,
+          borderColor: borderColor,
+          backgroundColor: backgroundColor,
+          alignment: Alignment.centerRight,
+        ),
+      ],
     );
   }
 
