@@ -41,7 +41,7 @@ class _MainScreen extends State<MainScreen> {
     Timer.periodic(
       Duration(seconds: 1),
       (Timer t) => setState(() {
-        if (_currentSlot.status == Status.running) {
+        if (_currentSlot != null && _currentSlot.status == Status.running) {
           _currentSlot.workDuration;
         }
       }),
@@ -430,7 +430,8 @@ class _MainScreen extends State<MainScreen> {
       _isStopped = false;
       _isPaused = false;
 
-      _workSlots.last.stop();
+      _currentSlot.stop();
+      _currentSlot = null;
     });
 
     print('stopp tapped at ${DateFormat('HH:mm.ss').format(DateTime.now())}');
