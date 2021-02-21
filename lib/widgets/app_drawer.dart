@@ -10,12 +10,11 @@ class AppDrawer extends StatelessWidget {
       child: Column(
         children: [
           _buildLanguagesRow(context),
+          Divider(height: 20),
           DrawerHeader(
-            child: Icon(
-              Icons.timer_sharp,
-              size: 90,
-            ),
+            child: Icon(Icons.timer_sharp, size: 90),
           ),
+          Divider(height: 20),
           Container(
             child: Text('My drawer'),
           ),
@@ -27,7 +26,7 @@ class AppDrawer extends StatelessWidget {
   Widget _buildLanguagesRow(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      padding: EdgeInsets.all(10.0),
+      padding: EdgeInsets.only(top: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
