@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:work_hour_tracker/classes/status.dart';
 import 'package:work_hour_tracker/classes/work_hour_slot.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/widgets/header_footer.dart';
@@ -21,6 +24,7 @@ class _MainScreen extends State<MainScreen> {
   final SlidableController _slidableController = SlidableController();
   final List<String> _options = ['Projekt', 'Allgemeine', 'Fortbildung'];
   final List<WorkHourSlot> _workSlots = [];
+  WorkHourSlot _currentSlot;
   String _selectedOption;
 
   bool _isStarted = false;
@@ -33,6 +37,15 @@ class _MainScreen extends State<MainScreen> {
     _workSlots.add(WorkHourSlot.withSampleData('Random Option'));
     _workSlots.add(WorkHourSlot.withSampleData('My Slot'));
     _workSlots.add(WorkHourSlot.withSampleData('Quite Long Option'));
+
+    Timer.periodic(
+      Duration(seconds: 1),
+      (Timer t) => setState(() {
+        if (_currentSlot.status == Status.running) {
+          _currentSlot.workDuration;
+        }
+      }),
+    );
   }
 
   @override
@@ -48,7 +61,7 @@ class _MainScreen extends State<MainScreen> {
           child: ConstrainedBox(
             constraints: BoxConstraints(
               maxWidth: PlatformInfo.isWeb()
-                  ? 500
+                  ? 600
                   : MediaQuery.of(context).size.width,
             ),
             child: Column(
@@ -113,7 +126,7 @@ class _MainScreen extends State<MainScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 2),
                 _buildFooter(),
               ],
             ),
@@ -280,7 +293,6 @@ class _MainScreen extends State<MainScreen> {
       children: [
         Container(
           color: isOdd ? Colors.grey[200] : Colors.grey[300],
-          padding: EdgeInsets.symmetric(vertical: 0),
           child: Row(
             children: [
               Expanded(
@@ -302,14 +314,12 @@ class _MainScreen extends State<MainScreen> {
                   child: Column(
                     children: [
                       Container(
-                        alignment: Alignment.centerLeft,
                         child: Text(
                           startHour,
                           style: GoogleFonts.ibmPlexMono(fontSize: 23),
                         ),
                       ),
                       Container(
-                        alignment: Alignment.centerLeft,
                         child: Text(
                           stopHour,
                           style: GoogleFonts.ibmPlexMono(fontSize: 23),
@@ -322,7 +332,7 @@ class _MainScreen extends State<MainScreen> {
               Expanded(
                 flex: 2,
                 child: Container(
-                  alignment: Alignment.center,
+                  alignment: Alignment.centerRight,
                   child: Text(
                     '${breakDuration.inMinutes.remainder(60).toString().padLeft(2, '0')}:'
                     '${breakDuration.inSeconds.remainder(60).toString().padLeft(2, '0')}',
@@ -333,7 +343,7 @@ class _MainScreen extends State<MainScreen> {
               Expanded(
                 flex: 2,
                 child: Container(
-                  alignment: Alignment.center,
+                  alignment: Alignment.centerRight,
                   child: Text(
                     '${totalWorkHour.inMinutes.remainder(60).toString().padLeft(2, '0')}:'
                     '${totalWorkHour.inSeconds.remainder(60).toString().padLeft(2, '0')}',
@@ -359,13 +369,15 @@ class _MainScreen extends State<MainScreen> {
         .map<Duration>((e) => e.breakDuration)
         .fold(Duration.zero, (p, e) => p + e);
 
-    var textColor =
-        totalWork.inSeconds > workHourLimit ? Colors.red[900] : Colors.black;
-    var borderColor =
-        totalWork.inSeconds > workHourLimit ? Colors.red[900] : Colors.black;
+    var textColor = totalWork.inSeconds > workHourLimit
+        ? Colors.red[900]
+        : Colors.green[900];
+    var borderColor = totalWork.inSeconds > workHourLimit
+        ? Colors.red[900]
+        : Colors.green[900];
     var backgroundColor = totalWork.inSeconds > workHourLimit
         ? Colors.redAccent[100]
-        : Colors.grey[400];
+        : Colors.green[100];
 
     return HeaderFooter(
       columns: [
@@ -399,8 +411,8 @@ class _MainScreen extends State<MainScreen> {
   String _formatDuration(Duration duration) {
     var totalMinutes = duration.inMinutes;
     var totalSeconds = duration.inSeconds - totalMinutes * 60;
-    return '${totalMinutes.toString().padLeft(2, '0')}:'
-        '${totalSeconds.toString().padLeft(2, '0')}';
+    return '${totalMinutes.toString().padLeft(2, '0')}h '
+        '${totalSeconds.toString().padLeft(2, '0')}m';
   }
 
   void _startFunc() {
@@ -412,9 +424,9 @@ class _MainScreen extends State<MainScreen> {
       _isPaused = true;
 
       if (_workSlots.isEmpty || _workSlots.last.isStopped) {
-        var workSlot = WorkHourSlot(_selectedOption);
-        workSlot.start();
-        _workSlots.add(workSlot);
+        _currentSlot = WorkHourSlot(_selectedOption);
+        _currentSlot.start();
+        _workSlots.add(_currentSlot);
       } else if (_workSlots.last.isPaused) {
         _workSlots.last.start();
       }

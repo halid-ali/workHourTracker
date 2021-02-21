@@ -21,6 +21,7 @@ class WorkHourSlot {
     _breakDuration =
         Duration(seconds: Random().nextInt(totalDuration.inSeconds));
     _workDuration = totalDuration - _breakDuration;
+    _status = Status.stopped;
   }
 
   DateTime get startTime => _startTime;
@@ -29,13 +30,15 @@ class WorkHourSlot {
 
   Duration get breakDuration => _breakDuration;
 
-  Duration get workDuration => _workDuration;
+  Duration get workDuration => _getWorkDuration();
 
   bool get isStarted => _status == Status.running;
 
   bool get isStopped => _status == Status.stopped;
 
   bool get isPaused => _status == Status.paused;
+
+  Status get status => _status;
 
   void start() {
     if (_status == Status.none) {
@@ -60,6 +63,15 @@ class WorkHourSlot {
 
   void pause() {
     _breakTime = DateTime.now();
+    _workDuration += _breakTime.difference(_startTime);
     _status = Status.paused;
+  }
+
+  Duration _getWorkDuration() {
+    if (_status == Status.running) {
+      return DateTime.now().difference(_startTime) - _breakDuration;
+    }
+
+    return _workDuration;
   }
 }
