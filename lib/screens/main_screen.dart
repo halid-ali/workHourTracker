@@ -24,7 +24,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreen extends State<MainScreen> {
   final SlidableController _slidableController = SlidableController();
   final List<String> _options = ['Projekt', 'Allgemeine', 'Fortbildung'];
-  final DisplayFormat _displayFormat = DisplayFormat.minuteSecond;
+  final DisplayFormat _displayFormat = DisplayFormat.hourMinute;
   final List<WorkHourSlot> _workSlots = [];
   scheme.ColorScheme _colorScheme;
   WorkHourSlot _currentSlot;
