@@ -15,7 +15,7 @@ class WorkHourSlot {
   WorkHourSlot(this.option);
 
   WorkHourSlot.withSampleData(this.option) {
-    var totalDuration = Duration(seconds: Random().nextInt(1000));
+    var totalDuration = Duration(seconds: Random().nextInt(500));
     _startTime = DateTime.now();
     _stopTime = DateTime.now().add(totalDuration);
     _breakDuration =

@@ -12,6 +12,7 @@ import 'package:work_hour_tracker/widgets/app_drawer.dart';
 import 'package:work_hour_tracker/widgets/header_footer.dart';
 import 'package:work_hour_tracker/widgets/header_footer_column.dart';
 import 'package:work_hour_tracker/widgets/track_button.dart';
+import 'package:work_hour_tracker/utils/color_scheme.dart' as scheme;
 
 class MainScreen extends StatefulWidget {
   MainScreen({Key key}) : super(key: key);
@@ -23,7 +24,9 @@ class MainScreen extends StatefulWidget {
 class _MainScreen extends State<MainScreen> {
   final SlidableController _slidableController = SlidableController();
   final List<String> _options = ['Projekt', 'Allgemeine', 'Fortbildung'];
+  final DisplayFormat _displayFormat = DisplayFormat.minuteSecond;
   final List<WorkHourSlot> _workSlots = [];
+  scheme.ColorScheme _colorScheme;
   WorkHourSlot _currentSlot;
   String _selectedOption;
 
@@ -37,9 +40,6 @@ class _MainScreen extends State<MainScreen> {
     _workSlots.add(WorkHourSlot.withSampleData('Random Option'));
     _workSlots.add(WorkHourSlot.withSampleData('My Slot'));
     _workSlots.add(WorkHourSlot.withSampleData('Quite Long Option'));
-    _workSlots.add(WorkHourSlot.withSampleData('Projekt'));
-    _workSlots.add(WorkHourSlot.withSampleData('Unterricht'));
-    _workSlots.add(WorkHourSlot.withSampleData('Besprechung'));
 
     Timer.periodic(
       Duration(seconds: 1),
@@ -56,8 +56,12 @@ class _MainScreen extends State<MainScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Color(0xFF212529),
           title: Text(
-              '${S.of(context).appTitle} ${PlatformInfo.isWeb() ? 'Web' : 'Mobile'}'),
+            '${S.of(context).appTitle} ${PlatformInfo.isWeb() ? 'Web' : 'Mobile'}',
+            style: GoogleFonts.notoSerif(fontSize: 25, letterSpacing: 0.7),
+          ),
         ),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -83,14 +87,14 @@ class _MainScreen extends State<MainScreen> {
                     value: _selectedOption,
                     hint: Text(
                       S.of(context).dropdownDefault,
-                      style: GoogleFonts.openSans(fontSize: 19),
+                      style: GoogleFonts.openSans(fontSize: 21),
                     ),
                     items: _options.map((String option) {
                       return DropdownMenuItem<String>(
                         value: option,
                         child: Text(
                           option,
-                          style: GoogleFonts.openSans(fontSize: 19),
+                          style: GoogleFonts.openSans(fontSize: 21),
                         ),
                       );
                     }).toList(),
@@ -148,28 +152,28 @@ class _MainScreen extends State<MainScreen> {
         children: [
           TrackButton(
             icon: Icons.play_arrow_sharp,
-            color: Colors.green,
+            color: Color(0xFF3FA34D),
             onPressCallback: _startFunc,
             isActiveCallback: () => _isStarted,
           ),
           SizedBox(width: 20),
           TrackButton(
             icon: Icons.pause_sharp,
-            color: Colors.blue,
+            color: Color(0xFF0077B6),
             onPressCallback: _breakFunc,
             isActiveCallback: () => _isPaused,
           ),
           SizedBox(width: 20),
           TrackButton(
             icon: Icons.stop_sharp,
-            color: Colors.red,
+            color: Color(0xFFD90429),
             onPressCallback: _stopFunc,
             isActiveCallback: () => _isStopped,
           ),
           SizedBox(width: 20),
           TrackButton(
             icon: Icons.save_sharp,
-            color: Colors.amber,
+            color: Color(0xFF22333B),
             onPressCallback: () {},
             isActiveCallback: () => true,
           ),
@@ -236,41 +240,37 @@ class _MainScreen extends State<MainScreen> {
   }
 
   Widget _buildListHeader() {
-    var textColor = Colors.blue[800];
-    var borderColor = Colors.blue[700];
-    var backgroundColor = Colors.blue[300];
-
     return HeaderFooter(
       columns: [
         HeaderFooterColumn(
           flex: 4,
           text: S.of(context).listHeaderOption,
-          textColor: textColor,
-          borderColor: borderColor,
-          backgroundColor: backgroundColor,
+          textColor: scheme.ColorScheme.blue().textColor,
+          borderColor: scheme.ColorScheme.blue().borderColor,
+          backgroundColor: scheme.ColorScheme.blue().backgroundColor,
         ),
         HeaderFooterColumn(
           flex: 2,
           text: S.of(context).listHeaderStart,
-          textColor: textColor,
-          borderColor: borderColor,
-          backgroundColor: backgroundColor,
+          textColor: scheme.ColorScheme.blue().textColor,
+          borderColor: scheme.ColorScheme.blue().borderColor,
+          backgroundColor: scheme.ColorScheme.blue().backgroundColor,
           alignment: Alignment.center,
         ),
         HeaderFooterColumn(
           flex: 2,
           text: S.of(context).listHeaderBreak,
-          textColor: textColor,
-          borderColor: borderColor,
-          backgroundColor: backgroundColor,
+          textColor: scheme.ColorScheme.blue().textColor,
+          borderColor: scheme.ColorScheme.blue().borderColor,
+          backgroundColor: scheme.ColorScheme.blue().backgroundColor,
           alignment: Alignment.center,
         ),
         HeaderFooterColumn(
           flex: 2,
           text: S.of(context).listHeaderWork,
-          textColor: textColor,
-          borderColor: borderColor,
-          backgroundColor: backgroundColor,
+          textColor: scheme.ColorScheme.blue().textColor,
+          borderColor: scheme.ColorScheme.blue().borderColor,
+          backgroundColor: scheme.ColorScheme.blue().backgroundColor,
           alignment: Alignment.center,
         ),
       ],
@@ -285,10 +285,11 @@ class _MainScreen extends State<MainScreen> {
     Duration totalWorkHour,
     bool isOdd,
   ) {
+    var fontColor = Color(0xFF212529);
     return Column(
       children: [
         Container(
-          color: isOdd ? Colors.grey[200] : Colors.grey[300],
+          color: isOdd ? Color(0xFFDEE2E6) : Color(0xFFCED4DA),
           child: Row(
             children: [
               Expanded(
@@ -298,7 +299,10 @@ class _MainScreen extends State<MainScreen> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     option,
-                    style: GoogleFonts.ibmPlexMono(fontSize: 23),
+                    style: GoogleFonts.ibmPlexMono(
+                      fontSize: 23,
+                      color: fontColor,
+                    ),
                   ),
                 ),
               ),
@@ -312,13 +316,19 @@ class _MainScreen extends State<MainScreen> {
                       Container(
                         child: Text(
                           startHour,
-                          style: GoogleFonts.ibmPlexMono(fontSize: 23),
+                          style: GoogleFonts.ibmPlexMono(
+                            fontSize: 23,
+                            color: fontColor,
+                          ),
                         ),
                       ),
                       Container(
                         child: Text(
                           stopHour,
-                          style: GoogleFonts.ibmPlexMono(fontSize: 23),
+                          style: GoogleFonts.ibmPlexMono(
+                            fontSize: 23,
+                            color: fontColor,
+                          ),
                         ),
                       ),
                     ],
@@ -328,22 +338,28 @@ class _MainScreen extends State<MainScreen> {
               Expanded(
                 flex: 2,
                 child: Container(
+                  padding: EdgeInsets.only(right: 5),
                   alignment: Alignment.centerRight,
                   child: Text(
-                    '${breakDuration.inMinutes.remainder(60).toString().padLeft(2, '0')}:'
-                    '${breakDuration.inSeconds.remainder(60).toString().padLeft(2, '0')}',
-                    style: GoogleFonts.ibmPlexMono(fontSize: 23),
+                    _formatDisplay(breakDuration, true),
+                    style: GoogleFonts.ibmPlexMono(
+                      fontSize: 23,
+                      color: fontColor,
+                    ),
                   ),
                 ),
               ),
               Expanded(
                 flex: 2,
                 child: Container(
+                  padding: EdgeInsets.only(right: 5),
                   alignment: Alignment.centerRight,
                   child: Text(
-                    '${totalWorkHour.inMinutes.remainder(60).toString().padLeft(2, '0')}:'
-                    '${totalWorkHour.inSeconds.remainder(60).toString().padLeft(2, '0')}',
-                    style: GoogleFonts.ibmPlexMono(fontSize: 23),
+                    _formatDisplay(totalWorkHour, true),
+                    style: GoogleFonts.ibmPlexMono(
+                      fontSize: 23,
+                      color: fontColor,
+                    ),
                   ),
                 ),
               ),
@@ -355,8 +371,6 @@ class _MainScreen extends State<MainScreen> {
   }
 
   Widget _buildFooter() {
-    int workHourLimit = 500;
-
     Duration totalWork = _workSlots
         .map<Duration>((e) => e.workDuration)
         .fold(Duration.zero, (p, e) => p + e);
@@ -365,50 +379,75 @@ class _MainScreen extends State<MainScreen> {
         .map<Duration>((e) => e.breakDuration)
         .fold(Duration.zero, (p, e) => p + e);
 
-    var textColor = totalWork.inSeconds > workHourLimit
-        ? Colors.red[900]
-        : Colors.green[900];
-    var borderColor = totalWork.inSeconds > workHourLimit
-        ? Colors.red[900]
-        : Colors.green[900];
-    var backgroundColor = totalWork.inSeconds > workHourLimit
-        ? Colors.redAccent[100]
-        : Colors.green[100];
+    _setColorScheme(totalWork);
 
     return HeaderFooter(
       columns: [
         HeaderFooterColumn(
           flex: 6,
           text: S.of(context).footerTotal,
-          textColor: textColor,
-          borderColor: borderColor,
-          backgroundColor: backgroundColor,
+          textColor: _colorScheme.textColor,
+          borderColor: _colorScheme.borderColor,
+          backgroundColor: _colorScheme.backgroundColor,
         ),
         HeaderFooterColumn(
           flex: 2,
-          text: _formatDuration(totalBreak),
-          textColor: textColor,
-          borderColor: borderColor,
-          backgroundColor: backgroundColor,
+          text: _formatDisplay(totalBreak, false),
+          textColor: _colorScheme.textColor,
+          borderColor: _colorScheme.borderColor,
+          backgroundColor: _colorScheme.backgroundColor,
           alignment: Alignment.centerRight,
         ),
         HeaderFooterColumn(
           flex: 2,
-          text: _formatDuration(totalWork),
-          textColor: textColor,
-          borderColor: borderColor,
-          backgroundColor: backgroundColor,
+          text: _formatDisplay(totalWork, false),
+          textColor: _colorScheme.textColor,
+          borderColor: _colorScheme.borderColor,
+          backgroundColor: _colorScheme.backgroundColor,
           alignment: Alignment.centerRight,
         ),
       ],
     );
   }
 
-  String _formatDuration(Duration duration) {
-    var totalMinutes = duration.inMinutes;
-    var totalSeconds = duration.inSeconds - totalMinutes * 60;
-    return '${totalMinutes.toString().padLeft(2, '0')}h '
-        '${totalSeconds.toString().padLeft(2, '0')}m';
+  String _formatDisplay(Duration duration, bool isDigitalDisplay) {
+    String prefix;
+    String suffix;
+    String prefixUnit = _displayFormat == DisplayFormat.hourMinute ? 'h' : 'm';
+    String suffixUnit = _displayFormat == DisplayFormat.hourMinute ? 'm' : 's';
+
+    if (_displayFormat == DisplayFormat.hourMinute) {
+      prefix = duration.inHours.remainder(60).toString().padLeft(2, '0');
+      suffix = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+    } else {
+      prefix = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+      suffix = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+    }
+
+    return isDigitalDisplay
+        ? '$prefix:$suffix'
+        : '$prefix$prefixUnit $suffix$suffixUnit';
+  }
+
+  void _setColorScheme(Duration duration) {
+    int workHourLimit = 480; // 8 hours
+    int overTimeLimit = 570; // 9.5 hours
+
+    var totalWorkDuration = _displayFormat == DisplayFormat.hourMinute
+        ? duration.inMinutes
+        : duration.inSeconds;
+
+    setState(() {
+      if (totalWorkDuration == 0) {
+        _colorScheme = scheme.ColorScheme.grey();
+      } else if (totalWorkDuration < workHourLimit) {
+        _colorScheme = scheme.ColorScheme.green();
+      } else if (totalWorkDuration < overTimeLimit) {
+        _colorScheme = scheme.ColorScheme.yellow();
+      } else {
+        _colorScheme = scheme.ColorScheme.red();
+      }
+    });
   }
 
   void _startFunc() {
@@ -460,4 +499,9 @@ class _MainScreen extends State<MainScreen> {
 
     print('break tapped at ${DateFormat('HH:mm.ss').format(DateTime.now())}');
   }
+}
+
+enum DisplayFormat {
+  hourMinute,
+  minuteSecond,
 }

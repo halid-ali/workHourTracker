@@ -25,7 +25,7 @@ class TrackButton extends StatelessWidget {
           style: ButtonStyle(
             elevation: MaterialStateProperty.all(0),
             backgroundColor: MaterialStateProperty.all(
-              isActiveCallback() ? color : Colors.grey,
+              isActiveCallback() ? color : Color(0xFFC0C0C0),
             ),
             padding: MaterialStateProperty.all(
               EdgeInsets.symmetric(
