@@ -37,6 +37,9 @@ class _MainScreen extends State<MainScreen> {
     _workSlots.add(WorkHourSlot.withSampleData('Random Option'));
     _workSlots.add(WorkHourSlot.withSampleData('My Slot'));
     _workSlots.add(WorkHourSlot.withSampleData('Quite Long Option'));
+    _workSlots.add(WorkHourSlot.withSampleData('Projekt'));
+    _workSlots.add(WorkHourSlot.withSampleData('Unterricht'));
+    _workSlots.add(WorkHourSlot.withSampleData('Besprechung'));
 
     Timer.periodic(
       Duration(seconds: 1),
@@ -177,10 +180,19 @@ class _MainScreen extends State<MainScreen> {
 
   Widget _getSlidable(WorkHourSlot workSlot, bool isOdd) {
     return Slidable(
+      key: Key(workSlot.option),
       controller: _slidableController,
       actionPane: SlidableStrechActionPane(),
       closeOnScroll: true,
       actionExtentRatio: 0.20,
+      dismissal: SlidableDismissal(
+        child: SlidableDrawerDismissal(),
+        onDismissed: (actionType) {
+          setState(() {
+            _workSlots.remove(workSlot);
+          });
+        },
+      ),
       secondaryActions: [
         Container(
           height: double.infinity,
@@ -200,9 +212,7 @@ class _MainScreen extends State<MainScreen> {
           color: Colors.red,
           child: IconButton(
             onPressed: () {
-              setState(() {
-                _workSlots.remove(workSlot);
-              });
+              _slidableController.activeState.dismiss();
               print('delete');
             },
             icon: Icon(
