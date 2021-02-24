@@ -63,7 +63,7 @@ class WorkHourSlot {
 
   void pause() {
     _breakTime = DateTime.now();
-    _workDuration += _breakTime.difference(_startTime);
+    _workDuration = _breakTime.difference(_startTime) - _breakDuration;
     _status = Status.paused;
   }
 
