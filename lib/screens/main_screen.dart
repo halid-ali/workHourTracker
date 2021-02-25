@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -297,8 +298,11 @@ class _MainScreen extends State<MainScreen> {
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   alignment: Alignment.centerLeft,
-                  child: Text(
+                  child: AutoSizeText(
                     option,
+                    minFontSize: 1,
+                    maxFontSize: 23,
+                    maxLines: 2,
                     style: GoogleFonts.ibmPlexMono(
                       fontSize: 23,
                       color: fontColor,
@@ -314,8 +318,11 @@ class _MainScreen extends State<MainScreen> {
                   child: Column(
                     children: [
                       Container(
-                        child: Text(
+                        child: AutoSizeText(
                           startHour,
+                          minFontSize: 1,
+                          maxFontSize: 23,
+                          maxLines: 1,
                           style: GoogleFonts.ibmPlexMono(
                             fontSize: 23,
                             color: fontColor,
@@ -323,8 +330,11 @@ class _MainScreen extends State<MainScreen> {
                         ),
                       ),
                       Container(
-                        child: Text(
+                        child: AutoSizeText(
                           stopHour,
+                          minFontSize: 1,
+                          maxFontSize: 23,
+                          maxLines: 1,
                           style: GoogleFonts.ibmPlexMono(
                             fontSize: 23,
                             color: fontColor,
@@ -340,8 +350,11 @@ class _MainScreen extends State<MainScreen> {
                 child: Container(
                   padding: EdgeInsets.only(right: 5),
                   alignment: Alignment.centerRight,
-                  child: Text(
+                  child: AutoSizeText(
                     _formatDisplay(breakDuration, true),
+                    minFontSize: 1,
+                    maxFontSize: 23,
+                    maxLines: 1,
                     style: GoogleFonts.ibmPlexMono(
                       fontSize: 23,
                       color: fontColor,
@@ -354,8 +367,11 @@ class _MainScreen extends State<MainScreen> {
                 child: Container(
                   padding: EdgeInsets.only(right: 5),
                   alignment: Alignment.centerRight,
-                  child: Text(
+                  child: AutoSizeText(
                     _formatDisplay(totalWorkHour, true),
+                    minFontSize: 1,
+                    maxFontSize: 23,
+                    maxLines: 1,
                     style: GoogleFonts.ibmPlexMono(
                       fontSize: 23,
                       color: fontColor,
