@@ -1,13 +1,13 @@
-class Options {
+class Option {
   final int id;
   final String name;
 
-  Options({
+  Option({
     this.id,
     this.name,
   });
 
-  factory Options.fromJson(Map<String, dynamic> data) => Options(
+  factory Option.fromJson(Map<String, dynamic> data) => Option(
         id: data['id'],
         name: data['name'],
       );

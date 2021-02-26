@@ -27,7 +27,7 @@ class DatabaseProvider {
       version: 1,
       onConfigure: _onConfigure,
       onCreate: _onCreate,
-      onOpen: (db) async {},
+      onOpen: _onOpen,
     );
   }
 
@@ -38,17 +38,29 @@ class DatabaseProvider {
   void _onCreate(Database db, int version) async {
     await db.execute('''CREATE TABLE options (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT)''');
+      name TEXT,
+      UNIQUE(name))''');
 
     await db.execute('''CREATE TABLE settings (
       locale TEXT)''');
 
+    await db.execute('''CREATE TABLE users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT,
+      password TEXT,
+      UNIQUE(username))''');
+
     await db.execute('''CREATE TABLE workslots (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      userId INTEGER,
       optionId INTEGER,
       startTime INTEGER,
       stopTime INTEGER,
       breakDuration INTEGER,
-      workDuration INTEGER)''');
+      workDuration INTEGER,
+      CONSTRAINT fk_user FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION),
+      CONSTRAINT fk_option FOREIGN KEY (optionId) REFERENCES options(id) ON DELETE CASCADE ON UPDATE NO ACTION))''');
   }
+
+  void _onOpen(Database db) async {}
 }
