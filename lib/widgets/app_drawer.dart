@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:work_hour_tracker/main.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -30,33 +31,20 @@ class AppDrawer extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildButton(context, 'EN', 'en'),
-          SizedBox(width: 10),
-          _buildButton(context, 'DE', 'de'),
-          SizedBox(width: 10),
-          _buildButton(context, 'TR', 'tr'),
+          _buildButton(context, 'england', 'en'),
+          _buildButton(context, 'deutschland', 'de'),
+          _buildButton(context, 'turkiye', 'tr'),
         ],
       ),
     );
   }
 
-  Widget _buildButton(BuildContext context, String text, String locale) {
-    return ElevatedButton(
-      onPressed: () => WorkHourTracker.of(context).setLocale(Locale(locale)),
-      child: Text(text),
-      style: ButtonStyle(
-        elevation: MaterialStateProperty.all(0),
-        backgroundColor: MaterialStateProperty.all(
-          Colors.grey,
-        ),
-        padding: MaterialStateProperty.all(
-          EdgeInsets.zero,
-        ),
-        shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-        ),
+  Widget _buildButton(BuildContext context, String flag, String locale) {
+    return InkWell(
+      onTap: () => WorkHourTracker.of(context).setLocale(Locale(locale)),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: SvgPicture.asset('$flag.svg', height: 48),
       ),
     );
   }
