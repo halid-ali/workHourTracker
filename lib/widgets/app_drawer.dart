@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:work_hour_tracker/main.dart';
+import 'package:work_hour_tracker/widgets/app_drawer_menu.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key key}) : super(key: key);
@@ -12,12 +13,17 @@ class AppDrawer extends StatelessWidget {
         children: [
           _buildLanguagesRow(context),
           Divider(height: 20),
-          DrawerHeader(
-            child: Icon(Icons.timer_sharp, size: 90),
+          Container(
+            child: Image.asset(
+              'chronometer.png',
+              width: 180,
+            ),
           ),
           Divider(height: 20),
-          Container(
-            child: Text('My drawer'),
+          Column(
+            children: [
+              ..._getButtons(),
+            ],
           ),
         ],
       ),
@@ -47,5 +53,28 @@ class AppDrawer extends StatelessWidget {
         child: SvgPicture.asset('$flag.svg', height: 48),
       ),
     );
+  }
+
+  List<Widget> _getButtons() {
+    return [
+      DrawerMenu(
+        text: 'Login',
+        icon: Icons.login_sharp,
+        func: () {},
+      ),
+      Divider(height: 5),
+      DrawerMenu(
+        text: 'Register',
+        icon: Icons.person_add_sharp,
+        func: () {},
+      ),
+      Divider(height: 5),
+      DrawerMenu(
+        text: 'Settings',
+        icon: Icons.settings_sharp,
+        func: () {},
+      ),
+      Divider(height: 5),
+    ];
   }
 }
