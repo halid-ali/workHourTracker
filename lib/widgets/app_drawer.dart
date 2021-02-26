@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:path/path.dart';
 import 'package:work_hour_tracker/main.dart';
+import 'package:work_hour_tracker/routes.dart';
 import 'package:work_hour_tracker/widgets/app_drawer_menu.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -22,7 +24,7 @@ class AppDrawer extends StatelessWidget {
           Divider(height: 20),
           Column(
             children: [
-              ..._getButtons(),
+              ..._getButtons(context),
             ],
           ),
         ],
@@ -55,24 +57,24 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  List<Widget> _getButtons() {
+  List<Widget> _getButtons(BuildContext context) {
     return [
       DrawerMenu(
         text: 'Login',
         icon: Icons.login_sharp,
-        func: () {},
+        func: () => Navigator.pushNamed(context, RouteGenerator.loginPage),
       ),
       Divider(height: 5),
       DrawerMenu(
         text: 'Register',
         icon: Icons.person_add_sharp,
-        func: () {},
+        func: () => Navigator.pushNamed(context, RouteGenerator.registerPage),
       ),
       Divider(height: 5),
       DrawerMenu(
         text: 'Settings',
         icon: Icons.settings_sharp,
-        func: () {},
+        func: () => Navigator.pushNamed(context, RouteGenerator.settingsPage),
       ),
       Divider(height: 5),
     ];
