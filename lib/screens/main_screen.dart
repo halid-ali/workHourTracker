@@ -25,7 +25,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreen extends State<MainScreen> {
   final SlidableController _slidableController = SlidableController();
   final List<String> _options = ['Projekt', 'Allgemeine', 'Fortbildung'];
-  final DisplayFormat _displayFormat = DisplayFormat.hourMinute;
+  final DisplayFormat _displayFormat = DisplayFormat.minuteSecond;
   final List<WorkHourSlot> _workSlots = [];
   scheme.ColorScheme _colorScheme;
   WorkHourSlot _currentSlot;
@@ -99,12 +99,14 @@ class _MainScreen extends State<MainScreen> {
                         ),
                       );
                     }).toList(),
-                    onChanged: (String value) {
-                      setState(() {
-                        _selectedOption = value;
-                        _isStarted = true;
-                      });
-                    },
+                    onChanged: !_isStopped
+                        ? (String value) {
+                            setState(() {
+                              _selectedOption = value;
+                              _isStarted = true;
+                            });
+                          }
+                        : null,
                   ),
                 ),
                 SizedBox(height: 20),
@@ -176,7 +178,7 @@ class _MainScreen extends State<MainScreen> {
             icon: Icons.save_sharp,
             color: Color(0xFF22333B),
             onPressCallback: () {},
-            isActiveCallback: () => true,
+            isActiveCallback: () => _isStopped,
           ),
         ],
       ),
