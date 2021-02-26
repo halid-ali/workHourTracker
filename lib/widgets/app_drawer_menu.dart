@@ -17,7 +17,7 @@ class DrawerMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: func,
-      hoverColor: Color(0xFFCFD2CD),
+      hoverColor: Color(0xFFE1E5F2),
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: 20,
