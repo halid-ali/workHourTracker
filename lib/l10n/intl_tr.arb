@@ -9,5 +9,9 @@
     "footerTotal": "Toplam",
     "login": "Giriş",
     "register": "Kayıt",
-    "settings": "Ayarlar"
+    "settings": "Ayarlar",
+    "username": "Kullanıcı adı",
+    "password": "Şifre",
+    "repeat_password": "Şifre Tekrar",
+    "required_field": "Zorunlu"
 }

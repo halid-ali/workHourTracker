@@ -9,5 +9,9 @@
     "footerTotal": "Gesamt",
     "login": "Anmelden",
     "register": "Register",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "repeat_password": "Passwort wiederholen",
+    "required_field": "Erforderlich"
 }

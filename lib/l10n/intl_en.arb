@@ -39,5 +39,21 @@
     "settings": "Settings",
     "@settings": {
         "description": "Settings screen/button text"
+    },
+    "username": "Username",
+    "@username": {
+        "description": "Username text field hint"
+    },
+    "password": "Password",
+    "@password": {
+        "description": "Password text field hint"
+    },
+    "repeat_password": "Repeat Password",
+    "@repeat_password": {
+        "description": "Repeat password text field hint"
+    },
+    "required_field": "Required",
+    "@required_field": {
+        "description": "Helper text for required fields"
     }
 }

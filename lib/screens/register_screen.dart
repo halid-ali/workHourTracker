@@ -41,7 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: Container(
                           alignment: Alignment.center,
                           child: Text(
-                            'Register',
+                            S.of(context).register,
                             style: GoogleFonts.merriweather(
                               color: Color(0xFFF1FAEE),
                               fontSize: 21,
@@ -62,9 +62,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 // Separator
                 Container(
-                  height: 1,
+                  height: 10,
                   color: Color(0xFFE63946),
-                  margin: EdgeInsets.symmetric(vertical: 20),
+                  margin: EdgeInsets.only(bottom: 20),
                 ),
                 // Content
                 Form(
@@ -74,10 +74,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        color: Color(0xFFF1FAEE),
+                        color: Color(0xFFF8F9FA),
                         border: Border.all(
                           width: 1,
-                          color: Color(0xFF1D3557),
+                          color: Color(0xFFCED4DA),
                         ),
                       ),
                       child: Padding(
@@ -92,9 +92,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     controller: _usernameController,
                                     obscureText: false,
                                     validator: _validateUsername,
-                                    style: TextStyle(fontSize: 13),
+                                    style: GoogleFonts.openSans(fontSize: 17),
                                     decoration: _getDecoration(
-                                      'Username',
+                                      S.of(context).username,
                                       Icons.person_sharp,
                                     ),
                                   ),
@@ -103,9 +103,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     controller: _passwordController,
                                     obscureText: true,
                                     validator: _validatePassword,
-                                    style: TextStyle(fontSize: 13),
+                                    style: GoogleFonts.openSans(fontSize: 17),
                                     decoration: _getDecoration(
-                                      'Password',
+                                      S.of(context).password,
                                       Icons.lock_sharp,
                                     ),
                                   ),
@@ -114,9 +114,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     controller: _passwordRepeatController,
                                     obscureText: true,
                                     validator: _validatePasswordConfirm,
-                                    style: TextStyle(fontSize: 13),
+                                    style: GoogleFonts.openSans(fontSize: 17),
                                     decoration: _getDecoration(
-                                      'Password Repeat',
+                                      S.of(context).repeat_password,
                                       Icons.lock_sharp,
                                     ),
                                   ),
@@ -156,14 +156,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   InputDecoration _getDecoration(String hintText, IconData icon) {
     return InputDecoration(
-      errorStyle: TextStyle(fontSize: 9),
       errorMaxLines: 2,
-      helperText: 'Required',
-      helperStyle: TextStyle(fontSize: 9),
+      errorStyle: GoogleFonts.openSans(fontSize: 11),
+      helperText: S.of(context).required_field,
+      helperStyle: GoogleFonts.openSans(fontSize: 11),
       hintText: hintText,
+      hintStyle: GoogleFonts.openSans(fontSize: 17),
       icon: Icon(
         icon,
-        color: Color(0xFF457B9D),
+        color: Color(0xFF6C757D),
         size: 33,
       ),
       suffixIcon: Icon(
