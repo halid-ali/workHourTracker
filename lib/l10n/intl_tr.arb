@@ -6,5 +6,8 @@
     "listHeaderStart": "Başlangıç",
     "listHeaderBreak": "Mola",
     "listHeaderWork": "Çalışma",
-    "footerTotal": "Toplam"
+    "footerTotal": "Toplam",
+    "login": "Giriş",
+    "register": "Kayıt",
+    "settings": "Ayarlar"
 }

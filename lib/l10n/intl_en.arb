@@ -27,5 +27,17 @@
     "footerTotal": "Total",
     "@footerTotal": {
         "description": "Footer total column"
+    },
+    "login": "Login",
+    "@login": {
+        "description": "Login screen/button text"
+    },
+    "register": "Register",
+    "@register": {
+        "description": "Register screen/button text"
+    },
+    "settings": "Settings",
+    "@settings": {
+        "description": "Settings screen/button text"
     }
 }

@@ -17,7 +17,7 @@ class DrawerMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: func,
-      hoverColor: Color(0xFFE1E5F2),
+      hoverColor: Color(0xFFF0F0F0),
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: 20,
@@ -25,15 +25,17 @@ class DrawerMenu extends StatelessWidget {
         ),
         child: Row(
           children: [
+            Icon(icon, size: 27),
             Expanded(
               child: Container(
+                padding: EdgeInsets.only(left: 20),
                 child: Text(
                   text,
                   style: GoogleFonts.merriweather(fontSize: 17),
                 ),
               ),
             ),
-            Icon(icon, size: 27),
+            Icon(Icons.arrow_forward_ios_sharp, size: 20),
           ],
         ),
       ),

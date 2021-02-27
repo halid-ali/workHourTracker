@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:path/path.dart';
+import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/main.dart';
 import 'package:work_hour_tracker/routes.dart';
 import 'package:work_hour_tracker/widgets/app_drawer_menu.dart';
@@ -60,19 +60,19 @@ class AppDrawer extends StatelessWidget {
   List<Widget> _getButtons(BuildContext context) {
     return [
       DrawerMenu(
-        text: 'Login',
+        text: S.of(context).login,
         icon: Icons.login_sharp,
         func: () => Navigator.pushNamed(context, RouteGenerator.loginPage),
       ),
       Divider(height: 5),
       DrawerMenu(
-        text: 'Register',
+        text: S.of(context).register,
         icon: Icons.person_add_sharp,
         func: () => Navigator.pushNamed(context, RouteGenerator.registerPage),
       ),
       Divider(height: 5),
       DrawerMenu(
-        text: 'Settings',
+        text: S.of(context).settings,
         icon: Icons.settings_sharp,
         func: () => Navigator.pushNamed(context, RouteGenerator.settingsPage),
       ),

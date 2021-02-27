@@ -6,5 +6,8 @@
     "listHeaderStart": "Start",
     "listHeaderBreak": "Pause",
     "listHeaderWork": "Arbeit",
-    "footerTotal": "Gesamt"
+    "footerTotal": "Gesamt",
+    "login": "Anmelden",
+    "register": "Register",
+    "settings": "Einstellungen"
 }
