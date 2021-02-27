@@ -13,5 +13,15 @@
     "username": "Kullanıcı adı",
     "password": "Şifre",
     "repeat_password": "Şifre Tekrar",
-    "required_field": "Zorunlu"
+    "required_field": "Zorunlu",
+    "username_empty": "Kullanıcı adı boş olamaz.",
+    "username_invalid_length": "Uzunluk 5-15 arasında olmalı.",
+    "password_empty": "Şifre boş olamaz.",
+    "password_invalid_length": "Şifre uzunluğu 7-20 arasında olmalı.",
+    "password_buffer_prefix": "Şifre en az bir adet",
+    "password_contains_uppercase": "\nbüyük harf içermeli.",
+    "password_contains_lowercase": "\nküçük harf içermeli.",
+    "password_contains_digit": "\nrakam içermeli.",
+    "password_contains_special_character": "\nözel karakter içermeli.",
+    "password_not_match": "Şifre eşleşmedi."
 }

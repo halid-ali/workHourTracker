@@ -13,5 +13,15 @@
     "username": "Benutzername",
     "password": "Passwort",
     "repeat_password": "Passwort wiederholen",
-    "required_field": "Erforderlich"
+    "required_field": "Erforderlich",
+    "username_empty": "Benutzername darf nicht null sein.",
+    "username_invalid_length": "Die Länge muss zwischen 5-15 liegen.",
+    "password_empty": "Das Passwort darf nicht null sein.",
+    "password_invalid_length": "Die Passwortlänge muss zwischen 7 und 20 liegen.",
+    "password_buffer_prefix": "Das Passwort muss mindestens",
+    "password_contains_uppercase": "\neinen Großbuchstaben enthalten.",
+    "password_contains_lowercase": "\neinen Kleinbuchstaben enthalten.",
+    "password_contains_digit": "\neine Ziffer enthalten.",
+    "password_contains_special_character": "\nein Sonderzeichen enthalten.",
+    "password_not_match": "Passwort stimmt nicht überein."
 }

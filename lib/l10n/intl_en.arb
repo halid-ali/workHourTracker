@@ -55,5 +55,45 @@
     "required_field": "Required",
     "@required_field": {
         "description": "Helper text for required fields"
+    },
+    "username_empty": "Username cannot be null.",
+    "@username_empty": {
+        "description": "Error message when username is empty"
+    },
+    "username_invalid_length": "Length must be between 5-15.",
+    "@username_invalid_length": {
+        "description": "Error message when username length is out of scope"
+    },
+    "password_empty": "Password cannot be null.",
+    "@password_empty": {
+        "description": "Error message when password is empty"
+    },
+    "password_invalid_length": "Password length must be between 7-20.",
+    "@password_invalid_length": {
+        "description": "Error message when password length is out of scope"
+    },
+    "password_buffer_prefix": "Password must contain at least",
+    "@password_buffer_prefix": {
+        "description": "Error message prefix for characters that password must contain"
+    },
+    "password_contains_uppercase": "\none uppercase letter.",
+    "@password_contains_uppercase": {
+        "description": "Error message suffix for uppercase"
+    },
+    "password_contains_lowercase": "\none lowercase letter.",
+    "@password_contains_lowercase": {
+        "description": "Error message suffix for lowercase"
+    },
+    "password_contains_digit": "\none digit.",
+    "@password_contains_digit": {
+        "description": "Error message suffix for digits"
+    },
+    "password_contains_special_character": "\none special character.",
+    "@password_contains_special_character": {
+        "description": "Error message suffix for special characters"
+    },
+    "password_not_match": "Password doesn't match.",
+    "@password_not_match": {
+        "description": "Error message when password doesn't match"
     }
 }
