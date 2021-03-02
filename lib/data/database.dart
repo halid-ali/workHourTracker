@@ -38,28 +38,28 @@ class DatabaseProvider {
   void _onCreate(Database db, int version) async {
     await db.execute('''CREATE TABLE options (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT,
+      name TEXT NOT NULL,
       UNIQUE(name))''');
 
     await db.execute('''CREATE TABLE settings (
-      locale TEXT)''');
+      locale TEXT NOT NULL)''');
 
     await db.execute('''CREATE TABLE users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      username TEXT,
-      password TEXT,
+      username TEXT NOT NULL,
+      password TEXT NOT NULL,
       UNIQUE(username))''');
 
     await db.execute('''CREATE TABLE workslots (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      userId INTEGER,
-      optionId INTEGER,
-      startTime INTEGER,
-      stopTime INTEGER,
-      breakDuration INTEGER,
-      workDuration INTEGER,
-      CONSTRAINT fk_user FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION),
-      CONSTRAINT fk_option FOREIGN KEY (optionId) REFERENCES options(id) ON DELETE CASCADE ON UPDATE NO ACTION))''');
+      userId INTEGER NOT NULL,
+      optionId INTEGER NOT NULL,
+      startTime INTEGER NOT NULL,
+      stopTime INTEGER NOT NULL,
+      breakDuration INTEGER NOT NULL,
+      workDuration INTEGER NOT NULL,
+      CONSTRAINT fk_user FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE ON UPDATE NO ACTION,
+      CONSTRAINT fk_option FOREIGN KEY (optionId) REFERENCES options(id) ON DELETE CASCADE ON UPDATE NO ACTION)''');
   }
 
   void _onOpen(Database db) async {}
