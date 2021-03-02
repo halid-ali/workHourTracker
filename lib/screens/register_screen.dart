@@ -143,7 +143,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                         ),
-                        onTap: () {},
+                        onTap: () => Navigator.pushNamed(
+                            context, RouteGenerator.homePage),
                       ),
                     ],
                   ),
