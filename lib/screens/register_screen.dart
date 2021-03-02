@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:work_hour_tracker/data/model/user_model.dart';
-import 'package:work_hour_tracker/data/repo/user_repo.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/routes.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
@@ -145,17 +143,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                         ),
-                        onTap: () {
-                          if (_formKey.currentState.validate()) {
-                            var _user = User(
-                              username: _usernameController.text,
-                              password: _passwordController.text,
-                            );
-                            var result = UserRepository().addUser(_user);
-                            Navigator.pushNamed(
-                                context, RouteGenerator.loginPage);
-                          }
-                        },
+                        onTap: () {},
                       ),
                     ],
                   ),
