@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "921027742925",
+    "project_id": "work-hour-tracker-75f02",
+    "storage_bucket": "work-hour-tracker-75f02.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921027742925:android:20a18848760b2c30826d84",
+        "android_client_info": {
+          "package_name": "com.mobile.work_hour_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "921027742925-cl2tvhfgaf657ktt7esr85ceie2qvt9n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mobile.work_hour_tracker",
+            "certificate_hash": "e0b4153c9c9ebb85074ab148c1e65c236d76dc5e"
+          }
+        },
+        {
+          "client_id": "921027742925-tp1io028s1d3tmsq6lvt0sl95osn2fet.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqVJj8YH3r2dBL8QMbaGiGCRYmDTjZxu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "921027742925-tp1io028s1d3tmsq6lvt0sl95osn2fet.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
