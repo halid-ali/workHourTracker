@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 
-class CustomTextFormField extends StatefulWidget {
+class AppTextFormField extends StatefulWidget {
   final bool isObscureText;
   final bool isRequired;
   final String hintText;
@@ -10,7 +10,7 @@ class CustomTextFormField extends StatefulWidget {
   final Function validateFunc;
   final TextEditingController controller;
 
-  CustomTextFormField({
+  AppTextFormField({
     Key key,
     this.isObscureText = false,
     this.isRequired = false,
@@ -21,10 +21,10 @@ class CustomTextFormField extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CustomTextFormFieldState createState() => _CustomTextFormFieldState();
+  _AppTextFormFieldState createState() => _AppTextFormFieldState();
 }
 
-class _CustomTextFormFieldState extends State<CustomTextFormField> {
+class _AppTextFormFieldState extends State<AppTextFormField> {
   final _focusNode = FocusNode();
   Color _suffixIconColor = Colors.white;
 

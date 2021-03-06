@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/routes.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
-import 'package:work_hour_tracker/widgets/custom_text_field.dart';
+import 'package:work_hour_tracker/widgets/app_text_field.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key key}) : super(key: key);
@@ -99,7 +99,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   // hasScrollBody: false,
                   child: Column(
                     children: [
-                      CustomTextFormField(
+                      AppTextFormField(
                         isRequired: true,
                         hintText: S.of(context).username,
                         iconData: Icons.account_box_rounded,
@@ -108,7 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       SizedBox(height: 40),
                       //Password
-                      CustomTextFormField(
+                      AppTextFormField(
                         isRequired: true,
                         isObscureText: true,
                         hintText: S.of(context).password,
@@ -118,7 +118,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       SizedBox(height: 40),
                       //Password Repeat
-                      CustomTextFormField(
+                      AppTextFormField(
                         isRequired: true,
                         isObscureText: true,
                         hintText: S.of(context).repeat_password,
