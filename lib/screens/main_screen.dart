@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:work_hour_tracker/classes/status.dart';
 import 'package:work_hour_tracker/classes/work_hour_slot.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
+import 'package:work_hour_tracker/utils/login.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/utils/preferences.dart';
 import 'package:work_hour_tracker/utils/web_storage.dart';
@@ -101,7 +102,7 @@ class _MainScreen extends State<MainScreen> {
                         ),
                       );
                     }).toList(),
-                    onChanged: !_isStopped && _isLoggedIn()
+                    onChanged: !_isStopped && Login.isLogged()
                         ? (String value) {
                             setState(() {
                               _selectedOption = value;
@@ -447,16 +448,6 @@ class _MainScreen extends State<MainScreen> {
     return isDigitalDisplay
         ? '$prefix:$suffix'
         : '$prefix$prefixUnit $suffix$suffixUnit';
-  }
-
-  bool _isLoggedIn() {
-    bool result = false;
-    if (PlatformInfo.isWeb()) {
-      result = WebStorage.instance.userId != null;
-    } else {
-      Preferences.contains('userId').then((value) => result = value);
-    }
-    return result;
   }
 
   void _setColorScheme(Duration duration) {

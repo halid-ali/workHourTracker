@@ -32,6 +32,10 @@
     "@login": {
         "description": "Login screen/button text"
     },
+    "logout": "Logout",
+    "@logout": {
+        "description": "Logout screen/button text"
+    },
     "register": "Register",
     "@register": {
         "description": "Register screen/button text"
