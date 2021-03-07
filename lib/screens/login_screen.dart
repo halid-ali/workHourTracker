@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:work_hour_tracker/routes.dart';
+import 'package:work_hour_tracker/utils/platform_info.dart';
+import 'package:work_hour_tracker/utils/preferences.dart';
+import 'package:work_hour_tracker/utils/web_storage.dart';
 import 'package:work_hour_tracker/widgets/app_button.dart';
 import 'package:work_hour_tracker/widgets/app_text_field.dart';
 
@@ -16,8 +19,17 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   String _selectedUser;
 
+  Future<void> _login() async {
+    if (PlatformInfo.isWeb()) {
+      WebStorage.instance.userId = '1';
+    } else {
+      await Preferences.setInt('userId', 1);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    _login();
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.green,
