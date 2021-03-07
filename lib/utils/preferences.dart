@@ -1,31 +1,23 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Preferences {
-  static Future<SharedPreferences> get _sp async {
-    return await SharedPreferences.getInstance();
+  static FlutterSecureStorage get _sp {
+    return FlutterSecureStorage();
   }
 
   static Future<bool> contains(String key) async {
-    return await _sp.then<bool>((sp) => sp.containsKey(key));
+    return await _sp.containsKey(key: key);
   }
 
-  static Future<void> setInt(String key, int value) async {
-    await _sp.then((sp) => sp.setInt(key, value));
+  static Future<void> write(String key, String value) async {
+    await _sp.write(key: key, value: value);
   }
 
-  static Future<int> getInt(String key) async {
-    return await _sp.then<int>((sp) => sp.getInt(key));
-  }
-
-  static Future<void> setString(String key, String value) async {
-    await _sp.then((sp) => sp.setString(key, value));
-  }
-
-  static Future<String> getString(String key) async {
-    return await _sp.then<String>((sp) => sp.getString(key));
+  static Future<String> read(String key) async {
+    return await _sp.read(key: key);
   }
 
   static Future<void> clear() async {
-    await _sp.then((sp) => sp.clear());
+    await _sp.deleteAll();
   }
 }

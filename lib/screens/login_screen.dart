@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (PlatformInfo.isWeb()) {
       WebStorage.instance.userId = '1';
     } else {
-      await Preferences.setInt('userId', 1);
+      await Preferences.write('userId', '1');
     }
   }
 
