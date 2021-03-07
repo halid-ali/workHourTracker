@@ -56,6 +56,10 @@
     "@repeat_password": {
         "description": "Repeat password text field hint"
     },
+    "email": "Email",
+    "@email": {
+        "description": "Email text field hint"
+    },
     "required_field": "Required",
     "@required_field": {
         "description": "Helper text for required fields"
@@ -99,5 +103,25 @@
     "password_not_match": "Password doesn't match.",
     "@password_not_match": {
         "description": "Error message when password doesn't match"
+    },
+    "email_empty": "Email cannot be null.",
+    "@email_empty": {
+        "description": "Error message when email is empty"
+    },
+    "email_invalid": "Invalid email address.",
+    "@email_invalid": {
+        "description": "Error message when email is invalid"
+    },
+    "select_user": "Select user",
+    "@select_user": {
+        "description": "Default text in dropdown menu"
+    },
+    "or": "or",
+    "@or": {
+        "description": "or separator"
+    },
+    "forgot_password": "Forgot password?",
+    "@forgot_password": {
+        "description": "Forgot password text button"
     }
 }

@@ -10,8 +10,6 @@ import 'package:work_hour_tracker/classes/work_hour_slot.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/utils/login.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
-import 'package:work_hour_tracker/utils/preferences.dart';
-import 'package:work_hour_tracker/utils/web_storage.dart';
 import 'package:work_hour_tracker/widgets/app_drawer.dart';
 import 'package:work_hour_tracker/widgets/header_footer.dart';
 import 'package:work_hour_tracker/widgets/header_footer_column.dart';

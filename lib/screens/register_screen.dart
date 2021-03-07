@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/routes.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
+import 'package:work_hour_tracker/widgets/app_button.dart';
 import 'package:work_hour_tracker/widgets/app_text_field.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -17,6 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _passwordRepeatController = TextEditingController();
+  final _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -99,10 +102,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   // hasScrollBody: false,
                   child: Column(
                     children: [
+                      //Username
                       AppTextFormField(
                         isRequired: true,
                         hintText: S.of(context).username,
-                        iconData: Icons.account_box_rounded,
+                        iconData: Icons.account_box_sharp,
                         validateFunc: _validateUsername,
                         controller: _usernameController,
                       ),
@@ -112,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         isRequired: true,
                         isObscureText: true,
                         hintText: S.of(context).password,
-                        iconData: Icons.lock_rounded,
+                        iconData: Icons.lock_sharp,
                         validateFunc: _validatePassword,
                         controller: _passwordController,
                       ),
@@ -122,29 +126,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         isRequired: true,
                         isObscureText: true,
                         hintText: S.of(context).repeat_password,
-                        iconData: Icons.lock_rounded,
+                        iconData: Icons.lock_sharp,
                         validateFunc: _validatePasswordRepeat,
                         controller: _passwordRepeatController,
                       ),
+                      SizedBox(height: 40),
+                      //Email
+                      AppTextFormField(
+                        isRequired: true,
+                        hintText: S.of(context).email,
+                        iconData: Icons.email_sharp,
+                        validateFunc: _validateMail,
+                        controller: _emailController,
+                      ),
                       Expanded(child: Container()),
                       //Button
-                      InkWell(
-                        child: Container(
-                          color: Color(0xFFE63946),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 40,
-                            vertical: 10,
-                          ),
-                          child: Text(
-                            S.of(context).register,
-                            style: GoogleFonts.merriweather(
-                              color: Color(0xFFF1FAEE),
-                              fontSize: 17,
-                            ),
-                          ),
-                        ),
-                        onTap: () => Navigator.pushNamed(
-                            context, RouteGenerator.homePage),
+                      AppButton(
+                        text: S.of(context).register,
+                        backgroundColor: Color(0xFFE63946),
+                        onSubmitFunction: submitRegister,
                       ),
                     ],
                   ),
@@ -155,6 +155,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  void submitRegister() async {
+    if (_formKey.currentState.validate()) {
+      var userMap = <String, dynamic>{
+        'username': _usernameController.text,
+        'password': _passwordController.text,
+        'email': _emailController.text,
+      };
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc()
+          .set(userMap)
+          .catchError((dynamic e) => print(e));
+
+      Navigator.pushNamed(context, RouteGenerator.loginPage);
+    }
   }
 
   String _validateUsername(String username) {
@@ -214,11 +232,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return null;
   }
 
+  String _validateMail(String mail) {
+    if (mail == null || mail.isEmpty) {
+      return S.of(context).email_empty;
+    }
+
+    var pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+
+    if (!RegExp(pattern).hasMatch(mail)) {
+      return S.of(context).email_invalid;
+    }
+
+    //TODO: check email existance from database
+
+    return null;
+  }
+
   @override
   void dispose() {
     _usernameController.dispose();
     _passwordController.dispose();
     _passwordRepeatController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 }

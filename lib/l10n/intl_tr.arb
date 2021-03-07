@@ -14,6 +14,7 @@
     "username": "Kullanıcı adı",
     "password": "Şifre",
     "repeat_password": "Şifre Tekrar",
+    "email": "Email",
     "required_field": "Zorunlu",
     "username_empty": "Kullanıcı adı boş olamaz.",
     "username_invalid_length": "Uzunluk 5-15 arasında olmalı.",
@@ -24,5 +25,10 @@
     "password_contains_lowercase": "\nküçük harf içermeli.",
     "password_contains_digit": "\nrakam içermeli.",
     "password_contains_special_character": "\nözel karakter içermeli.",
-    "password_not_match": "Şifre eşleşmedi."
+    "password_not_match": "Şifre eşleşmedi.",
+    "email_empty": "Email boş olamaz.",
+    "email_invalid": "Geçersiz email adresi.",
+    "select_user": "Kullanıcı seçiniz",
+    "or": "ya da",
+    "forgot_password": "Şifrenizi mi unuttunuz?"
 }

@@ -14,6 +14,7 @@
     "username": "Benutzername",
     "password": "Passwort",
     "repeat_password": "Passwort wiederholen",
+    "email": "Email",
     "required_field": "Erforderlich",
     "username_empty": "Benutzername darf nicht null sein.",
     "username_invalid_length": "Die Länge muss zwischen 5-15 liegen.",
@@ -24,5 +25,10 @@
     "password_contains_lowercase": "\neinen Kleinbuchstaben enthalten.",
     "password_contains_digit": "\neine Ziffer enthalten.",
     "password_contains_special_character": "\nein Sonderzeichen enthalten.",
-    "password_not_match": "Passwort stimmt nicht überein."
+    "password_not_match": "Passwort stimmt nicht überein.",
+    "email_empty": "E-Mail kann nicht null sein.",
+    "email_invalid": "Ungültige E-Mail-Adresse.",
+    "select_user": "Wähle den Benutzer",
+    "or": "oder",
+    "forgot_password": "Passwort vergessen?"
 }

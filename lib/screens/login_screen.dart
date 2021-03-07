@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/routes.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/utils/preferences.dart';
@@ -19,17 +20,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   String _selectedUser;
 
-  Future<void> _login() async {
-    if (PlatformInfo.isWeb()) {
-      WebStorage.instance.userId = '1';
-    } else {
-      await Preferences.write('userId', '1');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    _login();
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.green,
@@ -63,17 +55,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        userList(),
+                        dropdownList(),
+                        SizedBox(height: 20),
                         AppTextFormField(
-                          hintText: 'Password',
+                          hintText: S.of(context).password,
                           controller: _passwordController,
-                          validateFunc: (value) {},
+                          validateFunc: (value) => '',
                           isObscureText: true,
                         ),
-                        getButton('Login'),
+                        AppButton(
+                          text: S.of(context).login,
+                          backgroundColor: Color(0xFFE63946),
+                          onSubmitFunction: _login,
+                        ),
                         SizedBox(height: 20),
                         TextButton(
-                          child: Text('Forgot Password'),
+                          child: Text(S.of(context).forgot_password),
                           onPressed: () => print('Forgot Password'),
                         ),
                         Row(
@@ -82,23 +79,28 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: Divider(
                                 height: 50,
                                 thickness: 1,
-                                color: Colors.black,
+                                color: Color(0xFF9E9E9E),
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.all(20.0),
-                              child: Text('or'),
+                              padding: EdgeInsets.all(10.0),
+                              child: Text(S.of(context).or),
                             ),
                             Expanded(
                               child: Divider(
                                 height: 50,
                                 thickness: 1,
-                                color: Colors.black,
+                                color: Color(0xFF9E9E9E),
                               ),
                             ),
                           ],
                         ),
-                        getButton('Register'),
+                        AppButton(
+                          text: S.of(context).register,
+                          backgroundColor: Color(0xFFE63946),
+                          onSubmitFunction: () => Navigator.pushNamed(
+                              context, RouteGenerator.registerPage),
+                        ),
                       ],
                     ),
                   ),
@@ -112,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget userList() {
+  Widget dropdownList() {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     return StreamBuilder(
@@ -126,22 +128,31 @@ class _LoginScreenState extends State<LoginScreen> {
         }
 
         var users = snapshot.data.docs;
+        users.sort((a, b) => a
+            .data()['username']
+            .toString()
+            .compareTo(b.data()['username'].toString()));
         return DropdownButton<String>(
           isExpanded: true,
           value: _selectedUser,
-          hint: Text('Select User'),
+          hint: Text(S.of(context).select_user),
           style: GoogleFonts.openSans(fontSize: 17),
           onChanged: (String value) {
             setState(() {
               _selectedUser = value;
             });
-            print(_selectedUser);
           },
           items: users
               .map<DropdownMenuItem<String>>(
                 (e) => DropdownMenuItem<String>(
-                  value: e.data()['username'],
-                  child: Text(e.data()['username']),
+                  value: e.id,
+                  child: Row(
+                    children: [
+                      Text('${e.data()['username']}'),
+                      Expanded(child: Container()),
+                      Text('${e.id}'),
+                    ],
+                  ),
                 ),
               )
               .toList(),
@@ -150,11 +161,19 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget getButton(String text) {
-    return AppButton(
-      text: text,
-      backgroundColor: Color(0xFFE63946),
-      onSubmitFunction: () => print(text),
-    );
+  void _login() async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    DocumentSnapshot docSnapshot =
+        await firestore.collection('users').doc(_selectedUser).get();
+
+    if (_passwordController.text == docSnapshot.data()['password']) {
+      if (PlatformInfo.isWeb()) {
+        WebStorage.instance.userId = docSnapshot.id;
+      } else {
+        await Preferences.write('userId', docSnapshot.id);
+      }
+
+      Navigator.pushNamed(context, RouteGenerator.homePage);
+    }
   }
 }

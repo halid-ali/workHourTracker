@@ -5,7 +5,6 @@ import 'package:work_hour_tracker/main.dart';
 import 'package:work_hour_tracker/routes.dart';
 import 'package:work_hour_tracker/utils/login.dart';
 import 'package:work_hour_tracker/utils/logout.dart';
-import 'package:work_hour_tracker/utils/preferences.dart';
 import 'package:work_hour_tracker/widgets/app_drawer_menu.dart';
 
 class AppDrawer extends StatelessWidget {
