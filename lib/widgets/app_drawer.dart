@@ -63,7 +63,26 @@ class AppDrawer extends StatelessWidget {
   List<Widget> _getButtons(BuildContext context) {
     return [
       Login.isLogged()
-          ? Container()
+          ? Column(
+              children: [
+                DrawerMenu(
+                  text: S.of(context).settings,
+                  icon: Icons.settings_sharp,
+                  func: () =>
+                      Navigator.pushNamed(context, RouteGenerator.settingsPage),
+                ),
+                Divider(height: 5),
+                DrawerMenu(
+                  text: S.of(context).logout,
+                  icon: Icons.close_sharp,
+                  func: () {
+                    Logout.logout();
+                    Navigator.pushNamed(context, RouteGenerator.homePage);
+                  },
+                ),
+                Divider(height: 5),
+              ],
+            )
           : Column(
               children: [
                 DrawerMenu(
@@ -82,27 +101,6 @@ class AppDrawer extends StatelessWidget {
                 Divider(height: 5),
               ],
             ),
-      DrawerMenu(
-        text: S.of(context).settings,
-        icon: Icons.settings_sharp,
-        func: () => Navigator.pushNamed(context, RouteGenerator.settingsPage),
-      ),
-      Divider(height: 5),
-      Login.isLogged()
-          ? Column(
-              children: [
-                DrawerMenu(
-                  text: S.of(context).logout,
-                  icon: Icons.close_sharp,
-                  func: () {
-                    Logout.logout();
-                    Navigator.pushNamed(context, RouteGenerator.homePage);
-                  },
-                ),
-                Divider(height: 5),
-              ],
-            )
-          : Container(),
     ];
   }
 }
