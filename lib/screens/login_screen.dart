@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             AppTextFormField(
                               hintText: S.of(context).password,
                               controller: _passwordController,
-                              validateFunc: (value) => '',
+                              validateFunc: (val) => '',
                               isObscureText: true,
                             ),
                             AppButton(

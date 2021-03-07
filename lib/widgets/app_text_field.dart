@@ -26,7 +26,7 @@ class AppTextFormField extends StatefulWidget {
 
 class _AppTextFormFieldState extends State<AppTextFormField> {
   final _focusNode = FocusNode();
-  Color _suffixIconColor = Colors.white;
+  Widget _suffixIcon;
 
   initState() {
     super.initState();
@@ -42,9 +42,9 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
 
     widget.controller.addListener(() {
       setState(() {
-        _suffixIconColor = widget.validateFunc(widget.controller.text) == null
-            ? Colors.green
-            : Colors.white;
+        _suffixIcon = widget.validateFunc(widget.controller.text) == null
+            ? Icon(Icons.check, color: Colors.green)
+            : SizedBox(width: 1);
       });
     });
   }
@@ -65,10 +65,7 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
         hintText: widget.hintText,
         hintStyle: GoogleFonts.openSans(fontSize: 17),
         icon: _getIcon(),
-        suffixIcon: Icon(
-          Icons.check,
-          color: _suffixIconColor,
-        ),
+        suffixIcon: _suffixIcon,
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.grey,

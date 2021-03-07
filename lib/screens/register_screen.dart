@@ -215,7 +215,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       buffer.write(S.of(context).password_contains_digit);
     }
 
-    if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+    if (!password.contains(RegExp(r'[-_!@#$%^&*(),.?":{}|<>]'))) {
       buffer.write(S.of(context).password_contains_special_character);
     }
 
