@@ -27,8 +27,9 @@ class _AppButtonState extends State<AppButton> {
         color: widget.backgroundColor,
         padding: EdgeInsets.symmetric(
           horizontal: 40,
-          vertical: 10,
+          vertical: 15,
         ),
+        alignment: Alignment.center,
         child: Text(
           widget.text,
           style: GoogleFonts.merriweather(

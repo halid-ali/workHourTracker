@@ -90,10 +90,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Container(
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            color: Color(0xFFF8F9FA),
+            color: Color(0xFFF5F3F4),
             border: Border.all(
               width: 1,
-              color: Color(0xFFCED4DA),
+              color: Color(0xFFD3D3D3),
             ),
           ),
           child: Padding(
