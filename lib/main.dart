@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:work_hour_tracker/utils/login.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +39,8 @@ class _WorkHourTrackerState extends State<WorkHourTracker> {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      initialRoute: RouteGenerator.homePage,
+      initialRoute:
+          Login.isLogged() ? RouteGenerator.homePage : RouteGenerator.loginPage,
       onGenerateRoute: RouteGenerator.generateRoute,
       debugShowCheckedModeBanner: false,
     );

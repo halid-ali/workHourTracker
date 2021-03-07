@@ -24,90 +24,67 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.green,
         body: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Row(
-                children: [
-                  InkWell(
-                    onTap: () =>
-                        Navigator.pushNamed(context, RouteGenerator.homePage),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: PlatformInfo.isWeb()
+                  ? 600
+                  : MediaQuery.of(context).size.width,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(child: Container()),
+                Container(
+                  child: Center(
                     child: Container(
-                      padding: EdgeInsets.all(10),
-                      child: Icon(Icons.arrow_back_ios_sharp),
-                    ),
-                  ),
-                  Expanded(child: Container()),
-                ],
-              ),
-              Expanded(child: Container()),
-              Container(
-                color: Colors.pink,
-                child: Center(
-                  child: Container(
-                    margin: EdgeInsets.all(20.0),
-                    padding: EdgeInsets.all(20.0),
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.white,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        dropdownList(),
-                        SizedBox(height: 20),
-                        AppTextFormField(
-                          hintText: S.of(context).password,
-                          controller: _passwordController,
-                          validateFunc: (value) => '',
-                          isObscureText: true,
+                      margin: EdgeInsets.all(20.0),
+                      padding: EdgeInsets.all(20.0),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFF5F3F4),
+                        border: Border.all(
+                          width: 1,
+                          color: Color(0xFFD3D3D3),
                         ),
-                        AppButton(
-                          text: S.of(context).login,
-                          backgroundColor: Color(0xFFE63946),
-                          onSubmitFunction: _login,
-                        ),
-                        SizedBox(height: 20),
-                        TextButton(
-                          child: Text(S.of(context).forgot_password),
-                          onPressed: () => print('Forgot Password'),
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Divider(
-                                height: 50,
-                                thickness: 1,
-                                color: Color(0xFF9E9E9E),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(10.0),
-                              child: Text(S.of(context).or),
-                            ),
-                            Expanded(
-                              child: Divider(
-                                height: 50,
-                                thickness: 1,
-                                color: Color(0xFF9E9E9E),
-                              ),
-                            ),
-                          ],
-                        ),
-                        AppButton(
-                          text: S.of(context).register,
-                          backgroundColor: Color(0xFFE63946),
-                          onSubmitFunction: () => Navigator.pushNamed(
-                              context, RouteGenerator.registerPage),
-                        ),
-                      ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          dropdownList(),
+                          SizedBox(height: 20),
+                          AppTextFormField(
+                            hintText: S.of(context).password,
+                            controller: _passwordController,
+                            validateFunc: (value) => '',
+                            isObscureText: true,
+                          ),
+                          AppButton(
+                            text: S.of(context).login,
+                            backgroundColor: Color(0xFF0DB65C),
+                            onSubmitFunction: _login,
+                          ),
+                          divider(),
+                          AppButton(
+                            text: S.of(context).register,
+                            backgroundColor: Color(0xFFE63946),
+                            onSubmitFunction: () => Navigator.pushNamed(
+                                context, RouteGenerator.registerPage),
+                          ),
+                          SizedBox(height: 20),
+                          TextButton(
+                            child: Text(S.of(context).forgot_password),
+                            onPressed: () => print('Forgot Password'),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(child: Container()),
-            ],
+                Expanded(child: Container()),
+              ],
+            ),
           ),
         ),
       ),
@@ -161,6 +138,31 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Widget divider() {
+    return Row(
+      children: [
+        Expanded(
+          child: Divider(
+            height: 50,
+            thickness: 1,
+            color: Color(0xFFD3D3D3),
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.all(10.0),
+          child: Text(S.of(context).or),
+        ),
+        Expanded(
+          child: Divider(
+            height: 50,
+            thickness: 1,
+            color: Color(0xFFD3D3D3),
+          ),
+        ),
+      ],
+    );
+  }
+
   void _login() async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     DocumentSnapshot docSnapshot =
@@ -169,8 +171,10 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_passwordController.text == docSnapshot.data()['password']) {
       if (PlatformInfo.isWeb()) {
         WebStorage.instance.userId = docSnapshot.id;
+        WebStorage.instance.username = docSnapshot.data()['username'];
       } else {
         await Preferences.write('userId', docSnapshot.id);
+        await Preferences.write('username', docSnapshot.data()['username']);
       }
 
       Navigator.pushNamed(context, RouteGenerator.homePage);

@@ -1,3 +1,4 @@
+import 'package:universal_html/prefer_sdk/html.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/utils/web_storage.dart';
 
@@ -14,5 +15,35 @@ class Login {
     }
 
     return result;
+  }
+
+  static void logout() {
+    if (PlatformInfo.isWeb()) {
+      WebStorage.instance.userId = null;
+    } else {
+      Preferences.clear();
+    }
+  }
+
+  static String getUsername() {
+    String username;
+    if (PlatformInfo.isWeb()) {
+      username = WebStorage.instance.username;
+    } else {
+      Preferences.read('username').then((value) => username = value);
+    }
+
+    return username;
+  }
+
+  static String getUserId() {
+    String userId;
+    if (PlatformInfo.isWeb()) {
+      userId = WebStorage.instance.userId;
+    } else {
+      Preferences.read('userId').then((value) => userId = value);
+    }
+
+    return userId;
   }
 }

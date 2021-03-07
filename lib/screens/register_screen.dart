@@ -59,7 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: Color(0xFFF1FAEE),
                         ),
                         onTap: () => Navigator.pushNamed(
-                            context, RouteGenerator.homePage),
+                            context, RouteGenerator.loginPage),
                       ),
                     ],
                   ),

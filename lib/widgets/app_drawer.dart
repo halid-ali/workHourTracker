@@ -4,7 +4,6 @@ import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/main.dart';
 import 'package:work_hour_tracker/routes.dart';
 import 'package:work_hour_tracker/utils/login.dart';
-import 'package:work_hour_tracker/utils/logout.dart';
 import 'package:work_hour_tracker/widgets/app_drawer_menu.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -26,6 +25,16 @@ class AppDrawer extends StatelessWidget {
           Divider(height: 20),
           Column(
             children: [
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.all(10.0),
+                child: Text('Username: ${Login.getUsername()}'),
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.all(10.0),
+                child: Text('Id: ${Login.getUserId()}'),
+              ),
               ..._getButtons(context),
             ],
           ),
@@ -64,6 +73,7 @@ class AppDrawer extends StatelessWidget {
       Login.isLogged()
           ? Column(
               children: [
+                Divider(height: 5),
                 DrawerMenu(
                   text: S.of(context).settings,
                   icon: Icons.settings_sharp,
@@ -75,8 +85,8 @@ class AppDrawer extends StatelessWidget {
                   text: S.of(context).logout,
                   icon: Icons.close_sharp,
                   func: () {
-                    Logout.logout();
-                    Navigator.pushNamed(context, RouteGenerator.homePage);
+                    Login.logout();
+                    Navigator.pushNamed(context, RouteGenerator.loginPage);
                   },
                 ),
                 Divider(height: 5),

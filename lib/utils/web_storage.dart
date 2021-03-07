@@ -11,7 +11,13 @@ class WebStorage {
 
   String get userId => window.localStorage['userId'];
 
+  String get username => window.localStorage['username'];
+
   set userId(String sid) => (sid == null)
       ? window.localStorage.remove('userId')
       : window.localStorage['userId'] = sid;
+
+  set username(String sid) => (sid == null)
+      ? window.localStorage.remove('username')
+      : window.localStorage['username'] = sid;
 }
