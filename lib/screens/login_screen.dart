@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/routes.dart';
@@ -8,6 +9,7 @@ import 'package:work_hour_tracker/utils/preferences.dart';
 import 'package:work_hour_tracker/utils/web_storage.dart';
 import 'package:work_hour_tracker/widgets/app_button.dart';
 import 'package:work_hour_tracker/widgets/app_text_field.dart';
+import 'package:work_hour_tracker/widgets/app_toast.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key key}) : super(key: key);
@@ -166,6 +168,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _login() async {
+    if (_selectedUser == null) {
+      AppToast.info(context, S.of(context).select_user_toast);
+      return;
+    }
+
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     DocumentSnapshot docSnapshot =
         await firestore.collection('users').doc(_selectedUser).get();
@@ -180,6 +187,8 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
       Navigator.pushNamed(context, RouteGenerator.homePage);
+    } else {
+      AppToast.error(context, S.of(context).wrong_password);
     }
   }
 }

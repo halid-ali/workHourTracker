@@ -30,5 +30,7 @@
     "email_invalid": "Ungültige E-Mail-Adresse.",
     "select_user": "Wähle den Benutzer",
     "or": "oder",
-    "forgot_password": "Passwort vergessen?"
+    "forgot_password": "Passwort vergessen?",
+    "wrong_password": "Falsches Passwort!",
+    "select_user_toast": "Bitte wählen Sie einen Benutzer."
 }

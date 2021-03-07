@@ -123,5 +123,13 @@
     "forgot_password": "Forgot password?",
     "@forgot_password": {
         "description": "Forgot password text button"
+    },
+    "wrong_password": "Wrong password!",
+    "@wrong_password": {
+        "description": "Wrong password text toast"
+    },
+    "select_user_toast": "Please select a user.",
+    "@select_user_toast": {
+        "description": "Info toast for user selection in login"
     }
 }

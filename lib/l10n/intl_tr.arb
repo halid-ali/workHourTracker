@@ -30,5 +30,7 @@
     "email_invalid": "Geçersiz email adresi.",
     "select_user": "Kullanıcı seçiniz",
     "or": "ya da",
-    "forgot_password": "Şifrenizi mi unuttunuz?"
+    "forgot_password": "Şifrenizi mi unuttunuz?",
+    "wrong_password": "Yanlış şifre!",
+    "select_user_toast": "Lütfen bir kullanıcı seçiniz."
 }
