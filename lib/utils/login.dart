@@ -1,4 +1,3 @@
-import 'package:universal_html/prefer_sdk/html.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/utils/web_storage.dart';
 

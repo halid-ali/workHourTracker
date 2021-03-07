@@ -25,54 +25,56 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: PlatformInfo.isWeb()
-                  ? 600
-                  : MediaQuery.of(context).size.width,
-            ),
-            child: Column(
-              children: [
-                // Header
-                Container(
-                  color: Color(0xFF1D3557),
-                  padding: EdgeInsets.all(10.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            S.of(context).register,
-                            style: GoogleFonts.merriweather(
-                              color: Color(0xFFF1FAEE),
-                              fontSize: 21,
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: PlatformInfo.isWeb()
+                    ? 600
+                    : MediaQuery.of(context).size.width,
+              ),
+              child: Column(
+                children: [
+                  // Header
+                  Container(
+                    color: Color(0xFF1D3557),
+                    padding: EdgeInsets.all(10.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              S.of(context).register,
+                              style: GoogleFonts.merriweather(
+                                color: Color(0xFFF1FAEE),
+                                fontSize: 21,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      InkWell(
-                        child: Icon(
-                          Icons.close_sharp,
-                          color: Color(0xFFF1FAEE),
+                        InkWell(
+                          child: Icon(
+                            Icons.close_sharp,
+                            color: Color(0xFFF1FAEE),
+                          ),
+                          onTap: () => Navigator.pushNamed(
+                              context, RouteGenerator.loginPage),
                         ),
-                        onTap: () => Navigator.pushNamed(
-                            context, RouteGenerator.loginPage),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                // Separator
-                Container(
-                  height: 10,
-                  color: Color(0xFFE63946),
-                  margin: EdgeInsets.only(bottom: 20),
-                ),
-                // Form
-                _buildForm(),
-              ],
+                  // Separator
+                  Container(
+                    height: 10,
+                    color: Color(0xFFE63946),
+                    margin: EdgeInsets.only(bottom: 20),
+                  ),
+                  // Form
+                  _buildForm(),
+                ],
+              ),
             ),
           ),
         ),

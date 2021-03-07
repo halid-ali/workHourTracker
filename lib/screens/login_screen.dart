@@ -24,66 +24,68 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: PlatformInfo.isWeb()
-                  ? 600
-                  : MediaQuery.of(context).size.width,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Expanded(child: Container()),
-                Container(
-                  child: Center(
-                    child: Container(
-                      margin: EdgeInsets.all(20.0),
-                      padding: EdgeInsets.all(20.0),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF5F3F4),
-                        border: Border.all(
-                          width: 1,
-                          color: Color(0xFFD3D3D3),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: PlatformInfo.isWeb()
+                    ? 600
+                    : MediaQuery.of(context).size.width,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(child: Container()),
+                  Container(
+                    child: Center(
+                      child: Container(
+                        margin: EdgeInsets.all(20.0),
+                        padding: EdgeInsets.all(20.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF5F3F4),
+                          border: Border.all(
+                            width: 1,
+                            color: Color(0xFFD3D3D3),
+                          ),
                         ),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          dropdownList(),
-                          SizedBox(height: 20),
-                          AppTextFormField(
-                            hintText: S.of(context).password,
-                            controller: _passwordController,
-                            validateFunc: (value) => '',
-                            isObscureText: true,
-                          ),
-                          AppButton(
-                            text: S.of(context).login,
-                            backgroundColor: Color(0xFF0DB65C),
-                            onSubmitFunction: _login,
-                          ),
-                          divider(),
-                          AppButton(
-                            text: S.of(context).register,
-                            backgroundColor: Color(0xFFE63946),
-                            onSubmitFunction: () => Navigator.pushNamed(
-                                context, RouteGenerator.registerPage),
-                          ),
-                          SizedBox(height: 20),
-                          TextButton(
-                            child: Text(S.of(context).forgot_password),
-                            onPressed: () => print('Forgot Password'),
-                          ),
-                        ],
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            dropdownList(),
+                            SizedBox(height: 20),
+                            AppTextFormField(
+                              hintText: S.of(context).password,
+                              controller: _passwordController,
+                              validateFunc: (value) => '',
+                              isObscureText: true,
+                            ),
+                            AppButton(
+                              text: S.of(context).login,
+                              backgroundColor: Color(0xFF0DB65C),
+                              onSubmitFunction: _login,
+                            ),
+                            divider(),
+                            AppButton(
+                              text: S.of(context).register,
+                              backgroundColor: Color(0xFFE63946),
+                              onSubmitFunction: () => Navigator.pushNamed(
+                                  context, RouteGenerator.registerPage),
+                            ),
+                            SizedBox(height: 20),
+                            TextButton(
+                              child: Text(S.of(context).forgot_password),
+                              onPressed: () => print('Forgot Password'),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Expanded(child: Container()),
-              ],
+                  Expanded(child: Container()),
+                ],
+              ),
             ),
           ),
         ),

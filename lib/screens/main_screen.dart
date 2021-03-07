@@ -65,81 +65,84 @@ class _MainScreen extends State<MainScreen> {
             style: GoogleFonts.notoSerif(fontSize: 25, letterSpacing: 0.7),
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: PlatformInfo.isWeb()
-                  ? 600
-                  : MediaQuery.of(context).size.width,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(width: 1, color: Colors.grey[400]),
-                  ),
-                  child: DropdownButton<String>(
-                    icon: Icon(Icons.arrow_drop_down_sharp),
-                    isExpanded: true,
-                    underline: Container(),
-                    value: _selectedOption,
-                    hint: Text(
-                      S.of(context).dropdownDefault,
-                      style: GoogleFonts.openSans(fontSize: 21),
-                    ),
-                    items: _options.map((String option) {
-                      return DropdownMenuItem<String>(
-                        value: option,
-                        child: Text(
-                          option,
-                          style: GoogleFonts.openSans(fontSize: 21),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: !_isStopped && Login.isLogged()
-                        ? (String value) {
-                            setState(() {
-                              _selectedOption = value;
-                              _isStarted = true;
-                            });
-                          }
-                        : null,
-                  ),
-                ),
-                SizedBox(height: 20),
-                _buildButtons(),
-                SizedBox(height: 20),
-                _buildListHeader(),
-                SizedBox(height: 2),
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(1),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: PlatformInfo.isWeb()
+                    ? 600
+                    : MediaQuery.of(context).size.width,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1,
-                        color: Colors.grey,
+                      color: Colors.grey[200],
+                      border: Border.all(width: 1, color: Colors.grey[400]),
+                    ),
+                    child: DropdownButton<String>(
+                      icon: Icon(Icons.arrow_drop_down_sharp),
+                      isExpanded: true,
+                      underline: Container(),
+                      value: _selectedOption,
+                      hint: Text(
+                        S.of(context).dropdownDefault,
+                        style: GoogleFonts.openSans(fontSize: 21),
+                      ),
+                      items: _options.map((String option) {
+                        return DropdownMenuItem<String>(
+                          value: option,
+                          child: Text(
+                            option,
+                            style: GoogleFonts.openSans(fontSize: 21),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: !_isStopped && Login.isLogged()
+                          ? (String value) {
+                              setState(() {
+                                _selectedOption = value;
+                                _isStarted = true;
+                              });
+                            }
+                          : null,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  _buildButtons(),
+                  SizedBox(height: 20),
+                  _buildListHeader(),
+                  SizedBox(height: 2),
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.all(1),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      child: ListView.separated(
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: 1),
+                        itemCount: _workSlots.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              _getSlidable(_workSlots[index], index % 2 != 0)
+                            ],
+                          );
+                        },
                       ),
                     ),
-                    child: ListView.separated(
-                      separatorBuilder: (context, index) => SizedBox(height: 1),
-                      itemCount: _workSlots.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            _getSlidable(_workSlots[index], index % 2 != 0)
-                          ],
-                        );
-                      },
-                    ),
                   ),
-                ),
-                SizedBox(height: 2),
-                _buildFooter(),
-              ],
+                  SizedBox(height: 2),
+                  _buildFooter(),
+                ],
+              ),
             ),
           ),
         ),
