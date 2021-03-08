@@ -13,6 +13,7 @@ import 'package:work_hour_tracker/utils/options.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/utils/settings.dart';
 import 'package:work_hour_tracker/widgets/app_drawer.dart';
+import 'package:work_hour_tracker/widgets/app_toast.dart';
 import 'package:work_hour_tracker/widgets/header_footer.dart';
 import 'package:work_hour_tracker/widgets/header_footer_column.dart';
 import 'package:work_hour_tracker/widgets/track_button.dart';
@@ -473,8 +474,10 @@ class _MainScreen extends State<MainScreen> {
         _currentSlot = WorkHourSlot(_selectedOption);
         _currentSlot.start();
         _workSlots.add(_currentSlot);
+        AppToast.info(context, 'Timer is started.');
       } else if (_workSlots.last.isPaused) {
         _workSlots.last.start();
+        AppToast.info(context, 'Timer is resumed.');
       }
     });
 
@@ -494,6 +497,7 @@ class _MainScreen extends State<MainScreen> {
       _currentSlot = null;
     });
 
+    AppToast.info(context, 'Timer is stopped.');
     print('stopp tapped at ${DateFormat('HH:mm.ss').format(DateTime.now())}');
   }
 
@@ -508,6 +512,7 @@ class _MainScreen extends State<MainScreen> {
       _workSlots.last.pause();
     });
 
+    AppToast.info(context, 'Timer is paused.');
     print('break tapped at ${DateFormat('HH:mm.ss').format(DateTime.now())}');
   }
 }
