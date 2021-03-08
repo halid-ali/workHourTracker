@@ -17,6 +17,7 @@ class AppDrawer extends StatelessWidget {
           _buildLanguagesRow(context),
           Divider(height: 20),
           Container(
+            height: 180,
             child: Image.asset(
               'chronometer.png',
               width: 180,
