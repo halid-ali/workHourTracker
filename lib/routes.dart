@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:work_hour_tracker/screens/login_screen.dart';
 import 'package:work_hour_tracker/screens/main_screen.dart';
 import 'package:work_hour_tracker/screens/register_screen.dart';
-import 'package:work_hour_tracker/screens/settings_screen.dart';
+import 'package:work_hour_tracker/screens/settings/settings_screen.dart';
 
 class RouteGenerator {
   static const homePage = '/';
