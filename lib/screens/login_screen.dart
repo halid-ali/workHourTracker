@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         Expanded(
                           child: Container(
-                            alignment: Alignment.center,
+                            alignment: Alignment.centerLeft,
                             child: Text(
                               S.of(context).login,
                               style: GoogleFonts.merriweather(

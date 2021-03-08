@@ -44,7 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       children: [
                         Expanded(
                           child: Container(
-                            alignment: Alignment.center,
+                            alignment: Alignment.centerLeft,
                             child: Text(
                               S.of(context).register,
                               style: GoogleFonts.merriweather(
