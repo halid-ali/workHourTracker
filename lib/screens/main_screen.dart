@@ -9,7 +9,9 @@ import 'package:work_hour_tracker/classes/status.dart';
 import 'package:work_hour_tracker/classes/work_hour_slot.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/utils/login.dart';
+import 'package:work_hour_tracker/utils/options.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
+import 'package:work_hour_tracker/utils/settings.dart';
 import 'package:work_hour_tracker/widgets/app_drawer.dart';
 import 'package:work_hour_tracker/widgets/header_footer.dart';
 import 'package:work_hour_tracker/widgets/header_footer_column.dart';
@@ -25,8 +27,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreen extends State<MainScreen> {
   final SlidableController _slidableController = SlidableController();
-  final List<String> _options = ['Projekt', 'Allgemeine', 'Fortbildung'];
-  final DisplayFormat _displayFormat = DisplayFormat.minuteSecond;
+  final DisplayFormat _displayFormat = AppSettings.displayFormat;
   final List<WorkHourSlot> _workSlots = [];
   scheme.ColorScheme _colorScheme;
   WorkHourSlot _currentSlot;
@@ -39,10 +40,6 @@ class _MainScreen extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    _workSlots.add(WorkHourSlot.withSampleData('Random Option'));
-    _workSlots.add(WorkHourSlot.withSampleData('My Slot'));
-    _workSlots.add(WorkHourSlot.withSampleData('Quite Long Option'));
-
     Timer.periodic(
       Duration(seconds: 1),
       (Timer t) => setState(() {
@@ -92,15 +89,7 @@ class _MainScreen extends State<MainScreen> {
                         S.of(context).dropdownDefault,
                         style: GoogleFonts.openSans(fontSize: 21),
                       ),
-                      items: _options.map((String option) {
-                        return DropdownMenuItem<String>(
-                          value: option,
-                          child: Text(
-                            option,
-                            style: GoogleFonts.openSans(fontSize: 21),
-                          ),
-                        );
-                      }).toList(),
+                      items: Options.dropdownMenus(),
                       onChanged: !_isStopped && Login.isLogged()
                           ? (String value) {
                               setState(() {
