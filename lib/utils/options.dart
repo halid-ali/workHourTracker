@@ -12,20 +12,23 @@ class Options {
       menuItems.add(
         DropdownMenuItem<String>(
           value: option.key,
-          child: Tooltip(
-            message: option.value,
-            padding: EdgeInsets.all(5.0),
-            margin: EdgeInsets.all(20.0),
-            textStyle: GoogleFonts.openSans(fontSize: 15, color: Colors.white),
-            decoration: BoxDecoration(color: Color(0xFF212529)),
-            child: Row(
-              children: [
-                Text(
-                  option.key,
-                  style: GoogleFonts.openSans(fontSize: 21),
-                ),
-              ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                option.key,
+                style: GoogleFonts.openSans(fontSize: 21),
+              ),
+              Tooltip(
+                message: option.value,
+                padding: EdgeInsets.all(5.0),
+                margin: EdgeInsets.all(20.0),
+                textStyle:
+                    GoogleFonts.openSans(fontSize: 15, color: Colors.white),
+                decoration: BoxDecoration(color: Color(0xFF212529)),
+                child: Icon(Icons.info_outline_rounded),
+              ),
+            ],
           ),
         ),
       );
