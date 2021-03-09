@@ -9,7 +9,7 @@ import 'package:work_hour_tracker/classes/status.dart';
 import 'package:work_hour_tracker/classes/work_hour_slot.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/utils/login.dart';
-import 'package:work_hour_tracker/utils/options.dart';
+import 'package:work_hour_tracker/utils/dropdown_options.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/utils/settings.dart';
 import 'package:work_hour_tracker/widgets/app_drawer.dart';
@@ -90,7 +90,7 @@ class _MainScreen extends State<MainScreen> {
                         S.of(context).dropdownDefault,
                         style: GoogleFonts.openSans(fontSize: 21),
                       ),
-                      items: Options.dropdownMenus(),
+                      items: DropdownOptions.getMenus(),
                       onChanged: !_isStopped && Login.isLogged()
                           ? (String value) {
                               setState(() {

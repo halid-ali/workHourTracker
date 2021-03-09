@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Options {
+class DropdownOptions {
   static Map<String, String> _options = Map<String, String>();
 
-  static List<DropdownMenuItem<String>> dropdownMenus() {
+  static List<DropdownMenuItem<String>> getMenus() {
     _initOptions();
     List<DropdownMenuItem<String>> menuItems = [];
 
