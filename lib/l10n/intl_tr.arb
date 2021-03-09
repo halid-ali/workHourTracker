@@ -32,5 +32,11 @@
     "or": "ya da",
     "forgot_password": "Şifrenizi mi unuttunuz?",
     "wrong_password": "Yanlış şifre!",
-    "select_user_toast": "Lütfen bir kullanıcı seçiniz."
+    "select_user_toast": "Lütfen bir kullanıcı seçiniz.",
+    "timer_started": "Sayaç başlatıldı.",
+    "timer_stopped": "Sayaç sonlandırıldı.",
+    "timer_paused": "Sayaç duraklatıldı.",
+    "timer_resumed": "Sayaç sürdürülüyor.",
+    "error_occurred": "Hata oluştu.",
+    "work_hour_options": "Çalışma Saati Seçenekleri"
 }

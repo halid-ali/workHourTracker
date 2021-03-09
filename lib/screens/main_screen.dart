@@ -474,10 +474,10 @@ class _MainScreen extends State<MainScreen> {
         _currentSlot = WorkHourSlot(_selectedOption);
         _currentSlot.start();
         _workSlots.add(_currentSlot);
-        AppToast.info(context, 'Timer is started.');
+        AppToast.info(context, S.of(context).timer_started);
       } else if (_workSlots.last.isPaused) {
         _workSlots.last.start();
-        AppToast.info(context, 'Timer is resumed.');
+        AppToast.info(context, S.of(context).timer_resumed);
       }
     });
 
@@ -497,7 +497,7 @@ class _MainScreen extends State<MainScreen> {
       _currentSlot = null;
     });
 
-    AppToast.info(context, 'Timer is stopped.');
+    AppToast.info(context, S.of(context).timer_stopped);
     print('stopp tapped at ${DateFormat('HH:mm.ss').format(DateTime.now())}');
   }
 
@@ -512,7 +512,7 @@ class _MainScreen extends State<MainScreen> {
       _workSlots.last.pause();
     });
 
-    AppToast.info(context, 'Timer is paused.');
+    AppToast.info(context, S.of(context).timer_paused);
     print('break tapped at ${DateFormat('HH:mm.ss').format(DateTime.now())}');
   }
 }

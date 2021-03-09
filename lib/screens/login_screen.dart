@@ -161,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
       stream: firestore.collection('users').snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text('Error occured');
+          return Text(S.of(context).error_occurred);
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();

@@ -32,5 +32,11 @@
     "or": "oder",
     "forgot_password": "Passwort vergessen?",
     "wrong_password": "Falsches Passwort!",
-    "select_user_toast": "Bitte wählen Sie einen Benutzer."
+    "select_user_toast": "Bitte wählen Sie einen Benutzer.",
+    "timer_started": "Der Timer wird gestartet.",
+    "timer_stopped": "Der Timer wird gestoppt.",
+    "timer_paused": "Der Timer ist angehalten.",
+    "timer_resumed": "Der Timer wird fortgesetzt.",
+    "error_occurred": "Ein Fehler ist aufgetreten.",
+    "work_hour_options": "Arbeitszeitoptionen"
 }

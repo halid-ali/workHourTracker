@@ -131,5 +131,29 @@
     "select_user_toast": "Please select a user.",
     "@select_user_toast": {
         "description": "Info toast for user selection in login"
+    },
+    "timer_started": "The timer is started.",
+    "@timer_started": {
+        "description": "The timer is started toast message"
+    },
+    "timer_stopped": "The timer is stopped.",
+    "@timer_stopped": {
+        "description": "The timer is stopped toast message"
+    },
+    "timer_paused": "The timer is paused.",
+    "@timer_paused": {
+        "description": "The timer is paused toast message"
+    },
+    "timer_resumed": "The timer is resumed.",
+    "@timer_resumed": {
+        "description": "The timer is resumed toast message"
+    },
+    "error_occurred": "Error occurred.",
+    "@error_occurred": {
+        "description": "Error message of Firebase"
+    },
+    "work_hour_options": "Work Hour Options",
+    "@work_hour_options": {
+        "description": "Settings option title for Work Hour Options"
     }
 }

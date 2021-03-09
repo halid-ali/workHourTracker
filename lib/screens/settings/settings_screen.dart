@@ -87,7 +87,7 @@ class SettingsScreen extends StatelessWidget {
                                 children: [
                                   Container(
                                     child: Text(
-                                      'Options',
+                                      S.of(context).work_hour_options,
                                       style: GoogleFonts.openSans(
                                         fontSize: 17,
                                         color: Colors.black,
