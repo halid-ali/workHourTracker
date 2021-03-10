@@ -168,10 +168,12 @@ class _LoginScreenState extends State<LoginScreen> {
         }
 
         var users = snapshot.data.docs;
-        users.sort((a, b) => a
-            .data()['username']
-            .toString()
-            .compareTo(b.data()['username'].toString()));
+        users.sort(
+          (a, b) => a
+              .data()['username']
+              .toString()
+              .compareTo(b.data()['username'].toString()),
+        );
         return DropdownButton<String>(
           isExpanded: true,
           value: _selectedUser,

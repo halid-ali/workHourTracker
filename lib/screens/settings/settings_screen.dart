@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/routes.dart';
+import 'package:work_hour_tracker/screens/settings/workhour_options_screen.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
+import 'package:work_hour_tracker/widgets/fade_transition.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key key}) : super(key: key);
@@ -102,7 +104,12 @@ class SettingsScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            onPressed: () => print('options clicked'),
+                            onPressed: () => Navigator.push(
+                              context,
+                              FadeRouteTransition(
+                                page: WorkHourOptionsScreen(),
+                              ),
+                            ),
                           ),
                         ],
                       ),
