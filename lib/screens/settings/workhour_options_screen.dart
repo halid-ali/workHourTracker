@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:work_hour_tracker/data/model/work_hour_option_model.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/screens/settings/settings_screen.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
@@ -155,9 +156,10 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
             itemCount: options.length,
             itemBuilder: (context, index) {
               double bottom = index == options.length - 1 ? 10 : 0;
-              String id = options[index].id;
-              String name = options[index].data()['name'];
-              String description = options[index].data()['description'];
+              var option = WorkHourOption.fromJson(
+                options[index].id,
+                options[index].data(),
+              );
               return Container(
                 padding: EdgeInsets.all(10.0),
                 margin: EdgeInsets.only(
@@ -177,7 +179,7 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
                   children: [
                     Expanded(
                       child: Text(
-                        name,
+                        option.name,
                         style: GoogleFonts.openSans(fontSize: 17),
                       ),
                     ),
@@ -188,7 +190,10 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
                           fontSize: 15, color: Colors.white),
                       decoration: BoxDecoration(color: Color(0xFF212529)),
                       child: InkWell(
-                        onTap: () => onDetailsTapped(name, description),
+                        onTap: () => onDetailsTapped(
+                          option.name,
+                          option.description,
+                        ),
                         child: Icon(
                           Icons.info_outline_rounded,
                           color: Color(0xFF6C757D),
@@ -218,7 +223,11 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
                           fontSize: 15, color: Colors.white),
                       decoration: BoxDecoration(color: Color(0xFF212529)),
                       child: InkWell(
-                        onTap: () => onDeleteTapped(firestore, id, name),
+                        onTap: () => onDeleteTapped(
+                          firestore,
+                          option.id,
+                          option.name,
+                        ),
                         child: Icon(
                           Icons.delete_forever_sharp,
                           color: Color(0xFFBA181B),
