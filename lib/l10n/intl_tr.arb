@@ -38,5 +38,16 @@
     "timer_paused": "Sayaç duraklatıldı.",
     "timer_resumed": "Sayaç sürdürülüyor.",
     "error_occurred": "Hata oluştu.",
-    "work_hour_options": "Çalışma Saati Seçenekleri"
+    "work_hour_options": "Çalışma Saati Seçenekleri",
+    "details": "Detaylar",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "option_deleted": "{optionName} silindi.",
+    "yes": "Evet",
+    "no": "Hayır",
+    "option_will_deleted": "\"{optionName}\" silinecek.",
+    "really_delete": "Gerçekten silmek istiyor musunuz?",
+    "warning": "Dikkat",
+    "available_options": "Aktif Seçenekler",
+    "add_update_options": "Seçenek Ekle/Güncelle"
 }

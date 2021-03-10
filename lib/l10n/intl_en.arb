@@ -155,5 +155,49 @@
     "work_hour_options": "Work Hour Options",
     "@work_hour_options": {
         "description": "Settings option title for Work Hour Options"
+    },
+    "details": "Details",
+    "@details": {
+        "description": "Details tooltip text"
+    },
+    "edit": "Edit",
+    "@edit": {
+        "description": "Edit tooltip text"
+    },
+    "delete": "Delete",
+    "@delete": {
+        "description": "Delete tooltip text"
+    },
+    "option_deleted": "{optionName} is deleted.",
+    "@option_deleted": {
+        "description": "Toast message for deleted option"
+    },
+    "yes": "Yes",
+    "@yes": {
+        "description": "Yes button text"
+    },
+    "no": "No",
+    "@no": {
+        "description": "No button text"
+    },
+    "option_will_deleted": "\"{optionName}\" will be deleted.",
+    "@option_will_deleted": {
+        "description": "First part of option confirmation message"
+    },
+    "really_delete": "Do you really want to delete it?",
+    "@really_delete": {
+        "description": "Second part of option confirmation message"
+    },
+    "warning": "Warning",
+    "@warning": {
+        "description": "Title of delete message box"
+    },
+    "available_options": "Available Options",
+    "@available_options": {
+        "description": "Header text of Available Options"
+    },
+    "add_update_options": "Add/Update Option",
+    "@add_update_options": {
+        "description": "Header text of Add/Update Option"
     }
 }
