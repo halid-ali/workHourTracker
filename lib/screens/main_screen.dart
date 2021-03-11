@@ -155,7 +155,7 @@ class _MainScreen extends State<MainScreen> {
               style: GoogleFonts.openSans(fontSize: 21),
             ),
             items: _getMenuItems(options
-                .map((e) => WorkHourOption.fromJson(e.id, e.data()))
+                .map((e) => WorkHourOptionModel.fromJson(e.id, e.data()))
                 .toList()),
             onChanged: !_isStopped && Login.isLogged()
                 ? (String value) {
@@ -171,7 +171,8 @@ class _MainScreen extends State<MainScreen> {
     );
   }
 
-  List<DropdownMenuItem<String>> _getMenuItems(List<WorkHourOption> options) {
+  List<DropdownMenuItem<String>> _getMenuItems(
+      List<WorkHourOptionModel> options) {
     List<DropdownMenuItem<String>> menuItems = [];
 
     for (var option in options) {

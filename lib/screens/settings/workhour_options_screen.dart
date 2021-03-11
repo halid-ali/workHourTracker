@@ -23,7 +23,7 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
   String buttonTitle = '';
   bool isAddPanelVisible = false;
   bool isEditPanelVisible = false;
-  WorkHourOption workHourOption;
+  WorkHourOptionModel workHourOption;
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +102,7 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
                                 isEditPanelVisible = false;
                                 isAddPanelVisible = true;
                                 panelHeader = S.of(context).add_option;
-                                workHourOption = WorkHourOption();
+                                workHourOption = WorkHourOptionModel();
                                 buttonTitle = S.of(context).add;
                               });
                             },
@@ -182,7 +182,7 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
             itemCount: options.length,
             itemBuilder: (context, index) {
               double bottom = index == options.length - 1 ? 10 : 0;
-              var option = WorkHourOption.fromJson(
+              var option = WorkHourOptionModel.fromJson(
                 options[index].id,
                 options[index].data(),
               );
@@ -281,7 +281,7 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
   void onAddOption() async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    var who = WorkHourOption(
+    var who = WorkHourOptionModel(
       name: optionNameController.text.trim(),
       description: optionDescController.text.trim(),
     );
@@ -309,7 +309,7 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
   void onEditOption() async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    var who = WorkHourOption(
+    var who = WorkHourOptionModel(
       name: optionNameController.text.trim(),
       description: optionDescController.text.trim(),
     );
