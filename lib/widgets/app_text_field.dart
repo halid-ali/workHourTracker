@@ -8,6 +8,7 @@ class AppTextFormField extends StatefulWidget {
   final String hintText;
   final IconData iconData;
   final Function validateFunc;
+  final Function onSubmitFunc;
   final TextEditingController controller;
 
   AppTextFormField({
@@ -17,6 +18,7 @@ class AppTextFormField extends StatefulWidget {
     @required this.hintText,
     this.iconData,
     this.validateFunc,
+    this.onSubmitFunc,
     @required this.controller,
   }) : super(key: key);
 
@@ -57,6 +59,7 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
       validator: widget.validateFunc,
       focusNode: _focusNode,
       style: GoogleFonts.openSans(fontSize: 17),
+      onFieldSubmitted: _submit,
       decoration: InputDecoration(
         errorStyle: GoogleFonts.openSans(fontSize: 13),
         errorMaxLines: 5,
@@ -90,6 +93,10 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
     }
 
     return null;
+  }
+
+  void _submit(String value) {
+    if (widget.onSubmitFunc != null) widget.onSubmitFunc();
   }
 
   @override

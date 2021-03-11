@@ -69,16 +69,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: EdgeInsets.all(20.0),
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('chronometer.png'),
-                          fit: BoxFit.none,
-                          scale: 1.5,
-                          alignment: Alignment.topCenter,
-                          colorFilter: ColorFilter.mode(
-                            Color(0xFFF5F3F4),
-                            BlendMode.color,
-                          ),
-                        ),
+                        // image: DecorationImage(
+                        //   image: AssetImage('chronometer.png'),
+                        //   fit: BoxFit.none,
+                        //   scale: 1.5,
+                        //   alignment: Alignment.topCenter,
+                        //   colorFilter: ColorFilter.mode(
+                        //     Color(0xFFF5F3F4),
+                        //     BlendMode.color,
+                        //   ),
+                        // ),
                         color: Color(0xFFF5F3F4),
                         border: Border.all(
                           width: 1,
@@ -99,6 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   hintText: S.of(context).password,
                                   controller: _passwordController,
                                   validateFunc: (val) => '',
+                                  onSubmitFunc: _login,
                                   isObscureText: true,
                                 ),
                                 SizedBox(height: 40),
