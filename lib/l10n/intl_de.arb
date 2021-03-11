@@ -49,5 +49,16 @@
     "really_delete": "Möchten Sie es wirklich löschen?",
     "warning": "Achtung",
     "available_options": "Verfügbare Optionen",
-    "add_update_options": "Option Hinzufügen/Aktualisieren"
+    "add_option": "Option Hinzufügen",
+    "edit_option": "Option Aktualisieren",
+    "add_new_option": "Neue Option hinzufügen",
+    "add": "Hinzufügen",
+    "cancel": "Stornieren",
+    "option_name": "Name",
+    "option_description": "Beschreibung",
+    "new_option_added": "Neue Option \"{optionName}\" wurde hinzugefügt.",
+    "add_error_message": "Neue Option konnte nicht hinzugefügt werden.",
+    "update_error_message": "Die Option konnte nicht aktualisiert werden.",
+    "delete_error_message": "Die Option konnte nicht gelöscht werden.",
+    "console_details": "Weitere Informationen finden Sie in der Konsole."
 }

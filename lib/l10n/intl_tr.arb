@@ -49,5 +49,16 @@
     "really_delete": "Gerçekten silmek istiyor musunuz?",
     "warning": "Dikkat",
     "available_options": "Aktif Seçenekler",
-    "add_update_options": "Seçenek Ekle/Güncelle"
+    "add_option": "Seçenek Ekle",
+    "edit_option": "Seçenek Düzenle",
+    "add_new_option": "Yeni seçenek ekle",
+    "add": "Ekle",
+    "cancel": "Iptal",
+    "option_name": "Ad",
+    "option_description": "Tanım",
+    "new_option_added": "Yeni seçenek \"{optionName}\" eklendi.",
+    "add_error_message": "Yeni seçenek ekleme başarısız.",
+    "update_error_message": "Seçenek güncelleme başarısız.",
+    "delete_error_message": "Seçenek silme başarısız.",
+    "console_details": "Detaylar için konsola bakınız."
 }

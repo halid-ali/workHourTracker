@@ -196,8 +196,52 @@
     "@available_options": {
         "description": "Header text of Available Options"
     },
-    "add_update_options": "Add/Update Option",
-    "@add_update_options": {
-        "description": "Header text of Add/Update Option"
+    "add_option": "Add Option",
+    "@add_option": {
+        "description": "Header text of Add Option"
+    },
+    "edit_option": "Edit Option",
+    "@edit_option": {
+        "description": "Header text of Update Option"
+    },
+    "add_new_option": "Add new option",
+    "@add_new_option": {
+        "description": "Add new option tooltip message"
+    },
+    "add": "Add",
+    "@add": {
+        "description": "Add button title"
+    },
+    "cancel": "Cancel",
+    "@cancel": {
+        "description": "Cancel button title"
+    },
+    "option_name": "Name",
+    "@option_name": {
+        "description": "Option name hint text"
+    },
+    "option_description": "Description",
+    "@option_description": {
+        "description": "Option description hint text"
+    },
+    "new_option_added": "New option \"{optionName}\" is added.",
+    "@new_option_added": {
+        "description": "Toast message new option add"
+    },
+    "add_error_message": "Failed to add work hour option.",
+    "@add_error_message": {
+        "description": "Toast message new option add error"
+    },
+    "update_error_message": "Failed to update work hour option.",
+    "@update_error_message": {
+        "description": "Toast message option update error"
+    },
+    "delete_error_message": "Failed to delete work hour option.",
+    "@delete_error_message": {
+        "description": "Toast message option delete error"
+    },
+    "console_details": "Please see the console for details.",
+    "@console_details": {
+        "description": "See console message"
     }
 }
