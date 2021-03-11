@@ -16,6 +16,15 @@ class WorkHourOptionsScreen extends StatefulWidget {
 }
 
 class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController optionNameController = TextEditingController();
+  final TextEditingController optionDescController = TextEditingController();
+  String panelHeader = '';
+  String buttonTitle = '';
+  bool isAddPanelVisible = false;
+  bool isEditPanelVisible = false;
+  WorkHourOption workHourOption;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -72,15 +81,38 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
                   Container(
                     padding: EdgeInsets.all(10.0),
                     alignment: Alignment.centerLeft,
-                    child: Text(
-                      S.of(context).available_options,
-                      style: GoogleFonts.openSans(
-                        fontSize: 19,
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          S.of(context).available_options,
+                          style: GoogleFonts.openSans(
+                            fontSize: 19,
+                          ),
+                        ),
+                        Tooltip(
+                          message: S.of(context).add_new_option,
+                          padding: EdgeInsets.all(5.0),
+                          textStyle: GoogleFonts.openSans(
+                              fontSize: 15, color: Colors.white),
+                          decoration: BoxDecoration(color: Color(0xFF212529)),
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                isEditPanelVisible = false;
+                                isAddPanelVisible = true;
+                                panelHeader = S.of(context).add_option;
+                                workHourOption = WorkHourOption();
+                                buttonTitle = S.of(context).add;
+                              });
+                            },
+                            child: Icon(Icons.add_sharp),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Expanded(
-                    flex: 4,
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
@@ -93,30 +125,24 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
                       child: _getWorkHourOptions(),
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Container(
-                    padding: EdgeInsets.all(10.0),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      S.of(context).add_update_options,
-                      style: GoogleFonts.openSans(
-                        fontSize: 19,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 6,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF5F3F4),
-                        border: Border.all(
-                          width: 1,
-                          color: Color(0xFFD3D3D3),
-                        ),
-                      ),
-                    ),
-                  ),
+                  isAddPanelVisible || isEditPanelVisible
+                      ? Container(
+                          padding: EdgeInsets.only(
+                            top: 20.0,
+                            left: 10.0,
+                            right: 10.0,
+                            bottom: 10.0,
+                          ),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            panelHeader,
+                            style: GoogleFonts.openSans(
+                              fontSize: 19,
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  _buildAddEditPanel(),
                 ],
               ),
             ),
@@ -190,7 +216,7 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
                           fontSize: 15, color: Colors.white),
                       decoration: BoxDecoration(color: Color(0xFF212529)),
                       child: InkWell(
-                        onTap: () => onDetailsTapped(
+                        onTap: () => _onDetailsTapped(
                           option.name,
                           option.description,
                         ),
@@ -208,7 +234,15 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
                           fontSize: 15, color: Colors.white),
                       decoration: BoxDecoration(color: Color(0xFF212529)),
                       child: InkWell(
-                        onTap: () => print('edit'),
+                        onTap: () {
+                          setState(() {
+                            isAddPanelVisible = false;
+                            isEditPanelVisible = true;
+                            panelHeader = S.of(context).edit_option;
+                            workHourOption = option;
+                            buttonTitle = S.of(context).edit;
+                          });
+                        },
                         child: Icon(
                           Icons.edit_sharp,
                           color: Color(0xFF0077B6),
@@ -223,7 +257,7 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
                           fontSize: 15, color: Colors.white),
                       decoration: BoxDecoration(color: Color(0xFF212529)),
                       child: InkWell(
-                        onTap: () => onDeleteTapped(
+                        onTap: () => _onDeleteTapped(
                           firestore,
                           option.id,
                           option.name,
@@ -244,7 +278,216 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
     );
   }
 
-  void onDetailsTapped(String title, String contentString) {
+  void onAddOption() async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    var who = WorkHourOption(
+      name: optionNameController.text.trim(),
+      description: optionDescController.text.trim(),
+    );
+
+    await firestore
+        .collection('workHourOptions')
+        .doc()
+        .set(who.toJson())
+        .then((value) {
+      setState(() {
+        optionNameController.text = '';
+        optionDescController.text = '';
+        isAddPanelVisible = false;
+      });
+      AppToast.success(context, S.of(context).new_option_added(who.name));
+    }).catchError((error) {
+      AppToast.error(
+          context,
+          '${S.of(context).add_error_message}\n'
+          '${S.of(context).console_details}');
+      print(error);
+    });
+  }
+
+  void onEditOption() async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    var who = WorkHourOption(
+      name: optionNameController.text.trim(),
+      description: optionDescController.text.trim(),
+    );
+
+    await firestore
+        .collection('workHourOptions')
+        .doc(workHourOption.id)
+        .update(who.toJson())
+        .then((value) {
+      setState(() {
+        optionNameController.text = '';
+        optionDescController.text = '';
+        isEditPanelVisible = false;
+      });
+    }).catchError((error) {
+      AppToast.error(
+          context,
+          '${S.of(context).update_error_message}\n'
+          '${S.of(context).console_details}');
+      print(error);
+    });
+  }
+
+  Widget _buildAddEditPanel() {
+    if (!isAddPanelVisible && !isEditPanelVisible) return Container();
+
+    if (isEditPanelVisible) {
+      optionNameController.text = workHourOption.name;
+      optionDescController.text = workHourOption.description;
+    } else {
+      optionNameController.text = '';
+      optionDescController.text = '';
+    }
+
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        color: Color(0xFFF5F3F4),
+        border: Border.all(
+          width: 1,
+          color: Color(0xFFD3D3D3),
+        ),
+      ),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      child: TextFormField(
+                        controller: optionNameController,
+                        style: GoogleFonts.openSans(),
+                        decoration: InputDecoration(
+                          hintText: S.of(context).option_name,
+                          hintStyle:
+                              GoogleFonts.openSans(color: Color(0xFFCED4DA)),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(0),
+                            borderSide: BorderSide(color: Color(0xFFADB5BD)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(0),
+                            borderSide: BorderSide(color: Color(0xFF6C757D)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                    child: Container(
+                      color: Colors.white,
+                      child: TextFormField(
+                        maxLines: 9,
+                        controller: optionDescController,
+                        style: GoogleFonts.openSans(),
+                        decoration: InputDecoration(
+                          hintText: S.of(context).option_description,
+                          hintStyle:
+                              GoogleFonts.openSans(color: Color(0xFFCED4DA)),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(0),
+                            borderSide: BorderSide(color: Color(0xFFADB5BD)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(0),
+                            borderSide: BorderSide(color: Color(0xFF6C757D)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  padding: EdgeInsets.only(
+                    top: 10,
+                    left: 10,
+                    bottom: 10,
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        optionNameController.text = '';
+                        optionDescController.text = '';
+                        isAddPanelVisible = false;
+                        isEditPanelVisible = false;
+                      });
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 30,
+                      ),
+                      color: Color(0xFF6C757D),
+                      child: Text(
+                        S.of(context).cancel,
+                        style: GoogleFonts.openSans(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(
+                    top: 10,
+                    left: 10,
+                    right: 10,
+                    bottom: 10,
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      isAddPanelVisible ? onAddOption() : onEditOption();
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 30,
+                      ),
+                      color: Color(0xFF1D3557),
+                      child: Text(
+                        buttonTitle,
+                        style: GoogleFonts.openSans(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _onDetailsTapped(String title, String contentString) {
     showDialog<AlertDialog>(
       context: context,
       builder: (context) {
@@ -291,7 +534,7 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
     );
   }
 
-  void onDeleteTapped(
+  void _onDeleteTapped(
     FirebaseFirestore firestore,
     String optionId,
     String optionName,
@@ -364,18 +607,23 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
                           ),
                         ),
                         onTap: () {
-                          try {
-                            firestore
-                                .collection('workHourOptions')
-                                .doc(optionId)
-                                .delete();
-                            AppToast.info(context,
-                                S.of(context).option_deleted(optionName));
-                          } catch (e) {
-                            print(e);
-                          } finally {
-                            Navigator.of(context, rootNavigator: true).pop();
-                          }
+                          firestore
+                              .collection('workHourOptions')
+                              .doc(optionId)
+                              .delete()
+                              .then(
+                            (value) {
+                              AppToast.info(context,
+                                  S.of(context).option_deleted(optionName));
+                              Navigator.of(context, rootNavigator: true).pop();
+                            },
+                          ).catchError((error) {
+                            AppToast.error(
+                                context,
+                                '${S.of(context).delete_error_message}\n'
+                                '${S.of(context).console_details}');
+                            print(error);
+                          });
                         },
                       ),
                     ),

@@ -3,12 +3,14 @@ import 'package:work_hour_tracker/screens/login_screen.dart';
 import 'package:work_hour_tracker/screens/main_screen.dart';
 import 'package:work_hour_tracker/screens/register_screen.dart';
 import 'package:work_hour_tracker/screens/settings/settings_screen.dart';
+import 'package:work_hour_tracker/screens/settings/workhour_options_screen.dart';
 
 class RouteGenerator {
   static const homePage = '/';
   static const loginPage = '/login';
   static const registerPage = '/register';
   static const settingsPage = '/settings';
+  static const workHourOptionsPage = '/settings/workhouroptions';
 
   const RouteGenerator._();
 
@@ -29,6 +31,10 @@ class RouteGenerator {
       case settingsPage:
         return MaterialPageRoute<SettingsScreen>(
           builder: (_) => SettingsScreen(),
+        );
+      case workHourOptionsPage:
+        return MaterialPageRoute<WorkHourOptionsScreen>(
+          builder: (_) => WorkHourOptionsScreen(),
         );
       default:
         throw RouteException("Route not found.");
