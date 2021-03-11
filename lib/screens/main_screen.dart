@@ -1,15 +1,16 @@
 import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:work_hour_tracker/classes/status.dart';
 import 'package:work_hour_tracker/classes/work_hour_slot.dart';
+import 'package:work_hour_tracker/data/model/work_hour_option_model.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/utils/login.dart';
-import 'package:work_hour_tracker/utils/dropdown_options.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/utils/settings.dart';
 import 'package:work_hour_tracker/widgets/app_drawer.dart';
@@ -75,32 +76,7 @@ class _MainScreen extends State<MainScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      border: Border.all(width: 1, color: Colors.grey[400]),
-                    ),
-                    child: DropdownButton<String>(
-                      icon: Icon(Icons.arrow_drop_down_sharp),
-                      isExpanded: true,
-                      underline: Container(),
-                      value: _selectedOption,
-                      hint: Text(
-                        S.of(context).dropdownDefault,
-                        style: GoogleFonts.openSans(fontSize: 21),
-                      ),
-                      items: DropdownOptions.getMenus(),
-                      onChanged: !_isStopped && Login.isLogged()
-                          ? (String value) {
-                              setState(() {
-                                _selectedOption = value;
-                                _isStarted = true;
-                              });
-                            }
-                          : null,
-                    ),
-                  ),
+                  _buildDropdownButton(),
                   SizedBox(height: 20),
                   _buildButtons(),
                   SizedBox(height: 20),
@@ -139,6 +115,92 @@ class _MainScreen extends State<MainScreen> {
         drawer: AppDrawer(),
       ),
     );
+  }
+
+  Widget _buildDropdownButton() {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    return StreamBuilder(
+      stream: firestore.collection('workHourOptions').snapshots(),
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text(S.of(context).error_occurred);
+        }
+
+        if (snapshot.data == null) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        var options = snapshot.data.docs;
+        options.sort(
+          (a, b) => a
+              .data()['name']
+              .toString()
+              .compareTo(b.data()['name'].toString()),
+        );
+
+        return Container(
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            border: Border.all(width: 1, color: Colors.grey[400]),
+          ),
+          child: DropdownButton<String>(
+            icon: Icon(Icons.arrow_drop_down_sharp),
+            isExpanded: true,
+            underline: Container(),
+            value: _selectedOption,
+            hint: Text(
+              S.of(context).dropdownDefault,
+              style: GoogleFonts.openSans(fontSize: 21),
+            ),
+            items: _getMenuItems(options
+                .map((e) => WorkHourOption.fromJson(e.id, e.data()))
+                .toList()),
+            onChanged: !_isStopped && Login.isLogged()
+                ? (String value) {
+                    setState(() {
+                      _selectedOption = value;
+                      _isStarted = true;
+                    });
+                  }
+                : null,
+          ),
+        );
+      },
+    );
+  }
+
+  List<DropdownMenuItem<String>> _getMenuItems(List<WorkHourOption> options) {
+    List<DropdownMenuItem<String>> menuItems = [];
+
+    for (var option in options) {
+      menuItems.add(
+        DropdownMenuItem<String>(
+          value: option.name,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                option.name,
+                style: GoogleFonts.openSans(fontSize: 21),
+              ),
+              Tooltip(
+                message: option.description,
+                padding: EdgeInsets.all(5.0),
+                margin: EdgeInsets.all(20.0),
+                textStyle:
+                    GoogleFonts.openSans(fontSize: 15, color: Colors.white),
+                decoration: BoxDecoration(color: Color(0xFF212529)),
+                child: Icon(Icons.info_outline_rounded),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return menuItems;
   }
 
   Widget _buildButtons() {
@@ -214,7 +276,6 @@ class _MainScreen extends State<MainScreen> {
           child: IconButton(
             onPressed: () {
               _slidableController.activeState.dismiss();
-              print('delete');
             },
             icon: Icon(
               Icons.delete_forever_sharp,
