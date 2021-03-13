@@ -26,9 +26,7 @@ class WorkHourOptionRepository {
     await _dbProvider.database
         .collection('workHourOptions')
         .doc()
-        .set(workHourOption.toJson())
-        .then((value) {})
-        .catchError((error) => print(error));
+        .set(workHourOption.toJson());
   }
 
   static Future<void> updateWorkHourOption(
@@ -36,17 +34,10 @@ class WorkHourOptionRepository {
     await _dbProvider.database
         .collection('workHourOptions')
         .doc(workHourOption.id)
-        .update(workHourOption.toJson())
-        .then((value) {})
-        .catchError((error) => print(error));
+        .update(workHourOption.toJson());
   }
 
   static Future<void> deleteWorkHourOption(String id) async {
-    await _dbProvider.database
-        .collection('workHourOptions')
-        .doc(id)
-        .delete()
-        .then((value) {})
-        .catchError((error) => print(error));
+    await _dbProvider.database.collection('workHourOptions').doc(id).delete();
   }
 }

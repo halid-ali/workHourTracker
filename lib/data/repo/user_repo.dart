@@ -25,21 +25,14 @@ class UserRepository {
     await _dbProvider.database.collection('users').doc().set(user.toJson());
   }
 
-  static void updateUser(UserModel user) {
-    _dbProvider.database
+  static Future<void> updateUser(UserModel user) async {
+    await _dbProvider.database
         .collection('users')
         .doc(user.id)
-        .update(user.toJson())
-        .then((value) {})
-        .catchError((error) => print(error));
+        .update(user.toJson());
   }
 
-  static void deleteUser(String id) {
-    _dbProvider.database
-        .collection('users')
-        .doc(id)
-        .delete()
-        .then((value) {})
-        .catchError((error) => print(error));
+  static Future<void> deleteUser(String id) async {
+    await _dbProvider.database.collection('users').doc(id).delete();
   }
 }
