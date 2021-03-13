@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:work_hour_tracker/data/model/work_hour_option_model.dart';
+import 'package:work_hour_tracker/data/repo/work_hour_option_repo.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/screens/settings/settings_screen.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
@@ -153,10 +154,8 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
   }
 
   Widget _getWorkHourOptions() {
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
     return StreamBuilder(
-      stream: firestore.collection('workHourOptions').snapshots(),
+      stream: WorkHourOptionRepository.getWorkHourOptions(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Text(S.of(context).error_occurred);
@@ -258,7 +257,6 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
                       decoration: BoxDecoration(color: Color(0xFF212529)),
                       child: InkWell(
                         onTap: () => _onDeleteTapped(
-                          firestore,
                           option.id,
                           option.name,
                         ),
@@ -279,24 +277,21 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
   }
 
   void onAddOption() async {
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    var who = WorkHourOptionModel(
+    var workHourOption = WorkHourOptionModel(
       name: optionNameController.text.trim(),
       description: optionDescController.text.trim(),
     );
 
-    await firestore
-        .collection('workHourOptions')
-        .doc()
-        .set(who.toJson())
-        .then((value) {
+    WorkHourOptionRepository.addWorkHourOption(workHourOption).then((value) {
       setState(() {
         optionNameController.text = '';
         optionDescController.text = '';
         isAddPanelVisible = false;
       });
-      AppToast.success(context, S.of(context).new_option_added(who.name));
+      AppToast.success(
+        context,
+        S.of(context).new_option_added(workHourOption.name),
+      );
     }).catchError((error) {
       AppToast.error(
           context,
@@ -307,18 +302,13 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
   }
 
   void onEditOption() async {
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    var who = WorkHourOptionModel(
+    var updatedOption = WorkHourOptionModel(
+      id: workHourOption.id,
       name: optionNameController.text.trim(),
       description: optionDescController.text.trim(),
     );
 
-    await firestore
-        .collection('workHourOptions')
-        .doc(workHourOption.id)
-        .update(who.toJson())
-        .then((value) {
+    WorkHourOptionRepository.updateWorkHourOption(updatedOption).then((value) {
       setState(() {
         optionNameController.text = '';
         optionDescController.text = '';
@@ -535,7 +525,6 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
   }
 
   void _onDeleteTapped(
-    FirebaseFirestore firestore,
     String optionId,
     String optionName,
   ) {
@@ -554,10 +543,11 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
           ),
           content: Container(
             decoration: BoxDecoration(
-                border: Border.all(
-              width: 1,
-              color: Colors.white,
-            )),
+              border: Border.all(
+                width: 1,
+                color: Colors.white,
+              ),
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -607,15 +597,15 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
                           ),
                         ),
                         onTap: () {
-                          firestore
-                              .collection('workHourOptions')
-                              .doc(optionId)
-                              .delete()
-                              .then(
+                          WorkHourOptionRepository.deleteWorkHourOption(
+                            optionId,
+                          ).then(
                             (value) {
-                              AppToast.info(context,
-                                  S.of(context).option_deleted(optionName));
                               Navigator.of(context, rootNavigator: true).pop();
+                              AppToast.info(
+                                context,
+                                S.of(context).option_deleted(optionName),
+                              );
                             },
                           ).catchError((error) {
                             AppToast.error(
