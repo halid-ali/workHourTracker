@@ -1,11 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:work_hour_tracker/data/model/user_model.dart';
+import 'package:work_hour_tracker/data/repo/user_repo.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/routes.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/widgets/app_button.dart';
 import 'package:work_hour_tracker/widgets/app_text_field.dart';
+import 'package:work_hour_tracker/widgets/app_toast.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key key}) : super(key: key);
@@ -161,19 +163,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void submitRegister() async {
     if (_formKey.currentState.validate()) {
-      var userMap = <String, dynamic>{
-        'username': _usernameController.text,
-        'password': _passwordController.text,
-        'email': _emailController.text,
-      };
+      UserModel user = UserModel(
+        username: _usernameController.text,
+        password: _passwordController.text,
+        email: _emailController.text,
+      );
 
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc()
-          .set(userMap)
-          .catchError((dynamic e) => print(e));
-
-      Navigator.pushNamed(context, RouteGenerator.loginPage);
+      UserRepository.addUser(user).then((value) {
+        AppToast.success(context, 'Registered successfully.');
+        Navigator.pushNamed(context, RouteGenerator.loginPage);
+      }).catchError((error) {
+        AppToast.error(
+            context,
+            'Error occurred during register.\n'
+            'See console for details.');
+        print(error);
+      });
     }
   }
 
