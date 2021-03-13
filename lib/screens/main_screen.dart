@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:work_hour_tracker/classes/status.dart';
 import 'package:work_hour_tracker/classes/work_hour_slot.dart';
 import 'package:work_hour_tracker/data/model/work_hour_option_model.dart';
+import 'package:work_hour_tracker/data/repo/work_hour_option_repo.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/utils/login.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
@@ -33,7 +34,7 @@ class _MainScreen extends State<MainScreen> {
   final List<WorkHourSlot> _workSlots = [];
   scheme.ColorScheme _colorScheme;
   WorkHourSlot _currentSlot;
-  String _selectedOption;
+  String _currentOption;
 
   bool _isStarted = false;
   bool _isStopped = false;
@@ -118,10 +119,8 @@ class _MainScreen extends State<MainScreen> {
   }
 
   Widget _buildDropdownButton() {
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
     return StreamBuilder(
-      stream: firestore.collection('workHourOptions').snapshots(),
+      stream: WorkHourOptionRepository.getWorkHourOptions(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Text(S.of(context).error_occurred);
@@ -149,7 +148,7 @@ class _MainScreen extends State<MainScreen> {
             icon: Icon(Icons.arrow_drop_down_sharp),
             isExpanded: true,
             underline: Container(),
-            value: _selectedOption,
+            value: _currentOption,
             hint: Text(
               S.of(context).dropdownDefault,
               style: GoogleFonts.openSans(fontSize: 21),
@@ -160,7 +159,7 @@ class _MainScreen extends State<MainScreen> {
             onChanged: !_isStopped && Login.isLogged()
                 ? (String value) {
                     setState(() {
-                      _selectedOption = value;
+                      _currentOption = value;
                       _isStarted = true;
                     });
                   }
@@ -533,7 +532,7 @@ class _MainScreen extends State<MainScreen> {
       _isPaused = true;
 
       if (_workSlots.isEmpty || _workSlots.last.isStopped) {
-        _currentSlot = WorkHourSlot(_selectedOption);
+        _currentSlot = WorkHourSlot(_currentOption);
         _currentSlot.start();
         _workSlots.add(_currentSlot);
         AppToast.info(context, S.of(context).timer_started);
@@ -550,7 +549,7 @@ class _MainScreen extends State<MainScreen> {
     if (!_isStopped) return;
 
     setState(() {
-      _selectedOption = null;
+      _currentOption = null;
       _isStarted = false;
       _isStopped = false;
       _isPaused = false;

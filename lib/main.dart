@@ -39,9 +39,8 @@ class _WorkHourTrackerState extends State<WorkHourTracker> {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      initialRoute: Login.isLogged()
-          ? RouteGenerator.workHourOptionsPage
-          : RouteGenerator.loginPage,
+      initialRoute:
+          Login.isLogged() ? RouteGenerator.homePage : RouteGenerator.loginPage,
       onGenerateRoute: RouteGenerator.generateRoute,
       debugShowCheckedModeBanner: false,
     );

@@ -11,6 +11,16 @@ class UserRepository {
         .snapshots(includeMetadataChanges: true);
   }
 
+  static Future<UserModel> getUser(String userId) async {
+    return _dbProvider.database
+        .collection('users')
+        .doc(userId)
+        .get()
+        .then<UserModel>((value) {
+      return UserModel.fromJson(userId, value.data());
+    });
+  }
+
   static void addUser(UserModel user) {
     _dbProvider.database
         .collection('users')
