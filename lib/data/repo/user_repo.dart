@@ -11,13 +11,13 @@ class UserRepository {
         .snapshots(includeMetadataChanges: true);
   }
 
-  static Future<UserModel> getUser(String userId) async {
+  static Future<UserModel> getUser(String id) async {
     return _dbProvider.database
         .collection('users')
-        .doc(userId)
+        .doc(id)
         .get()
         .then<UserModel>((value) {
-      return UserModel.fromJson(userId, value.data());
+      return UserModel.fromJson(id, value.data());
     });
   }
 

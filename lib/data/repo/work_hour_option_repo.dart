@@ -11,13 +11,13 @@ class WorkHourOptionRepository {
         .snapshots(includeMetadataChanges: true);
   }
 
-  static Future<WorkHourOptionModel> getWorkHourOption(String optionId) async {
+  static Future<WorkHourOptionModel> getWorkHourOption(String id) async {
     return _dbProvider.database
         .collection('workHourOptions')
-        .doc(optionId)
+        .doc(id)
         .get()
         .then<WorkHourOptionModel>((value) {
-      return WorkHourOptionModel.fromJson(optionId, value.data());
+      return WorkHourOptionModel.fromJson(id, value.data());
     });
   }
 
