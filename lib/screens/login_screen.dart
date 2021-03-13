@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:work_hour_tracker/data/model/user_model.dart';
+import 'package:work_hour_tracker/data/repo/user_repo.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/routes.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
@@ -156,10 +158,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget dropdownList() {
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
     return StreamBuilder(
-      stream: firestore.collection('users').snapshots(),
+      stream: UserRepository.getUsers(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Text(S.of(context).error_occurred);
@@ -235,17 +235,15 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
-    DocumentSnapshot docSnapshot =
-        await firestore.collection('users').doc(_selectedUser).get();
+    UserModel user = await UserRepository.getUser(_selectedUser);
 
-    if (_passwordController.text == docSnapshot.data()['password']) {
+    if (_passwordController.text == user.password) {
       if (PlatformInfo.isWeb()) {
-        WebStorage.instance.userId = docSnapshot.id;
-        WebStorage.instance.username = docSnapshot.data()['username'];
+        WebStorage.instance.userId = user.id;
+        WebStorage.instance.username = user.username;
       } else {
-        await Preferences.write('userId', docSnapshot.id);
-        await Preferences.write('username', docSnapshot.data()['username']);
+        await Preferences.write('userId', user.id);
+        await Preferences.write('username', user.username);
       }
 
       Navigator.pushNamed(context, RouteGenerator.homePage);
