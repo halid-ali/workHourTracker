@@ -11,7 +11,6 @@ import 'package:work_hour_tracker/classes/work_hour_slot.dart';
 import 'package:work_hour_tracker/data/model/work_hour_option_model.dart';
 import 'package:work_hour_tracker/data/repo/work_hour_option_repo.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
-import 'package:work_hour_tracker/utils/login.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/utils/settings.dart';
 import 'package:work_hour_tracker/widgets/app_drawer.dart';
@@ -138,40 +137,34 @@ class _MainScreen extends State<MainScreen> {
               .compareTo(b.data()['name'].toString()),
         );
 
-        return FutureBuilder(
-            future: Login.isLogged(),
-            builder: (context, AsyncSnapshot<bool> snapshot) {
-              if (!snapshot.hasData) return CircularProgressIndicator();
-              final isLogged = snapshot.data;
-              return Container(
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  border: Border.all(width: 1, color: Colors.grey[400]),
-                ),
-                child: DropdownButton<String>(
-                  icon: Icon(Icons.arrow_drop_down_sharp),
-                  isExpanded: true,
-                  underline: Container(),
-                  value: _currentOption,
-                  hint: Text(
-                    S.of(context).dropdownDefault,
-                    style: GoogleFonts.openSans(fontSize: 21),
-                  ),
-                  items: _getMenuItems(options
-                      .map((e) => WorkHourOptionModel.fromJson(e.id, e.data()))
-                      .toList()),
-                  onChanged: !_isStopped && isLogged
-                      ? (String value) {
-                          setState(() {
-                            _currentOption = value;
-                            _isStarted = true;
-                          });
-                        }
-                      : null,
-                ),
-              );
-            });
+        return Container(
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            border: Border.all(width: 1, color: Colors.grey[400]),
+          ),
+          child: DropdownButton<String>(
+            icon: Icon(Icons.arrow_drop_down_sharp),
+            isExpanded: true,
+            underline: Container(),
+            value: _currentOption,
+            hint: Text(
+              S.of(context).dropdownDefault,
+              style: GoogleFonts.openSans(fontSize: 21),
+            ),
+            items: _getMenuItems(options
+                .map((e) => WorkHourOptionModel.fromJson(e.id, e.data()))
+                .toList()),
+            onChanged: !_isStopped
+                ? (String value) {
+                    setState(() {
+                      _currentOption = value;
+                      _isStarted = true;
+                    });
+                  }
+                : null,
+          ),
+        );
       },
     );
   }
