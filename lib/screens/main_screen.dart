@@ -138,34 +138,40 @@ class _MainScreen extends State<MainScreen> {
               .compareTo(b.data()['name'].toString()),
         );
 
-        return Container(
-          padding: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            border: Border.all(width: 1, color: Colors.grey[400]),
-          ),
-          child: DropdownButton<String>(
-            icon: Icon(Icons.arrow_drop_down_sharp),
-            isExpanded: true,
-            underline: Container(),
-            value: _currentOption,
-            hint: Text(
-              S.of(context).dropdownDefault,
-              style: GoogleFonts.openSans(fontSize: 21),
-            ),
-            items: _getMenuItems(options
-                .map((e) => WorkHourOptionModel.fromJson(e.id, e.data()))
-                .toList()),
-            onChanged: !_isStopped && Login.isLogged()
-                ? (String value) {
-                    setState(() {
-                      _currentOption = value;
-                      _isStarted = true;
-                    });
-                  }
-                : null,
-          ),
-        );
+        return FutureBuilder(
+            future: Login.isLogged(),
+            builder: (context, AsyncSnapshot<bool> snapshot) {
+              if (!snapshot.hasData) return CircularProgressIndicator();
+              final isLogged = snapshot.data;
+              return Container(
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  border: Border.all(width: 1, color: Colors.grey[400]),
+                ),
+                child: DropdownButton<String>(
+                  icon: Icon(Icons.arrow_drop_down_sharp),
+                  isExpanded: true,
+                  underline: Container(),
+                  value: _currentOption,
+                  hint: Text(
+                    S.of(context).dropdownDefault,
+                    style: GoogleFonts.openSans(fontSize: 21),
+                  ),
+                  items: _getMenuItems(options
+                      .map((e) => WorkHourOptionModel.fromJson(e.id, e.data()))
+                      .toList()),
+                  onChanged: !_isStopped && isLogged
+                      ? (String value) {
+                          setState(() {
+                            _currentOption = value;
+                            _isStarted = true;
+                          });
+                        }
+                      : null,
+                ),
+              );
+            });
       },
     );
   }

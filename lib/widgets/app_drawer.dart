@@ -11,37 +11,44 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: Column(
-        children: [
-          _buildLanguagesRow(context),
-          Divider(height: 20),
-          Container(
-            height: 180,
-            child: Image.asset(
-              'chronometer.png',
-              width: 180,
+    var userId = Login.getUserId();
+    var username = Login.getUsername();
+    return FutureBuilder(
+        future: Future.wait([userId, username]),
+        builder: (context, AsyncSnapshot<List<String>> snapshot) {
+          if (!snapshot.hasData) return CircularProgressIndicator();
+          return Drawer(
+            child: Column(
+              children: [
+                _buildLanguagesRow(context),
+                Divider(height: 20),
+                Container(
+                  height: 180,
+                  child: Image.asset(
+                    'chronometer.png',
+                    width: 180,
+                  ),
+                ),
+                Divider(height: 20),
+                Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.all(10.0),
+                      child: Text('Username: ${snapshot.data[1]}'),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.all(10.0),
+                      child: Text('Id: ${snapshot.data[0]}'),
+                    ),
+                    _getButtons(context),
+                  ],
+                ),
+              ],
             ),
-          ),
-          Divider(height: 20),
-          Column(
-            children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.all(10.0),
-                child: Text('Username: ${Login.getUsername()}'),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.all(10.0),
-                child: Text('Id: ${Login.getUserId()}'),
-              ),
-              ..._getButtons(context),
-            ],
-          ),
-        ],
-      ),
-    );
+          );
+        });
   }
 
   Widget _buildLanguagesRow(BuildContext context) {
@@ -69,48 +76,55 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  List<Widget> _getButtons(BuildContext context) {
-    return [
-      Login.isLogged()
-          ? Column(
-              children: [
-                Divider(height: 5),
-                DrawerMenu(
-                  text: S.of(context).settings,
-                  icon: Icons.settings_sharp,
-                  func: () =>
-                      Navigator.pushNamed(context, RouteGenerator.settingsPage),
-                ),
-                Divider(height: 5),
-                DrawerMenu(
-                  text: S.of(context).logout,
-                  icon: Icons.close_sharp,
-                  func: () {
-                    Login.logout();
-                    Navigator.pushNamed(context, RouteGenerator.loginPage);
-                  },
-                ),
-                Divider(height: 5),
-              ],
-            )
-          : Column(
-              children: [
-                DrawerMenu(
-                  text: S.of(context).login,
-                  icon: Icons.login_sharp,
-                  func: () =>
-                      Navigator.pushNamed(context, RouteGenerator.loginPage),
-                ),
-                Divider(height: 5),
-                DrawerMenu(
-                  text: S.of(context).register,
-                  icon: Icons.person_add_sharp,
-                  func: () =>
-                      Navigator.pushNamed(context, RouteGenerator.registerPage),
-                ),
-                Divider(height: 5),
-              ],
-            ),
-    ];
+  Widget _getButtons(BuildContext context) {
+    return FutureBuilder(
+      future: Login.isLogged(),
+      builder: (context, AsyncSnapshot<bool> snapshot) {
+        if (!snapshot.hasData) return CircularProgressIndicator();
+        final isLogged = snapshot.data;
+        if (isLogged) {
+          return Column(
+            children: [
+              Divider(height: 5),
+              DrawerMenu(
+                text: S.of(context).settings,
+                icon: Icons.settings_sharp,
+                func: () =>
+                    Navigator.pushNamed(context, RouteGenerator.settingsPage),
+              ),
+              Divider(height: 5),
+              DrawerMenu(
+                text: S.of(context).logout,
+                icon: Icons.close_sharp,
+                func: () {
+                  Login.logout();
+                  Navigator.pushNamed(context, RouteGenerator.loginPage);
+                },
+              ),
+              Divider(height: 5),
+            ],
+          );
+        } else {
+          return Column(
+            children: [
+              DrawerMenu(
+                text: S.of(context).login,
+                icon: Icons.login_sharp,
+                func: () =>
+                    Navigator.pushNamed(context, RouteGenerator.loginPage),
+              ),
+              Divider(height: 5),
+              DrawerMenu(
+                text: S.of(context).register,
+                icon: Icons.person_add_sharp,
+                func: () =>
+                    Navigator.pushNamed(context, RouteGenerator.registerPage),
+              ),
+              Divider(height: 5),
+            ],
+          );
+        }
+      },
+    );
   }
 }

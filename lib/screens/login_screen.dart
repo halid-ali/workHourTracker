@@ -6,8 +6,7 @@ import 'package:work_hour_tracker/data/repo/user_repo.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/routes.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
-import 'package:work_hour_tracker/utils/preferences.dart';
-import 'package:work_hour_tracker/utils/web_storage.dart';
+import 'package:work_hour_tracker/utils/session_manager.dart';
 import 'package:work_hour_tracker/widgets/app_button.dart';
 import 'package:work_hour_tracker/widgets/app_text_field.dart';
 import 'package:work_hour_tracker/widgets/app_toast.dart';
@@ -238,13 +237,8 @@ class _LoginScreenState extends State<LoginScreen> {
     UserModel user = await UserRepository.getUser(_selectedUser);
 
     if (_passwordController.text == user.password) {
-      if (PlatformInfo.isWeb()) {
-        WebStorage.instance.userId = user.id;
-        WebStorage.instance.username = user.username;
-      } else {
-        await Preferences.write('userId', user.id);
-        await Preferences.write('username', user.username);
-      }
+      SessionManager.write(SessionKey.userId, user.id);
+      SessionManager.write(SessionKey.username, user.username);
 
       Navigator.pushNamed(context, RouteGenerator.homePage);
     } else {

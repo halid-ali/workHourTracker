@@ -1,48 +1,24 @@
-import 'package:work_hour_tracker/utils/platform_info.dart';
-import 'package:work_hour_tracker/utils/web_storage.dart';
-
-import 'preferences.dart';
+import 'package:work_hour_tracker/utils/session_manager.dart';
 
 class Login {
-  static bool isLogged() {
-    bool result = false;
-
-    if (PlatformInfo.isWeb()) {
-      result = WebStorage.instance.userId != null;
-    } else {
-      Preferences.contains('userId').then((value) => result = value);
-    }
-
-    return result;
+  static Future<bool> isLogged() async {
+    return SessionManager.containsKey(SessionKey.userId);
   }
 
-  static void logout() {
-    if (PlatformInfo.isWeb()) {
-      WebStorage.instance.userId = null;
-    } else {
-      Preferences.clear();
-    }
+  static void logout() => SessionManager.clear();
+
+  static Future<String> getUserId() async {
+    return SessionManager.read(SessionKey.userId);
   }
 
-  static String getUsername() {
-    String username;
-    if (PlatformInfo.isWeb()) {
-      username = WebStorage.instance.username;
-    } else {
-      Preferences.read('username').then((value) => username = value);
-    }
-
-    return username;
+  static Future<String> getUsername() async {
+    return SessionManager.read(SessionKey.username);
   }
+}
 
-  static String getUserId() {
-    String userId;
-    if (PlatformInfo.isWeb()) {
-      userId = WebStorage.instance.userId;
-    } else {
-      Preferences.read('userId').then((value) => userId = value);
-    }
-
-    return userId;
-  }
+class SessionData {
+  Future<bool> get isLogged async =>
+      SessionManager.containsKey(SessionKey.userId);
+  Future<String> get userId async => SessionManager.read(SessionKey.userId);
+  Future<String> get username async => SessionManager.read(SessionKey.username);
 }
