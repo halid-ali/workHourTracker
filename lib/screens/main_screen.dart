@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:work_hour_tracker/classes/status.dart';
-import 'package:work_hour_tracker/classes/work_hour_slot.dart';
-import 'package:work_hour_tracker/data/model/work_hour_option_model.dart';
-import 'package:work_hour_tracker/data/repo/work_hour_option_repo.dart';
+import 'package:work_hour_tracker/data/model/slot_model.dart';
+import 'package:work_hour_tracker/data/repo/slot_repo.dart';
+import 'package:work_hour_tracker/utils/session_manager.dart';
+import 'package:work_hour_tracker/utils/status.dart';
+import 'package:work_hour_tracker/utils/work_hour_slot.dart';
+import 'package:work_hour_tracker/data/model/option_model.dart';
+import 'package:work_hour_tracker/data/repo/option_repo.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/utils/settings.dart';
@@ -20,38 +23,14 @@ import 'package:work_hour_tracker/widgets/header_footer_column.dart';
 import 'package:work_hour_tracker/widgets/track_button.dart';
 import 'package:work_hour_tracker/utils/color_scheme.dart' as scheme;
 
-class MainScreen extends StatefulWidget {
-  MainScreen({Key key}) : super(key: key);
+class MainLoad extends StatefulWidget {
+  MainLoad({Key key}) : super(key: key);
 
   @override
-  _MainScreen createState() => _MainScreen();
+  _MainLoad createState() => _MainLoad();
 }
 
-class _MainScreen extends State<MainScreen> {
-  final SlidableController _slidableController = SlidableController();
-  final DisplayFormat _displayFormat = AppSettings.displayFormat;
-  final List<WorkHourSlot> _workSlots = [];
-  scheme.ColorScheme _colorScheme;
-  WorkHourSlot _currentSlot;
-  String _currentOption;
-
-  bool _isStarted = false;
-  bool _isStopped = false;
-  bool _isPaused = false;
-
-  @override
-  void initState() {
-    super.initState();
-    Timer.periodic(
-      Duration(seconds: 1),
-      (Timer t) => setState(() {
-        if (_currentSlot != null && _currentSlot.status == Status.running) {
-          _currentSlot.workDuration;
-        }
-      }),
-    );
-  }
-
+class _MainLoad extends State<MainLoad> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -64,6 +43,7 @@ class _MainScreen extends State<MainScreen> {
             style: GoogleFonts.notoSerif(fontSize: 25, letterSpacing: 0.7),
           ),
         ),
+        drawer: AppDrawer(),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
@@ -73,110 +53,260 @@ class _MainScreen extends State<MainScreen> {
                     ? 600
                     : MediaQuery.of(context).size.width,
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  _buildDropdownButton(),
-                  SizedBox(height: 20),
-                  _buildButtons(),
-                  SizedBox(height: 20),
-                  _buildListHeader(),
-                  SizedBox(height: 2),
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.all(1),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          width: 1,
-                          color: Colors.grey,
-                        ),
+              child: FutureBuilder(
+                  future: SessionManager.read(SessionKey.userId),
+                  builder: (context, AsyncSnapshot<String> snapshot) {
+                    if (!snapshot.hasData) {
+                      return CircularProgressIndicator(
+                        backgroundColor: Colors.red,
+                      );
+                    }
+
+                    if (snapshot.hasError) {
+                      return Text('Error during userId');
+                    }
+
+                    final userId = snapshot.data;
+
+                    return StreamBuilder(
+                      stream: SlotRepository.getWorkHourSlotsByDate(
+                        userId,
+                        getDayStart(),
                       ),
-                      child: ListView.separated(
-                        separatorBuilder: (context, index) =>
-                            SizedBox(height: 1),
-                        itemCount: _workSlots.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              _getSlidable(_workSlots[index], index % 2 != 0)
-                            ],
+                      builder:
+                          (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (!snapshot.hasData) {
+                          return CircularProgressIndicator(
+                            backgroundColor: Colors.yellow,
                           );
-                        },
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 2),
-                  _buildFooter(),
-                ],
-              ),
+                        }
+
+                        if (snapshot.hasError) {
+                          return Text('Error during work slots');
+                        }
+
+                        final slots = snapshot.data.docs
+                            .map((e) => SlotModel.fromJson(e.id, e.data()))
+                            .toList();
+
+                        return StreamBuilder(
+                            stream: OptionRepository.getWorkHourOptions(),
+                            builder: (context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (!snapshot.hasData) {
+                                return CircularProgressIndicator(
+                                  backgroundColor: Colors.green,
+                                );
+                              }
+
+                              if (snapshot.hasError) {
+                                return Text('Error during options');
+                              }
+
+                              var options = snapshot.data.docs
+                                  .map((e) =>
+                                      OptionModel.fromJson(e.id, e.data()))
+                                  .toList();
+                              options.sort((a, b) => a.name.compareTo(b.name));
+
+                              if (slots.isEmpty ||
+                                  slots.last.timerStatus ==
+                                      Status.stopped.value) {
+                                return MainScreen(
+                                  userId: userId,
+                                  lastOption: null,
+                                  options: options,
+                                  slots: slots,
+                                );
+                              } else {
+                                return FutureBuilder(
+                                  future: OptionRepository.getWorkHourOption(
+                                      slots.last.optionId),
+                                  builder: (context,
+                                      AsyncSnapshot<OptionModel> snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return CircularProgressIndicator(
+                                        backgroundColor: Colors.grey,
+                                      );
+                                    }
+
+                                    if (snapshot.hasError) {
+                                      return Text('Error during option');
+                                    }
+
+                                    final option = snapshot.data;
+
+                                    return MainScreen(
+                                      userId: userId,
+                                      lastOption: option,
+                                      options: options,
+                                      slots: slots,
+                                    );
+                                  },
+                                );
+                              }
+                            });
+                      },
+                    );
+                  }),
             ),
           ),
         ),
-        drawer: AppDrawer(),
       ),
     );
   }
 
-  Widget _buildDropdownButton() {
-    return StreamBuilder(
-      stream: WorkHourOptionRepository.getWorkHourOptions(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return Text(S.of(context).error_occurred);
+  Timestamp getDayStart() {
+    DateTime toTime = DateTime.now();
+    toTime = DateTime(toTime.year, toTime.month, toTime.day);
+    return Timestamp.fromMillisecondsSinceEpoch(toTime.millisecondsSinceEpoch);
+  }
+}
+
+class MainScreenTemp extends StatefulWidget {
+  final String userId;
+  final OptionModel lastOption;
+  final List<OptionModel> options;
+  final List<SlotModel> slots;
+
+  MainScreenTemp({this.userId, this.lastOption, this.options, this.slots});
+
+  @override
+  _MainScreenTemp createState() => _MainScreenTemp();
+}
+
+class _MainScreenTemp extends State<MainScreenTemp> {
+  @override
+  Widget build(BuildContext context) {
+    return Text(widget.userId);
+  }
+}
+
+class MainScreen extends StatefulWidget {
+  final String userId;
+  final OptionModel lastOption;
+  final List<OptionModel> options;
+  final List<SlotModel> slots;
+
+  MainScreen({this.userId, this.lastOption, this.options, this.slots});
+
+  @override
+  _MainScreen createState() => _MainScreen();
+}
+
+class _MainScreen extends State<MainScreen> {
+  final SlidableController _slidableController = SlidableController();
+  final DisplayFormat displayFormat = AppSettings.displayFormat;
+
+  scheme.ColorScheme _colorScheme = scheme.ColorScheme.grey();
+  WorkHourSlot _currentSlot;
+  OptionModel _currentOption;
+
+  @override
+  void initState() {
+    setState(() {
+      if (widget.slots.isNotEmpty &&
+          widget.slots.last.timerStatus != Status.stopped.value) {
+        _currentOption = widget.lastOption;
+        _currentSlot = WorkHourSlot.fromSlot(widget.slots.last);
+      }
+    });
+    super.initState();
+
+    Timer.periodic(
+      displayFormat == DisplayFormat.hourMinute
+          ? Duration(minutes: 1)
+          : Duration(seconds: 1),
+      (Timer t) {
+        if (this.mounted) {
+          setState(() {
+            if (_currentSlot != null && isRunning()) {
+              _setColorScheme(_currentSlot.workDuration);
+            }
+          });
         }
-
-        if (snapshot.data == null) {
-          return Center(child: CircularProgressIndicator());
-        }
-
-        var options = snapshot.data.docs;
-        options.sort(
-          (a, b) => a
-              .data()['name']
-              .toString()
-              .compareTo(b.data()['name'].toString()),
-        );
-
-        return Container(
-          padding: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            border: Border.all(width: 1, color: Colors.grey[400]),
-          ),
-          child: DropdownButton<String>(
-            icon: Icon(Icons.arrow_drop_down_sharp),
-            isExpanded: true,
-            underline: Container(),
-            value: _currentOption,
-            hint: Text(
-              S.of(context).dropdownDefault,
-              style: GoogleFonts.openSans(fontSize: 21),
-            ),
-            items: _getMenuItems(options
-                .map((e) => WorkHourOptionModel.fromJson(e.id, e.data()))
-                .toList()),
-            onChanged: !_isStopped
-                ? (String value) {
-                    setState(() {
-                      _currentOption = value;
-                      _isStarted = true;
-                    });
-                  }
-                : null,
-          ),
-        );
       },
     );
   }
 
-  List<DropdownMenuItem<String>> _getMenuItems(
-      List<WorkHourOptionModel> options) {
-    List<DropdownMenuItem<String>> menuItems = [];
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        buildDropdownButton(),
+        SizedBox(height: 20),
+        buildButtons(),
+        SizedBox(height: 20),
+        _buildListHeader(),
+        SizedBox(height: 2),
+        Expanded(
+          child: Container(
+            padding: EdgeInsets.all(1),
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: Colors.grey,
+              ),
+            ),
+            child: ListView.separated(
+              separatorBuilder: (context, index) => SizedBox(height: 1),
+              itemCount: widget.slots.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    getSlidable(
+                      widget.slots[index],
+                      index % 2 != 0,
+                    )
+                  ],
+                );
+              },
+            ),
+          ),
+        ),
+        SizedBox(height: 2),
+        _buildFooter(widget.slots),
+      ],
+    );
+  }
 
-    for (var option in options) {
+  Widget buildDropdownButton() {
+    return Container(
+      padding: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        border: Border.all(width: 1, color: Colors.grey[400]),
+      ),
+      child: DropdownButton<OptionModel>(
+        icon: Icon(Icons.arrow_drop_down_sharp),
+        isExpanded: true,
+        underline: Container(),
+        value: _currentOption,
+        hint: Text(
+          S.of(context).dropdownDefault,
+          style: GoogleFonts.openSans(fontSize: 21),
+        ),
+        items: getMenuItems(),
+        onChanged: _currentSlot == null || isNone()
+            ? (OptionModel value) {
+                setState(() {
+                  _currentOption = value;
+                  _currentSlot = WorkHourSlot(widget.userId, _currentOption.id);
+                });
+              }
+            : null,
+      ),
+    );
+  }
+
+  List<DropdownMenuItem<OptionModel>> getMenuItems() {
+    List<DropdownMenuItem<OptionModel>> menuItems = [];
+
+    for (var option in widget.options) {
       menuItems.add(
-        DropdownMenuItem<String>(
-          value: option.name,
+        DropdownMenuItem<OptionModel>(
+          value: option,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -202,7 +332,7 @@ class _MainScreen extends State<MainScreen> {
     return menuItems;
   }
 
-  Widget _buildButtons() {
+  Widget buildButtons() {
     return FractionallySizedBox(
       widthFactor: 1,
       child: Row(
@@ -211,38 +341,39 @@ class _MainScreen extends State<MainScreen> {
           TrackButton(
             icon: Icons.play_arrow_sharp,
             color: Color(0xFF3FA34D),
-            onPressCallback: _startFunc,
-            isActiveCallback: () => _isStarted,
+            onPressCallback: startFunc,
+            isActiveCallback: () => isPaused() || isStopped() || isNone(),
           ),
           SizedBox(width: 20),
           TrackButton(
             icon: Icons.pause_sharp,
             color: Color(0xFF0077B6),
             onPressCallback: _breakFunc,
-            isActiveCallback: () => _isPaused,
+            isActiveCallback: () => isRunning(),
           ),
           SizedBox(width: 20),
           TrackButton(
             icon: Icons.stop_sharp,
             color: Color(0xFFD90429),
             onPressCallback: _stopFunc,
-            isActiveCallback: () => _isStopped,
+            isActiveCallback: () => isRunning(),
           ),
           SizedBox(width: 20),
           TrackButton(
             icon: Icons.save_sharp,
             color: Color(0xFF22333B),
             onPressCallback: () {},
-            isActiveCallback: () => _isStopped,
+            isActiveCallback: () => false,
           ),
         ],
       ),
     );
   }
 
-  Widget _getSlidable(WorkHourSlot workSlot, bool isOdd) {
+  Widget getSlidable(SlotModel slotModel, bool isOdd) {
+    var slot = WorkHourSlot.fromSlot(slotModel);
     return Slidable(
-      key: Key(workSlot.option),
+      key: Key(slot.optionId),
       controller: _slidableController,
       actionPane: SlidableStrechActionPane(),
       closeOnScroll: true,
@@ -251,7 +382,7 @@ class _MainScreen extends State<MainScreen> {
         child: SlidableDrawerDismissal(),
         onDismissed: (actionType) {
           setState(() {
-            _workSlots.remove(workSlot);
+            SlotRepository.deleteWorkHourSlot(slot.workSlot.id);
           });
         },
       ),
@@ -284,13 +415,13 @@ class _MainScreen extends State<MainScreen> {
         ),
       ],
       child: _buildListRow(
-        workSlot.option,
-        DateFormat('HH:mm').format(workSlot.startTime),
-        workSlot.stopTime != null
-            ? DateFormat('HH:mm').format(workSlot.stopTime)
+        widget.options.firstWhere((e) => e.id == slot.optionId).name,
+        DateFormat('HH:mm').format(slot.startTime),
+        slot.stopTime != null
+            ? DateFormat('HH:mm').format(slot.stopTime)
             : '--:--',
-        workSlot.breakDuration,
-        workSlot.workDuration,
+        slot.pauseDuration,
+        slot.workDuration,
         isOdd,
       ),
     );
@@ -442,16 +573,14 @@ class _MainScreen extends State<MainScreen> {
     );
   }
 
-  Widget _buildFooter() {
-    Duration totalWork = _workSlots
-        .map<Duration>((e) => e.workDuration)
+  Widget _buildFooter(List<SlotModel> workSlots) {
+    Duration totalWork = workSlots
+        .map<Duration>((e) => Duration(milliseconds: 0))
         .fold(Duration.zero, (p, e) => p + e);
 
-    Duration totalBreak = _workSlots
-        .map<Duration>((e) => e.breakDuration)
+    Duration totalBreak = workSlots
+        .map<Duration>((e) => Duration(milliseconds: e.pauseDuration))
         .fold(Duration.zero, (p, e) => p + e);
-
-    _setColorScheme(totalWork);
 
     return HeaderFooter(
       columns: [
@@ -485,10 +614,10 @@ class _MainScreen extends State<MainScreen> {
   String _formatDisplay(Duration duration, bool isDigitalDisplay) {
     String prefix;
     String suffix;
-    String prefixUnit = _displayFormat == DisplayFormat.hourMinute ? 'h' : 'm';
-    String suffixUnit = _displayFormat == DisplayFormat.hourMinute ? 'm' : 's';
+    String prefixUnit = displayFormat == DisplayFormat.hourMinute ? 'h' : 'm';
+    String suffixUnit = displayFormat == DisplayFormat.hourMinute ? 'm' : 's';
 
-    if (_displayFormat == DisplayFormat.hourMinute) {
+    if (displayFormat == DisplayFormat.hourMinute) {
       prefix = duration.inHours.remainder(60).toString().padLeft(2, '0');
       suffix = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
     } else {
@@ -505,7 +634,7 @@ class _MainScreen extends State<MainScreen> {
     int workHourLimit = 480; // 8 hours
     int overTimeLimit = 570; // 9.5 hours
 
-    var totalWorkDuration = _displayFormat == DisplayFormat.hourMinute
+    var totalWorkDuration = displayFormat == DisplayFormat.hourMinute
         ? duration.inMinutes
         : duration.inSeconds;
 
@@ -522,38 +651,39 @@ class _MainScreen extends State<MainScreen> {
     });
   }
 
-  void _startFunc() {
-    if (!_isStarted) return;
+  Timestamp getDayStart() {
+    DateTime toTime = DateTime.now();
+    toTime = DateTime(toTime.year, toTime.month, toTime.day);
+    return Timestamp.fromMillisecondsSinceEpoch(toTime.millisecondsSinceEpoch);
+  }
+
+  Status getStatus() => _currentSlot?.status ?? null;
+
+  bool isRunning() => getStatus() == Status.running;
+
+  bool isPaused() => getStatus() == Status.paused;
+
+  bool isStopped() => getStatus() == Status.stopped;
+
+  bool isNone() => getStatus() == Status.none;
+
+  void startFunc() {
+    if (isRunning() || isStopped()) return;
 
     setState(() {
-      _isStarted = false;
-      _isStopped = true;
-      _isPaused = true;
-
-      if (_workSlots.isEmpty || _workSlots.last.isStopped) {
-        _currentSlot = WorkHourSlot(_currentOption);
-        _currentSlot.start();
-        _workSlots.add(_currentSlot);
-        AppToast.info(context, S.of(context).timer_started);
-      } else if (_workSlots.last.isPaused) {
-        _workSlots.last.start();
-        AppToast.info(context, S.of(context).timer_resumed);
-      }
+      _currentSlot.start();
     });
+    AppToast.info(context, S.of(context).timer_started);
 
     print('start tapped at ${DateFormat('HH:mm.ss').format(DateTime.now())}');
   }
 
   void _stopFunc() {
-    if (!_isStopped) return;
+    if (isStopped() || isNone()) return;
 
     setState(() {
-      _currentOption = null;
-      _isStarted = false;
-      _isStopped = false;
-      _isPaused = false;
-
       _currentSlot.stop();
+      _currentOption = null;
       _currentSlot = null;
     });
 
@@ -562,14 +692,8 @@ class _MainScreen extends State<MainScreen> {
   }
 
   void _breakFunc() {
-    if (!_isPaused) return;
-
     setState(() {
-      _isStarted = true;
-      _isStopped = true;
-      _isPaused = false;
-
-      _workSlots.last.pause();
+      _currentSlot.pause();
     });
 
     AppToast.info(context, S.of(context).timer_paused);

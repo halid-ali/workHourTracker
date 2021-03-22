@@ -1,16 +1,16 @@
-class WorkHourOptionModel {
+class OptionModel {
   final String id;
   final String name;
   final String description;
 
-  WorkHourOptionModel({
+  OptionModel({
     this.id,
     this.name,
     this.description,
   });
 
-  factory WorkHourOptionModel.fromJson(String id, Map<String, dynamic> data) =>
-      WorkHourOptionModel(
+  factory OptionModel.fromJson(String id, Map<String, dynamic> data) =>
+      OptionModel(
         id: id,
         name: data['name'] as String,
         description: data['description'] as String,
@@ -20,4 +20,10 @@ class WorkHourOptionModel {
         'name': name,
         'description': description,
       };
+
+  bool operator ==(dynamic other) =>
+      other != null && other is OptionModel && this.id == other.id;
+
+  @override
+  int get hashCode => super.hashCode;
 }

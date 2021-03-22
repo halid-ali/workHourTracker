@@ -1,22 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:work_hour_tracker/data/model/work_hour_option_model.dart';
-import 'package:work_hour_tracker/data/repo/work_hour_option_repo.dart';
+import 'package:work_hour_tracker/data/model/option_model.dart';
+import 'package:work_hour_tracker/data/repo/option_repo.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/screens/settings/settings_screen.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/widgets/app_toast.dart';
 import 'package:work_hour_tracker/widgets/fade_transition.dart';
 
-class WorkHourOptionsScreen extends StatefulWidget {
-  WorkHourOptionsScreen({Key key}) : super(key: key);
+class OptionsScreen extends StatefulWidget {
+  OptionsScreen({Key key}) : super(key: key);
 
   @override
-  _WorkHourOptionsScreenState createState() => _WorkHourOptionsScreenState();
+  _OptionsScreenState createState() => _OptionsScreenState();
 }
 
-class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
+class _OptionsScreenState extends State<OptionsScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController optionNameController = TextEditingController();
   final TextEditingController optionDescController = TextEditingController();
@@ -24,7 +24,7 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
   String buttonTitle = '';
   bool isAddPanelVisible = false;
   bool isEditPanelVisible = false;
-  WorkHourOptionModel workHourOption;
+  OptionModel workHourOption;
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +103,7 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
                                 isEditPanelVisible = false;
                                 isAddPanelVisible = true;
                                 panelHeader = S.of(context).add_option;
-                                workHourOption = WorkHourOptionModel();
+                                workHourOption = OptionModel();
                                 buttonTitle = S.of(context).add;
                               });
                             },
@@ -155,7 +155,7 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
 
   Widget _getWorkHourOptions() {
     return StreamBuilder(
-      stream: WorkHourOptionRepository.getWorkHourOptions(),
+      stream: OptionRepository.getWorkHourOptions(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Text(S.of(context).error_occurred);
@@ -181,7 +181,7 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
             itemCount: options.length,
             itemBuilder: (context, index) {
               double bottom = index == options.length - 1 ? 10 : 0;
-              var option = WorkHourOptionModel.fromJson(
+              var option = OptionModel.fromJson(
                 options[index].id,
                 options[index].data(),
               );
@@ -277,12 +277,12 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
   }
 
   void onAddOption() async {
-    var workHourOption = WorkHourOptionModel(
+    var workHourOption = OptionModel(
       name: optionNameController.text.trim(),
       description: optionDescController.text.trim(),
     );
 
-    WorkHourOptionRepository.addWorkHourOption(workHourOption).then((value) {
+    OptionRepository.addWorkHourOption(workHourOption).then((value) {
       setState(() {
         optionNameController.text = '';
         optionDescController.text = '';
@@ -302,13 +302,13 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
   }
 
   void onEditOption() async {
-    var updatedOption = WorkHourOptionModel(
+    var updatedOption = OptionModel(
       id: workHourOption.id,
       name: optionNameController.text.trim(),
       description: optionDescController.text.trim(),
     );
 
-    WorkHourOptionRepository.updateWorkHourOption(updatedOption).then((value) {
+    OptionRepository.updateWorkHourOption(updatedOption).then((value) {
       setState(() {
         optionNameController.text = '';
         optionDescController.text = '';
@@ -597,7 +597,7 @@ class _WorkHourOptionsScreenState extends State<WorkHourOptionsScreen> {
                           ),
                         ),
                         onTap: () {
-                          WorkHourOptionRepository.deleteWorkHourOption(
+                          OptionRepository.deleteWorkHourOption(
                             optionId,
                           ).then(
                             (value) {
