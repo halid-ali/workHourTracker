@@ -31,24 +31,25 @@ class _WorkHourTrackerState extends State<WorkHourTracker> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Login.isLogged(),
-        builder: (context, AsyncSnapshot<bool> snapshot) {
-          if (!snapshot.hasData) return CircularProgressIndicator();
-          return MaterialApp(
-            locale: _locale,
-            localizationsDelegates: [
-              S.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: S.delegate.supportedLocales,
-            initialRoute: snapshot.data
-                ? RouteGenerator.homePage
-                : RouteGenerator.loginPage,
-            onGenerateRoute: RouteGenerator.generateRoute,
-            debugShowCheckedModeBanner: false,
-          );
-        });
+      future: Login.isLogged(),
+      builder: (context, AsyncSnapshot<bool> snapshot) {
+        if (!snapshot.hasData) return CircularProgressIndicator();
+        return MaterialApp(
+          locale: _locale,
+          localizationsDelegates: [
+            S.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: S.delegate.supportedLocales,
+          initialRoute: snapshot.data
+              ? RouteGenerator.homePage
+              : RouteGenerator.loginPage,
+          onGenerateRoute: RouteGenerator.generateRoute,
+          debugShowCheckedModeBanner: false,
+        );
+      },
+    );
   }
 }
