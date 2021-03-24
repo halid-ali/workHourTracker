@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/main.dart';
 import 'package:work_hour_tracker/routes.dart';
@@ -59,7 +58,9 @@ class AppDrawer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _buildButton(context, 'england', 'en'),
+          Text('|'),
           _buildButton(context, 'deutschland', 'de'),
+          Text('|'),
           _buildButton(context, 'turkiye', 'tr'),
         ],
       ),
@@ -71,7 +72,7 @@ class AppDrawer extends StatelessWidget {
       onTap: () => WorkHourTracker.of(context).setLocale(Locale(locale)),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
-        child: SvgPicture.asset('$flag.svg', height: 48),
+        child: Text(locale.toUpperCase()),
       ),
     );
   }
