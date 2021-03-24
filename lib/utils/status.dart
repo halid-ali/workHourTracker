@@ -1,3 +1,5 @@
+import 'package:work_hour_tracker/generated/l10n.dart';
+
 enum Status {
   none,
   running,
@@ -20,7 +22,7 @@ Status statusFromString(String value) {
     case 'paused':
       return Status.paused;
     default:
-      throw StatusException('Invalid status.');
+      throw StatusException(S.current.status_exception_message);
   }
 }
 

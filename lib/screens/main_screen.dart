@@ -66,11 +66,11 @@ class _MainLoadScreen extends State<MainScreen> {
                 future: SessionManager.read(SessionKey.userId),
                 builder: (context, AsyncSnapshot<String> snapshot) {
                   if (!snapshot.hasData) {
-                    return buildLoading('User data is being loaded.');
+                    return buildLoading(S.of(context).user_data_load);
                   }
 
                   if (snapshot.hasError) {
-                    return Text('Error during userId');
+                    return Text(S.of(context).user_data_load_error);
                   }
 
                   final userId = snapshot.data;
@@ -80,11 +80,11 @@ class _MainLoadScreen extends State<MainScreen> {
                         SlotRepository.getWorkHourSlotsByDate(getDayStart()),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
-                        return buildLoading('Work hours are being loaded.');
+                        return buildLoading(S.of(context).workhour_data_load);
                       }
 
                       if (snapshot.hasError) {
-                        return Text('Error during work slots');
+                        return Text(S.of(context).workhour_data_load_error);
                       }
 
                       final slots = snapshot.data.docs
@@ -97,11 +97,11 @@ class _MainLoadScreen extends State<MainScreen> {
                         builder:
                             (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (!snapshot.hasData) {
-                            return buildLoading('Options are being loaded.');
+                            return buildLoading(S.of(context).option_data_load);
                           }
 
                           if (snapshot.hasError) {
-                            return Text('Error during options');
+                            return Text(S.of(context).option_data_load_error);
                           }
 
                           var options = snapshot.data.docs
@@ -125,11 +125,13 @@ class _MainLoadScreen extends State<MainScreen> {
                                   AsyncSnapshot<OptionModel> snapshot) {
                                 if (!snapshot.hasData) {
                                   return buildLoading(
-                                      'Last running option is being loaded.');
+                                      S.of(context).last_option_data_load);
                                 }
 
                                 if (snapshot.hasError) {
-                                  return Text('Error during option');
+                                  return Text(S
+                                      .of(context)
+                                      .last_option_data_load_error);
                                 }
 
                                 final option = snapshot.data;
@@ -617,8 +619,12 @@ class _MainScreenContent extends State<MainScreenContent> {
   String _formatDisplay(Duration duration, bool isDigitalDisplay) {
     String prefix;
     String suffix;
-    String prefixUnit = displayFormat == DisplayFormat.hourMinute ? 'h' : 'm';
-    String suffixUnit = displayFormat == DisplayFormat.hourMinute ? 'm' : 's';
+    String prefixUnit = displayFormat == DisplayFormat.hourMinute
+        ? S.of(context).hour_unit
+        : S.of(context).minute_unit;
+    String suffixUnit = displayFormat == DisplayFormat.hourMinute
+        ? S.of(context).minute_unit
+        : S.of(context).second_unit;
 
     if (displayFormat == DisplayFormat.hourMinute) {
       prefix = duration.inHours.remainder(60).toString().padLeft(2, '0');

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/screens/login_screen.dart';
 import 'package:work_hour_tracker/screens/main_screen.dart';
 import 'package:work_hour_tracker/screens/register_screen.dart';
@@ -37,7 +38,7 @@ class RouteGenerator {
           builder: (_) => OptionsScreen(),
         );
       default:
-        throw RouteException("Route not found.");
+        throw RouteException(S.current.route_exception_message);
     }
   }
 }

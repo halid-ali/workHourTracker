@@ -60,5 +60,21 @@
     "add_error_message": "Yeni seçenek ekleme başarısız.",
     "update_error_message": "Seçenek güncelleme başarısız.",
     "delete_error_message": "Seçenek silme başarısız.",
-    "console_details": "Detaylar için konsola bakınız."
+    "console_details": "Detaylar için konsola bakınız.",
+    "route_exception_message": "Sayfa bulunamadı",
+    "status_exception_message": "Geçersiz zamanlayıcı durumu",
+    "successful_register_message": "Kayıt başarılı.",
+    "unsuccessful_register_message": "Kayıt esnasında hata oluştu.\nDetaylar için konsola bakınız.",
+    "user_data_load": "Kullanıcı bilgisi yükleniyor.",
+    "user_data_load_error": "Kullanıcı bilgisi yüklenirken hata oluştu.",
+    "workhour_data_load": "Çalışma saatleri yükleniyor.",
+    "workhour_data_load_error": "Çalışma saatleri yüklenirken hata oluştu.",
+    "option_data_load": "Opsiyonlar yükleniyor.",
+    "option_data_load_error": "Opsiyonlar yüklenirken hata oluştu.",
+    "last_option_data_load": "Son çalışan opsiyon bilgisi yükleniyor.",
+    "last_option_data_load_error": "Son çalışan opsiyon bilgisi yüklenirken hata oluştu.",
+    "hour_unit": "s",
+    "minute_unit": "d",
+    "second_unit": "sn",
+    "millisecond_unit": "ms"
 }

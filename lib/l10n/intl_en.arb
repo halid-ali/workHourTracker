@@ -243,5 +243,69 @@
     "console_details": "Please see the console for details.",
     "@console_details": {
         "description": "See console message"
+    },
+    "route_exception_message": "Route not found.",
+    "@route_exception_message": {
+        "description": "Exception message when invalid route occurs"
+    },
+    "status_exception_message": "Invalid timer status.",
+    "@status_exception_message": {
+        "description": "Exception message when invalid timer status occurs"
+    },
+    "successful_register_message": "Registered successfully.",
+    "@successful_register_message": {
+        "description": "Message when register is successful"
+    },
+    "unsuccessful_register_message": "Error occurred during register.\nSee console for details.",
+    "@unsuccessful_register_message": {
+        "description": "Error message when register is not successful"
+    },
+    "user_data_load": "User data is being loaded.",
+    "@user_data_load": {
+        "description": "Loading message while user is being loaded"
+    },
+    "user_data_load_error": "Error occurred while loading user data.",
+    "@user_data_load_error": {
+        "description": "Error message when user load fails"
+    },
+    "workhour_data_load": "Work hours are being loaded.",
+    "@workhour_data_load": {
+        "description": "Loading message while work hours are being loaded"
+    },
+    "workhour_data_load_error": "Error occurred while loading work hours.",
+    "@workhour_data_load_error": {
+        "description": "Error message when work hours load fails"
+    },
+    "option_data_load": "Options are being loaded.",
+    "@option_data_load": {
+        "description": "Loading message while options are being loaded"
+    },
+    "option_data_load_error": "Error occurred while loading options.",
+    "@option_data_load_error": {
+        "description": "Error message when options load fails"
+    },
+    "last_option_data_load": "Last running option is being loaded.",
+    "@last_option_data_load": {
+        "description": "Loading message while last running option is being loaded"
+    },
+    "last_option_data_load_error": "Error occurred while loading last running option.",
+    "@last_option_data_load_error": {
+        "description": "Error message when last running option load fails"
+    },
+    "hour_unit": "h",
+    "@hour_unit": {
+        "description": "Hour unit"
+    },
+    "minute_unit": "m",
+    "@minute_unit": {
+        "description": "Minute unit"
+    },
+    "second_unit": "s",
+    "@second_unit": {
+        "description": "Second unit"
+    },
+    "millisecond_unit": "ms",
+    "@millisecond_unit": {
+        "description": "Millisecond unit"
     }
 }

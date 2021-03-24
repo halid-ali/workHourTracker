@@ -1,6 +1,7 @@
 import 'package:work_hour_tracker/data/repo/slot_repo.dart';
 import 'package:work_hour_tracker/utils/status.dart';
 import 'package:work_hour_tracker/data/model/slot_model.dart';
+import 'package:work_hour_tracker/generated/l10n.dart';
 
 class WorkHourSlot {
   final String userId;
@@ -70,7 +71,7 @@ class WorkHourSlot {
       case Status.stopped:
         return Duration(milliseconds: workSlot.pauseDuration);
       default:
-        throw StatusException('Invalid timer status');
+        throw StatusException(S.current.status_exception_message);
     }
   }
 
@@ -88,7 +89,7 @@ class WorkHourSlot {
         return workSlot.stopTime.difference(workSlot.startTime) -
             Duration(milliseconds: workSlot.pauseDuration);
       default:
-        throw StatusException('Invalid timer status');
+        throw StatusException(S.current.status_exception_message);
     }
   }
 }

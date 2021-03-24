@@ -60,5 +60,21 @@
     "add_error_message": "Neue Option konnte nicht hinzugefügt werden.",
     "update_error_message": "Die Option konnte nicht aktualisiert werden.",
     "delete_error_message": "Die Option konnte nicht gelöscht werden.",
-    "console_details": "Weitere Informationen finden Sie in der Konsole."
+    "console_details": "Weitere Informationen finden Sie in der Konsole.",
+    "route_exception_message": "Route nicht gefunden",
+    "status_exception_message": "Ungültiger Timer-status",
+    "successful_register_message": "Registrierung ist erfolgreich.",
+    "unsuccessful_register_message": "Registrierung fehlgeschlagen.\nEinzelheiten finden Sie in der Konsole.",
+    "user_data_load": "Benutzerdaten wird geladen.",
+    "user_data_load_error": "Beim Laden der Benutzerdaten ist ein Fehler aufgetreten.",
+    "workhour_data_load": "Arbeitszeiten werden geladen.",
+    "workhour_data_load_error": "Beim Laden der Arbeitszeiten ist ein Fehler aufgetreten.",
+    "option_data_load": "Optionen werden geladen.",
+    "option_data_load_error": "Beim Laden der Optionen ist ein Fehler aufgetreten.",
+    "last_option_data_load": "Die zuletzt ausgeführte Option wird geladen.",
+    "last_option_data_load_error": "Beim Laden der zuletzt ausgeführt Option ist ein Fehler aufgetreten.",
+    "hour_unit": "h",
+    "minute_unit": "m",
+    "second_unit": "s",
+    "millisecond_unit": "ms"
 }

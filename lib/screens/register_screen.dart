@@ -170,13 +170,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
 
       UserRepository.addUser(user).then((value) {
-        AppToast.success(context, 'Registered successfully.');
+        AppToast.success(context, S.of(context).successful_register_message);
         Navigator.pushNamed(context, RouteGenerator.loginPage);
       }).catchError((error) {
-        AppToast.error(
-            context,
-            'Error occurred during register.\n'
-            'See console for details.');
+        AppToast.error(context, S.of(context).unsuccessful_register_message);
         print(error);
       });
     }
