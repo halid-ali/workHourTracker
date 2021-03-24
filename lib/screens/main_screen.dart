@@ -163,25 +163,6 @@ class _MainLoad extends State<MainLoad> {
   }
 }
 
-class MainScreenTemp extends StatefulWidget {
-  final String userId;
-  final OptionModel lastOption;
-  final List<OptionModel> options;
-  final List<SlotModel> slots;
-
-  MainScreenTemp({this.userId, this.lastOption, this.options, this.slots});
-
-  @override
-  _MainScreenTemp createState() => _MainScreenTemp();
-}
-
-class _MainScreenTemp extends State<MainScreenTemp> {
-  @override
-  Widget build(BuildContext context) {
-    return Text(widget.userId);
-  }
-}
-
 class MainScreen extends StatefulWidget {
   final String userId;
   final OptionModel lastOption;
@@ -219,9 +200,7 @@ class _MainScreen extends State<MainScreen> {
           : Duration(seconds: 1),
       (Timer t) {
         if (this.mounted) {
-          setState(() {
-            if (_currentSlot != null && isRunning()) {}
-          });
+          setState(() {});
         }
       },
     );
@@ -265,7 +244,7 @@ class _MainScreen extends State<MainScreen> {
           ),
         ),
         SizedBox(height: 2),
-        _buildFooter(widget.slots),
+        buildFooter(widget.slots),
       ],
     );
   }
@@ -578,14 +557,15 @@ class _MainScreen extends State<MainScreen> {
     );
   }
 
-  Widget _buildFooter(List<SlotModel> workSlots) {
+  Widget buildFooter(List<SlotModel> workSlots) {
     Duration totalWork = workSlots
         .map<WorkHourSlot>((e) => WorkHourSlot.fromSlot(e))
         .map<Duration>((e) => e.getWorkDuration())
         .fold(Duration.zero, (p, e) => p + e);
 
     Duration totalBreak = workSlots
-        .map<Duration>((e) => Duration(milliseconds: e.pauseDuration))
+        .map<WorkHourSlot>((e) => WorkHourSlot.fromSlot(e))
+        .map<Duration>((e) => e.getPauseDuration())
         .fold(Duration.zero, (p, e) => p + e);
 
     _setColorScheme(totalWork);

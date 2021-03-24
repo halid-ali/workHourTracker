@@ -22,7 +22,7 @@ class WorkHourSlot {
 
   DateTime get stopTime => workSlot.stopTime;
 
-  Duration get pauseDuration => Duration(milliseconds: workSlot.pauseDuration);
+  Duration get pauseDuration => getPauseDuration();
 
   Duration get workDuration => getWorkDuration();
 
@@ -57,6 +57,21 @@ class WorkHourSlot {
     workSlot.pauseTime = DateTime.now();
     workSlot.timerStatus = Status.paused.value;
     SlotRepository.updateWorkHourSlot(workSlot);
+  }
+
+  Duration getPauseDuration() {
+    var timerStatus = statusFromString(workSlot.timerStatus);
+
+    switch (timerStatus) {
+      case Status.paused:
+        return DateTime.now().difference(workSlot.pauseTime) +
+            Duration(milliseconds: workSlot.pauseDuration);
+      case Status.running:
+      case Status.stopped:
+        return Duration(milliseconds: workSlot.pauseDuration);
+      default:
+        throw StatusException('Invalid timer status');
+    }
   }
 
   Duration getWorkDuration() {
