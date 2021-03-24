@@ -60,12 +60,20 @@ class WorkHourSlot {
   }
 
   Duration getWorkDuration() {
-    if (statusFromString(workSlot.timerStatus) == Status.running) {
-      return DateTime.now().difference(workSlot.startTime) -
-          Duration(milliseconds: workSlot.pauseDuration);
-    }
+    var timerStatus = statusFromString(workSlot.timerStatus);
 
-    return workSlot.stopTime.difference(workSlot.startTime) -
-        Duration(milliseconds: workSlot.pauseDuration);
+    switch (timerStatus) {
+      case Status.running:
+        return DateTime.now().difference(workSlot.startTime) -
+            Duration(milliseconds: workSlot.pauseDuration);
+      case Status.paused:
+        return workSlot.pauseTime.difference(workSlot.startTime) -
+            Duration(milliseconds: workSlot.pauseDuration);
+      case Status.stopped:
+        return workSlot.stopTime.difference(workSlot.startTime) -
+            Duration(milliseconds: workSlot.pauseDuration);
+      default:
+        throw StatusException('Invalid timer status');
+    }
   }
 }

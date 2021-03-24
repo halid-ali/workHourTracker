@@ -198,7 +198,7 @@ class _MainScreen extends State<MainScreen> {
   final SlidableController _slidableController = SlidableController();
   final DisplayFormat displayFormat = AppSettings.displayFormat;
 
-  scheme.ColorScheme _colorScheme = scheme.ColorScheme.grey();
+  scheme.ColorScheme _colorScheme;
   WorkHourSlot _currentSlot;
   OptionModel _currentOption;
 
@@ -220,9 +220,7 @@ class _MainScreen extends State<MainScreen> {
       (Timer t) {
         if (this.mounted) {
           setState(() {
-            if (_currentSlot != null && isRunning()) {
-              _setColorScheme(_currentSlot.workDuration);
-            }
+            if (_currentSlot != null && isRunning()) {}
           });
         }
       },
@@ -256,7 +254,8 @@ class _MainScreen extends State<MainScreen> {
                 return Column(
                   children: [
                     getSlidable(
-                      widget.slots[index],
+                      widget.slots,
+                      index,
                       index % 2 != 0,
                     )
                   ],
@@ -348,15 +347,15 @@ class _MainScreen extends State<MainScreen> {
           TrackButton(
             icon: Icons.pause_sharp,
             color: Color(0xFF0077B6),
-            onPressCallback: _breakFunc,
+            onPressCallback: breakFunc,
             isActiveCallback: () => isRunning(),
           ),
           SizedBox(width: 20),
           TrackButton(
             icon: Icons.stop_sharp,
             color: Color(0xFFD90429),
-            onPressCallback: _stopFunc,
-            isActiveCallback: () => isRunning(),
+            onPressCallback: stopFunc,
+            isActiveCallback: () => isRunning() || isPaused(),
           ),
           SizedBox(width: 20),
           TrackButton(
@@ -370,10 +369,10 @@ class _MainScreen extends State<MainScreen> {
     );
   }
 
-  Widget getSlidable(SlotModel slotModel, bool isOdd) {
-    var slot = WorkHourSlot.fromSlot(slotModel);
+  Widget getSlidable(List<SlotModel> slotModels, int index, bool isOdd) {
+    var slot = WorkHourSlot.fromSlot(slotModels[index]);
     return Slidable(
-      key: Key(slot.optionId),
+      key: Key(slot.workSlot.id),
       controller: _slidableController,
       actionPane: SlidableStrechActionPane(),
       closeOnScroll: true,
@@ -383,6 +382,7 @@ class _MainScreen extends State<MainScreen> {
         onDismissed: (actionType) {
           setState(() {
             SlotRepository.deleteWorkHourSlot(slot.workSlot.id);
+            slotModels.removeAt(index);
           });
         },
       ),
@@ -414,8 +414,13 @@ class _MainScreen extends State<MainScreen> {
           ),
         ),
       ],
-      child: _buildListRow(
-        widget.options.firstWhere((e) => e.id == slot.optionId).name,
+      child: buildListRow(
+        widget.options
+            .firstWhere(
+              (e) => e.id == slot.optionId,
+              orElse: () => null,
+            )
+            .name,
         DateFormat('HH:mm').format(slot.startTime),
         slot.stopTime != null
             ? DateFormat('HH:mm').format(slot.stopTime)
@@ -465,7 +470,7 @@ class _MainScreen extends State<MainScreen> {
     );
   }
 
-  Widget _buildListRow(
+  Widget buildListRow(
     String option,
     String startHour,
     String stopHour,
@@ -575,12 +580,15 @@ class _MainScreen extends State<MainScreen> {
 
   Widget _buildFooter(List<SlotModel> workSlots) {
     Duration totalWork = workSlots
-        .map<Duration>((e) => Duration(milliseconds: 0))
+        .map<WorkHourSlot>((e) => WorkHourSlot.fromSlot(e))
+        .map<Duration>((e) => e.getWorkDuration())
         .fold(Duration.zero, (p, e) => p + e);
 
     Duration totalBreak = workSlots
         .map<Duration>((e) => Duration(milliseconds: e.pauseDuration))
         .fold(Duration.zero, (p, e) => p + e);
+
+    _setColorScheme(totalWork);
 
     return HeaderFooter(
       columns: [
@@ -678,7 +686,7 @@ class _MainScreen extends State<MainScreen> {
     print('start tapped at ${DateFormat('HH:mm.ss').format(DateTime.now())}');
   }
 
-  void _stopFunc() {
+  void stopFunc() {
     if (isStopped() || isNone()) return;
 
     setState(() {
@@ -691,7 +699,7 @@ class _MainScreen extends State<MainScreen> {
     print('stopp tapped at ${DateFormat('HH:mm.ss').format(DateTime.now())}');
   }
 
-  void _breakFunc() {
+  void breakFunc() {
     setState(() {
       _currentSlot.pause();
     });
