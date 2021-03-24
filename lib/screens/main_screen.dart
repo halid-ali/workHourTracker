@@ -69,10 +69,8 @@ class _MainLoad extends State<MainLoad> {
                     final userId = snapshot.data;
 
                     return StreamBuilder(
-                      stream: SlotRepository.getWorkHourSlotsByDate(
-                        userId,
-                        getDayStart(),
-                      ),
+                      stream:
+                          SlotRepository.getWorkHourSlotsByDate(getDayStart()),
                       builder:
                           (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (!snapshot.hasData) {
@@ -87,6 +85,7 @@ class _MainLoad extends State<MainLoad> {
 
                         final slots = snapshot.data.docs
                             .map((e) => SlotModel.fromJson(e.id, e.data()))
+                            .where((e) => e.userId == userId)
                             .toList();
 
                         return StreamBuilder(

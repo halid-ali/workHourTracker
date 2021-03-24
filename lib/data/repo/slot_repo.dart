@@ -12,25 +12,11 @@ class SlotRepository {
         .snapshots(includeMetadataChanges: true);
   }
 
-  static Stream<QuerySnapshot> getWorkHourSlotsByDate(
-    String userId,
-    Timestamp startDate,
-  ) {
+  static Stream<QuerySnapshot> getWorkHourSlotsByDate(Timestamp startTime) {
     return _dbProvider.database
         .collection('workHourSlots')
-        //.where('userId', isEqualTo: userId)
-        .where('startTime', isGreaterThanOrEqualTo: startDate)
+        .where('startTime', isGreaterThanOrEqualTo: startTime)
         .snapshots(includeMetadataChanges: true);
-  }
-
-  static Future<SlotModel> getWorkHourSlot(String id) async {
-    return _dbProvider.database
-        .collection('workHourSlots')
-        .doc(id)
-        .get()
-        .then<SlotModel>((value) {
-      return SlotModel.fromJson(id, value.data());
-    });
   }
 
   static Future<void> addWorkHourSlot(SlotModel workHourSlot) async {
