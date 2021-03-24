@@ -38,9 +38,18 @@ class _MainLoadScreen extends State<MainScreen> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Color(0xFF212529),
-          title: Text(
-            '${S.of(context).appTitle} ${PlatformInfo.isWeb() ? 'Web' : 'Mobile'}',
-            style: GoogleFonts.notoSerif(fontSize: 25, letterSpacing: 0.7),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '${S.of(context).appTitle} ${PlatformInfo.isWeb() ? 'Web' : 'Mobile'}',
+                style: GoogleFonts.notoSerif(fontSize: 25, letterSpacing: 0.7),
+              ),
+              Text(
+                'v1.0',
+                style: GoogleFonts.notoSerif(fontSize: 25, letterSpacing: 0.7),
+              ),
+            ],
           ),
         ),
         drawer: AppDrawer(),
