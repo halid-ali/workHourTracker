@@ -17,8 +17,8 @@ class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case homePage:
-        return MaterialPageRoute<MainLoad>(
-          builder: (_) => MainLoad(),
+        return MaterialPageRoute<MainScreen>(
+          builder: (_) => MainScreen(),
         );
       case loginPage:
         return MaterialPageRoute<LoginScreen>(

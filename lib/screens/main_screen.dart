@@ -23,14 +23,14 @@ import 'package:work_hour_tracker/widgets/header_footer_column.dart';
 import 'package:work_hour_tracker/widgets/track_button.dart';
 import 'package:work_hour_tracker/utils/color_scheme.dart' as scheme;
 
-class MainLoad extends StatefulWidget {
-  MainLoad({Key key}) : super(key: key);
+class MainScreen extends StatefulWidget {
+  MainScreen({Key key}) : super(key: key);
 
   @override
-  _MainLoad createState() => _MainLoad();
+  _MainLoadScreen createState() => _MainLoadScreen();
 }
 
-class _MainLoad extends State<MainLoad> {
+class _MainLoadScreen extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -102,7 +102,7 @@ class _MainLoad extends State<MainLoad> {
 
                           if (slots.isEmpty ||
                               slots.last.timerStatus == Status.stopped.value) {
-                            return MainScreen(
+                            return MainScreenContent(
                               userId: userId,
                               lastOption: null,
                               options: options,
@@ -125,7 +125,7 @@ class _MainLoad extends State<MainLoad> {
 
                                 final option = snapshot.data;
 
-                                return MainScreen(
+                                return MainScreenContent(
                                   userId: userId,
                                   lastOption: option,
                                   options: options,
@@ -169,19 +169,19 @@ class _MainLoad extends State<MainLoad> {
   }
 }
 
-class MainScreen extends StatefulWidget {
+class MainScreenContent extends StatefulWidget {
   final String userId;
   final OptionModel lastOption;
   final List<OptionModel> options;
   final List<SlotModel> slots;
 
-  MainScreen({this.userId, this.lastOption, this.options, this.slots});
+  MainScreenContent({this.userId, this.lastOption, this.options, this.slots});
 
   @override
-  _MainScreen createState() => _MainScreen();
+  _MainScreenContent createState() => _MainScreenContent();
 }
 
-class _MainScreen extends State<MainScreen> {
+class _MainScreenContent extends State<MainScreenContent> {
   final SlidableController _slidableController = SlidableController();
   final DisplayFormat displayFormat = AppSettings.displayFormat;
 
