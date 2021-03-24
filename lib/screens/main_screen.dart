@@ -54,104 +54,111 @@ class _MainLoad extends State<MainLoad> {
                     : MediaQuery.of(context).size.width,
               ),
               child: FutureBuilder(
-                  future: SessionManager.read(SessionKey.userId),
-                  builder: (context, AsyncSnapshot<String> snapshot) {
-                    if (!snapshot.hasData) {
-                      return CircularProgressIndicator(
-                        backgroundColor: Colors.red,
-                      );
-                    }
+                future: SessionManager.read(SessionKey.userId),
+                builder: (context, AsyncSnapshot<String> snapshot) {
+                  if (!snapshot.hasData) {
+                    return buildLoading('User data is being loaded.');
+                  }
 
-                    if (snapshot.hasError) {
-                      return Text('Error during userId');
-                    }
+                  if (snapshot.hasError) {
+                    return Text('Error during userId');
+                  }
 
-                    final userId = snapshot.data;
+                  final userId = snapshot.data;
 
-                    return StreamBuilder(
-                      stream:
-                          SlotRepository.getWorkHourSlotsByDate(getDayStart()),
-                      builder:
-                          (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (!snapshot.hasData) {
-                          return CircularProgressIndicator(
-                            backgroundColor: Colors.yellow,
-                          );
-                        }
+                  return StreamBuilder(
+                    stream:
+                        SlotRepository.getWorkHourSlotsByDate(getDayStart()),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (!snapshot.hasData) {
+                        return buildLoading('Work hours are being loaded.');
+                      }
 
-                        if (snapshot.hasError) {
-                          return Text('Error during work slots');
-                        }
+                      if (snapshot.hasError) {
+                        return Text('Error during work slots');
+                      }
 
-                        final slots = snapshot.data.docs
-                            .map((e) => SlotModel.fromJson(e.id, e.data()))
-                            .where((e) => e.userId == userId)
-                            .toList();
+                      final slots = snapshot.data.docs
+                          .map((e) => SlotModel.fromJson(e.id, e.data()))
+                          .where((e) => e.userId == userId)
+                          .toList();
 
-                        return StreamBuilder(
-                            stream: OptionRepository.getWorkHourOptions(),
-                            builder: (context,
-                                AsyncSnapshot<QuerySnapshot> snapshot) {
-                              if (!snapshot.hasData) {
-                                return CircularProgressIndicator(
-                                  backgroundColor: Colors.green,
-                                );
-                              }
+                      return StreamBuilder(
+                        stream: OptionRepository.getWorkHourOptions(),
+                        builder:
+                            (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (!snapshot.hasData) {
+                            return buildLoading('Options are being loaded.');
+                          }
 
-                              if (snapshot.hasError) {
-                                return Text('Error during options');
-                              }
+                          if (snapshot.hasError) {
+                            return Text('Error during options');
+                          }
 
-                              var options = snapshot.data.docs
-                                  .map((e) =>
-                                      OptionModel.fromJson(e.id, e.data()))
-                                  .toList();
-                              options.sort((a, b) => a.name.compareTo(b.name));
+                          var options = snapshot.data.docs
+                              .map((e) => OptionModel.fromJson(e.id, e.data()))
+                              .toList();
+                          options.sort((a, b) => a.name.compareTo(b.name));
 
-                              if (slots.isEmpty ||
-                                  slots.last.timerStatus ==
-                                      Status.stopped.value) {
+                          if (slots.isEmpty ||
+                              slots.last.timerStatus == Status.stopped.value) {
+                            return MainScreen(
+                              userId: userId,
+                              lastOption: null,
+                              options: options,
+                              slots: slots,
+                            );
+                          } else {
+                            return FutureBuilder(
+                              future: OptionRepository.getWorkHourOption(
+                                  slots.last.optionId),
+                              builder: (context,
+                                  AsyncSnapshot<OptionModel> snapshot) {
+                                if (!snapshot.hasData) {
+                                  return buildLoading(
+                                      'Last running option is being loaded.');
+                                }
+
+                                if (snapshot.hasError) {
+                                  return Text('Error during option');
+                                }
+
+                                final option = snapshot.data;
+
                                 return MainScreen(
                                   userId: userId,
-                                  lastOption: null,
+                                  lastOption: option,
                                   options: options,
                                   slots: slots,
                                 );
-                              } else {
-                                return FutureBuilder(
-                                  future: OptionRepository.getWorkHourOption(
-                                      slots.last.optionId),
-                                  builder: (context,
-                                      AsyncSnapshot<OptionModel> snapshot) {
-                                    if (!snapshot.hasData) {
-                                      return CircularProgressIndicator(
-                                        backgroundColor: Colors.grey,
-                                      );
-                                    }
-
-                                    if (snapshot.hasError) {
-                                      return Text('Error during option');
-                                    }
-
-                                    final option = snapshot.data;
-
-                                    return MainScreen(
-                                      userId: userId,
-                                      lastOption: option,
-                                      options: options,
-                                      slots: slots,
-                                    );
-                                  },
-                                );
-                              }
-                            });
-                      },
-                    );
-                  }),
+                              },
+                            );
+                          }
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildLoading(String text) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CircularProgressIndicator(
+          backgroundColor: Color(0xFFCED4DA),
+          strokeWidth: 1,
+          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF495057)),
+        ),
+        SizedBox(height: 20),
+        Text(text),
+      ],
     );
   }
 
