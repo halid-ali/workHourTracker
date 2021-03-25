@@ -47,7 +47,7 @@ class _MainLoadScreen extends State<MainScreen> {
                 style: GoogleFonts.notoSerif(fontSize: 25, letterSpacing: 0.7),
               ),
               Text(
-                'v1.0',
+                'v1.1',
                 style: GoogleFonts.notoSerif(fontSize: 25, letterSpacing: 0.7),
               ),
             ],

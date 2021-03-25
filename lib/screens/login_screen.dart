@@ -188,13 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
               .map<DropdownMenuItem<String>>(
                 (e) => DropdownMenuItem<String>(
                   value: e.id,
-                  child: Row(
-                    children: [
-                      Text('${e.data()['username']}'),
-                      Expanded(child: Container()),
-                      Text('${e.id}'),
-                    ],
-                  ),
+                  child: Text('${e.data()['username']}'),
                 ),
               )
               .toList(),

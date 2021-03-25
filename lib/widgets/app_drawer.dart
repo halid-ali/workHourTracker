@@ -36,11 +36,6 @@ class AppDrawer extends StatelessWidget {
                       padding: EdgeInsets.all(10.0),
                       child: Text('Username: ${snapshot.data[1]}'),
                     ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.all(10.0),
-                      child: Text('Id: ${snapshot.data[0]}'),
-                    ),
                     _getButtons(context),
                   ],
                 ),
