@@ -17,6 +17,7 @@ import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/utils/settings.dart';
 import 'package:work_hour_tracker/widgets/app_drawer.dart';
+import 'package:work_hour_tracker/widgets/app_loading.dart';
 import 'package:work_hour_tracker/widgets/app_toast.dart';
 import 'package:work_hour_tracker/widgets/header_footer.dart';
 import 'package:work_hour_tracker/widgets/header_footer_column.dart';
@@ -66,7 +67,7 @@ class _MainLoadScreen extends State<MainScreen> {
                 future: SessionManager.read(SessionKey.userId),
                 builder: (context, AsyncSnapshot<String> snapshot) {
                   if (!snapshot.hasData) {
-                    return buildLoading(S.of(context).user_data_load);
+                    return AppLoading(S.of(context).user_data_load);
                   }
 
                   if (snapshot.hasError) {
@@ -80,7 +81,7 @@ class _MainLoadScreen extends State<MainScreen> {
                         SlotRepository.getWorkHourSlotsByDate(getDayStart()),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
-                        return buildLoading(S.of(context).workhour_data_load);
+                        return AppLoading(S.of(context).workhour_data_load);
                       }
 
                       if (snapshot.hasError) {
@@ -93,11 +94,11 @@ class _MainLoadScreen extends State<MainScreen> {
                           .toList();
 
                       return StreamBuilder(
-                        stream: OptionRepository.getWorkHourOptions(),
+                        stream: OptionRepository.getWorkHourOptions(userId),
                         builder:
                             (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (!snapshot.hasData) {
-                            return buildLoading(S.of(context).option_data_load);
+                            return AppLoading(S.of(context).option_data_load);
                           }
 
                           if (snapshot.hasError) {
@@ -124,7 +125,7 @@ class _MainLoadScreen extends State<MainScreen> {
                               builder: (context,
                                   AsyncSnapshot<OptionModel> snapshot) {
                                 if (!snapshot.hasData) {
-                                  return buildLoading(
+                                  return AppLoading(
                                       S.of(context).last_option_data_load);
                                 }
 
@@ -155,21 +156,6 @@ class _MainLoadScreen extends State<MainScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget buildLoading(String text) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CircularProgressIndicator(
-          backgroundColor: Color(0xFFCED4DA),
-          strokeWidth: 1,
-          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF495057)),
-        ),
-        SizedBox(height: 20),
-        Text(text),
-      ],
     );
   }
 

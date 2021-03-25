@@ -6,6 +6,8 @@ import 'package:work_hour_tracker/data/repo/option_repo.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/screens/settings/settings_screen.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
+import 'package:work_hour_tracker/utils/session_manager.dart';
+import 'package:work_hour_tracker/widgets/app_loading.dart';
 import 'package:work_hour_tracker/widgets/app_toast.dart';
 import 'package:work_hour_tracker/widgets/fade_transition.dart';
 
@@ -31,137 +33,153 @@ class _OptionsScreenState extends State<OptionsScreen> {
     return SafeArea(
       child: Scaffold(
         body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: PlatformInfo.isWeb()
-                    ? 600
-                    : MediaQuery.of(context).size.width,
-              ),
-              child: Column(
-                children: [
-                  // Header
-                  Container(
-                    color: Color(0xFF1D3557),
-                    padding: EdgeInsets.all(10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: FutureBuilder(
+              future: SessionManager.read(SessionKey.userId),
+              builder: (context, AsyncSnapshot<String> snapshot) {
+                if (!snapshot.hasData) {
+                  return AppLoading(S.of(context).option_data_load);
+                }
+
+                if (snapshot.hasError) {
+                  return Text(S.of(context).option_data_load_error);
+                }
+
+                final userId = snapshot.data;
+
+                return Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: PlatformInfo.isWeb()
+                          ? 600
+                          : MediaQuery.of(context).size.width,
+                    ),
+                    child: Column(
                       children: [
-                        InkWell(
-                          child: Icon(
-                            Icons.arrow_back_ios_sharp,
-                            color: Color(0xFFF1FAEE),
+                        // Header
+                        Container(
+                          color: Color(0xFF1D3557),
+                          padding: EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                child: Icon(
+                                  Icons.arrow_back_ios_sharp,
+                                  color: Color(0xFFF1FAEE),
+                                ),
+                                onTap: () => Navigator.push(
+                                  context,
+                                  FadeRouteTransition(
+                                    page: SettingsScreen(),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  S.of(context).work_hour_options,
+                                  style: GoogleFonts.merriweather(
+                                    color: Color(0xFFF1FAEE),
+                                    fontSize: 21,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          onTap: () => Navigator.push(
-                            context,
-                            FadeRouteTransition(
-                              page: SettingsScreen(),
-                            ),
-                          ),
+                        ),
+                        // Separator
+                        Container(
+                          height: 10,
+                          color: Color(0xFFE63946),
+                          margin: EdgeInsets.only(bottom: 10),
                         ),
                         Container(
+                          padding: EdgeInsets.all(10.0),
                           alignment: Alignment.centerLeft,
-                          child: Text(
-                            S.of(context).work_hour_options,
-                            style: GoogleFonts.merriweather(
-                              color: Color(0xFFF1FAEE),
-                              fontSize: 21,
-                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                S.of(context).available_options,
+                                style: GoogleFonts.openSans(
+                                  fontSize: 19,
+                                ),
+                              ),
+                              Tooltip(
+                                message: S.of(context).add_new_option,
+                                padding: EdgeInsets.all(5.0),
+                                textStyle: GoogleFonts.openSans(
+                                    fontSize: 15, color: Colors.white),
+                                decoration:
+                                    BoxDecoration(color: Color(0xFF212529)),
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      isEditPanelVisible = false;
+                                      isAddPanelVisible = true;
+                                      panelHeader = S.of(context).add_option;
+                                      workHourOption = OptionModel();
+                                      buttonTitle = S.of(context).add;
+                                    });
+                                  },
+                                  child: Icon(Icons.add_sharp),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+                        Expanded(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: Color(0xFFF5F3F4),
+                              border: Border.all(
+                                width: 1,
+                                color: Color(0xFFD3D3D3),
+                              ),
+                            ),
+                            child: _getWorkHourOptions(userId),
+                          ),
+                        ),
+                        isAddPanelVisible || isEditPanelVisible
+                            ? Container(
+                                padding: EdgeInsets.only(
+                                  top: 20.0,
+                                  left: 10.0,
+                                  right: 10.0,
+                                  bottom: 10.0,
+                                ),
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  panelHeader,
+                                  style: GoogleFonts.openSans(
+                                    fontSize: 19,
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                        _buildAddEditPanel(userId),
                       ],
                     ),
                   ),
-                  // Separator
-                  Container(
-                    height: 10,
-                    color: Color(0xFFE63946),
-                    margin: EdgeInsets.only(bottom: 10),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(10.0),
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          S.of(context).available_options,
-                          style: GoogleFonts.openSans(
-                            fontSize: 19,
-                          ),
-                        ),
-                        Tooltip(
-                          message: S.of(context).add_new_option,
-                          padding: EdgeInsets.all(5.0),
-                          textStyle: GoogleFonts.openSans(
-                              fontSize: 15, color: Colors.white),
-                          decoration: BoxDecoration(color: Color(0xFF212529)),
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                isEditPanelVisible = false;
-                                isAddPanelVisible = true;
-                                panelHeader = S.of(context).add_option;
-                                workHourOption = OptionModel();
-                                buttonTitle = S.of(context).add;
-                              });
-                            },
-                            child: Icon(Icons.add_sharp),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF5F3F4),
-                        border: Border.all(
-                          width: 1,
-                          color: Color(0xFFD3D3D3),
-                        ),
-                      ),
-                      child: _getWorkHourOptions(),
-                    ),
-                  ),
-                  isAddPanelVisible || isEditPanelVisible
-                      ? Container(
-                          padding: EdgeInsets.only(
-                            top: 20.0,
-                            left: 10.0,
-                            right: 10.0,
-                            bottom: 10.0,
-                          ),
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            panelHeader,
-                            style: GoogleFonts.openSans(
-                              fontSize: 19,
-                            ),
-                          ),
-                        )
-                      : Container(),
-                  _buildAddEditPanel(),
-                ],
-              ),
-            ),
-          ),
+                );
+              }),
         ),
       ),
     );
   }
 
-  Widget _getWorkHourOptions() {
+  Widget _getWorkHourOptions(String userId) {
     return StreamBuilder(
-      stream: OptionRepository.getWorkHourOptions(),
+      stream: OptionRepository.getWorkHourOptions(userId),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text(S.of(context).error_occurred);
+          return Text(S.of(context).option_data_load_error);
         }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+
+        if (!snapshot.hasData) {
+          return AppLoading(S.of(context).option_data_load);
         }
 
         var options = snapshot.data.docs;
@@ -276,8 +294,9 @@ class _OptionsScreenState extends State<OptionsScreen> {
     );
   }
 
-  void onAddOption() async {
+  void onAddOption(String userId) async {
     var workHourOption = OptionModel(
+      userId: userId,
       name: optionNameController.text.trim(),
       description: optionDescController.text.trim(),
     );
@@ -301,9 +320,10 @@ class _OptionsScreenState extends State<OptionsScreen> {
     });
   }
 
-  void onEditOption() async {
+  void onEditOption(String userId) async {
     var updatedOption = OptionModel(
       id: workHourOption.id,
+      userId: userId,
       name: optionNameController.text.trim(),
       description: optionDescController.text.trim(),
     );
@@ -323,7 +343,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
     });
   }
 
-  Widget _buildAddEditPanel() {
+  Widget _buildAddEditPanel(String userId) {
     if (!isAddPanelVisible && !isEditPanelVisible) return Container();
 
     if (isEditPanelVisible) {
@@ -451,7 +471,9 @@ class _OptionsScreenState extends State<OptionsScreen> {
                   ),
                   child: InkWell(
                     onTap: () {
-                      isAddPanelVisible ? onAddOption() : onEditOption();
+                      isAddPanelVisible
+                          ? onAddOption(userId)
+                          : onEditOption(userId);
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(

@@ -53,7 +53,7 @@
     "edit_option": "Option Aktualisieren",
     "add_new_option": "Neue Option hinzufügen",
     "add": "Hinzufügen",
-    "cancel": "Stornieren",
+    "cancel": "Abbrechnen",
     "option_name": "Name",
     "option_description": "Beschreibung",
     "new_option_added": "Neue Option \"{optionName}\" wurde hinzugefügt.",

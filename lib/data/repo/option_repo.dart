@@ -5,9 +5,10 @@ import 'package:work_hour_tracker/data/model/option_model.dart';
 class OptionRepository {
   static final _dbProvider = DbProvider.provider;
 
-  static Stream<QuerySnapshot> getWorkHourOptions() {
+  static Stream<QuerySnapshot> getWorkHourOptions(String userId) {
     return _dbProvider.database
         .collection('workHourOptions')
+        .where('userId', isEqualTo: userId)
         .snapshots(includeMetadataChanges: true);
   }
 
