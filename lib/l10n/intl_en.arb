@@ -154,7 +154,7 @@
     },
     "work_hour_options": "Work Hour Options",
     "@work_hour_options": {
-        "description": "Settings option title for Work Hour Options"
+        "description": "Settings title for Work Hour Options"
     },
     "details": "Details",
     "@details": {
@@ -307,5 +307,17 @@
     "millisecond_unit": "ms",
     "@millisecond_unit": {
         "description": "Millisecond unit"
+    },
+    "application_settings": "Application",
+    "@application_settings": {
+        "description": "Settings header for application"
+    },
+    "display_settings": "Display",
+    "@display_settings": {
+        "description": "Settings title for display"
+    },
+    "language": "Language",
+    "@language": {
+        "description": "Settings title for Languages"
     }
 }

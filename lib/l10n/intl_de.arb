@@ -76,5 +76,8 @@
     "hour_unit": "h",
     "minute_unit": "m",
     "second_unit": "s",
-    "millisecond_unit": "ms"
+    "millisecond_unit": "ms",
+    "application_settings": "Anwendung",
+    "display_settings": "Darstellung",
+    "language": "Sprache"
 }

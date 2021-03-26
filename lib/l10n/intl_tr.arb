@@ -76,5 +76,8 @@
     "hour_unit": "s",
     "minute_unit": "d",
     "second_unit": "sn",
-    "millisecond_unit": "ms"
+    "millisecond_unit": "ms",
+    "application_settings": "Uygulama",
+    "display_settings": "Ekran",
+    "language": "Dil"
 }
