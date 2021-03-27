@@ -79,5 +79,9 @@
     "millisecond_unit": "ms",
     "application_settings": "Uygulama",
     "display_settings": "Ekran",
-    "language": "Dil"
+    "language": "Dil",
+    "settings_data_load": "Ayarlar yükleniyor.",
+    "settings_data_load_error": "Ayarlar yüklenirken hata oluştu.",
+    "session_data_load": "Oturum bilgileri yükleniyor.",
+    "session_data_load_error": "Oturum bilgileri yüklenirken hata oluştu."
 }

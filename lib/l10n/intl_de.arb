@@ -79,5 +79,9 @@
     "millisecond_unit": "ms",
     "application_settings": "Anwendung",
     "display_settings": "Darstellung",
-    "language": "Sprache"
+    "language": "Sprache",
+    "settings_data_load": "Einstellungen werden geladen.",
+    "settings_data_load_error": "Beim Laden der Einstellungen ist ein Fehler aufgetreten.",
+    "session_data_load": "Sitzungsdaten werden gelanden.",
+    "session_data_load_error": "Beim Laden der Sitzungsdaten ist ein Fehler aufgetreten."
 }

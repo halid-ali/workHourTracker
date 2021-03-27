@@ -319,5 +319,21 @@
     "language": "Language",
     "@language": {
         "description": "Settings title for Languages"
+    },
+    "settings_data_load": "Settings are being loaded.",
+    "@settings_data_load": {
+        "description": "Loading message while settings are being loaded"
+    },
+    "settings_data_load_error": "Error occurred while loading settings.",
+    "@settings_data_load_error": {
+        "description": "Error message when settings load fails"
+    },
+    "session_data_load": "Session data is being loaded.",
+    "@session_data_load": {
+        "description": "Loading message while session data is being loaded"
+    },
+    "session_data_load_error": "Error occurred while loading session data.",
+    "@session_data_load_error": {
+        "description": "Error message when session data load fails"
     }
 }
