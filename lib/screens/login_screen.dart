@@ -1,14 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:work_hour_tracker/data/model/user_model.dart';
 import 'package:work_hour_tracker/data/repo/user_repo.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/routes.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/utils/session_manager.dart';
 import 'package:work_hour_tracker/widgets/app_button.dart';
-import 'package:work_hour_tracker/widgets/app_loading.dart';
 import 'package:work_hour_tracker/widgets/app_text_field.dart';
 import 'package:work_hour_tracker/widgets/app_toast.dart';
 
@@ -22,7 +19,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  String _selectedUser;
 
   @override
   Widget build(BuildContext context) {
