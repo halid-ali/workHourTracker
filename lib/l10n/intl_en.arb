@@ -336,14 +336,6 @@
     "@session_data_load_error": {
         "description": "Error message when session data load fails"
     },
-    "invalid_username": "Username cannot be empty.",
-    "@invalid_username": {
-        "description": "Error message when username is empty"
-    },
-    "invalid_password": "Password cannot be empty.",
-    "@invalid_password": {
-        "description": "Error message when password is empty"
-    },
     "user_not_found": "Username cannot be found.",
     "@user_not_found": {
         "description": "Error message when username not found during login"

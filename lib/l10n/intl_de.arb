@@ -16,9 +16,9 @@
     "repeat_password": "Passwort wiederholen",
     "email": "Email",
     "required_field": "Erforderlich",
-    "username_empty": "Benutzername darf nicht null sein.",
+    "username_empty": "Benutzername darf nicht leer sein.",
     "username_invalid_length": "Die Länge muss zwischen 5-15 liegen.",
-    "password_empty": "Das Passwort darf nicht null sein.",
+    "password_empty": "Das Passwort darf nicht leer sein.",
     "password_invalid_length": "Die Passwortlänge muss zwischen 7 und 20 liegen.",
     "password_buffer_prefix": "Das Passwort muss mindestens",
     "password_contains_uppercase": "\neinen Großbuchstaben enthalten.",
@@ -26,7 +26,7 @@
     "password_contains_digit": "\neine Ziffer enthalten.",
     "password_contains_special_character": "\nein Sonderzeichen enthalten.",
     "password_not_match": "Passwort stimmt nicht überein.",
-    "email_empty": "E-Mail kann nicht null sein.",
+    "email_empty": "E-Mail darf nicht leer sein.",
     "email_invalid": "Ungültige E-Mail-Adresse.",
     "select_user": "Wähle den Benutzer",
     "or": "oder",
@@ -84,7 +84,5 @@
     "settings_data_load_error": "Beim Laden der Einstellungen ist ein Fehler aufgetreten.",
     "session_data_load": "Sitzungsdaten werden gelanden.",
     "session_data_load_error": "Beim Laden der Sitzungsdaten ist ein Fehler aufgetreten.",
-    "invalid_username": "Benutzername darf nicht leer sein.",
-    "invalid_password": "Passwort darf nicht leer sein.",
     "user_not_found": "Benutzername kann nicht gefunden werden."
 }

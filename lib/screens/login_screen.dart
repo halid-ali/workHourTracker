@@ -193,12 +193,12 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _passwordController.text;
 
     if (username == null || username == '') {
-      AppToast.error(context, S.of(context).invalid_username);
+      AppToast.error(context, S.of(context).username_empty);
       return;
     }
 
     if (password == null || password == '') {
-      AppToast.error(context, S.of(context).invalid_password);
+      AppToast.error(context, S.of(context).password_empty);
       return;
     }
 

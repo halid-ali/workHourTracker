@@ -84,7 +84,5 @@
     "settings_data_load_error": "Ayarlar yüklenirken hata oluştu.",
     "session_data_load": "Oturum bilgileri yükleniyor.",
     "session_data_load_error": "Oturum bilgileri yüklenirken hata oluştu.",
-    "invalid_username": "Kullanıcı adı boş olamaz.",
-    "invalid_password": "Şifre boş olamaz.",
     "user_not_found": "Kullanıcı adı bulunamadı."
 }
