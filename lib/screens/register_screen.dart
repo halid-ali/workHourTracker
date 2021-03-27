@@ -186,6 +186,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   String _validateUsername(String username) {
+    username = username.trim();
+
     if (username == null || username.isEmpty) {
       return S.of(context).username_empty;
     }

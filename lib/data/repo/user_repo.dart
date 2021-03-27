@@ -11,14 +11,15 @@ class UserRepository {
         .snapshots(includeMetadataChanges: true);
   }
 
-  static Future<UserModel> getUser(String id) async {
+  static Future<UserModel> getUser(String username) async {
     return _dbProvider.database
         .collection('users')
-        .doc(id)
         .get()
-        .then<UserModel>((value) {
-      return UserModel.fromJson(id, value.data());
-    });
+        .then<UserModel>((value) => value.docs
+            .map((e) => UserModel.fromJson(e.id, e.data()))
+            .where((e) => e.username == username)
+            .first)
+        .catchError((error) => null);
   }
 
   static Future<String> addUser(UserModel user) async {

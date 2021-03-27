@@ -20,6 +20,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   String _selectedUser;
 
@@ -95,7 +96,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Expanded(child: Container()),
-                                dropdownList(),
+                                AppTextFormField(
+                                  hintText: S.of(context).username,
+                                  controller: _usernameController,
+                                  validateFunc: (val) => '',
+                                  onSubmitFunc: _login,
+                                  isObscureText: false,
+                                ),
                                 SizedBox(height: 20),
                                 AppTextFormField(
                                   hintText: S.of(context).password,
@@ -157,89 +164,69 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget dropdownList() {
-    return StreamBuilder(
-      stream: UserRepository.getUsers(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return Text(S.of(context).error_occurred);
-        }
-        if (!snapshot.hasData) {
-          return AppLoading('Users are being loaded.');
-        }
-
-        var users = snapshot.data.docs;
-        users.sort(
-          (a, b) => a
-              .data()['username']
-              .toString()
-              .compareTo(b.data()['username'].toString()),
-        );
-
-        //TODO: change dropdown button by a textfield
-        return DropdownButton<String>(
-          isExpanded: true,
-          value: _selectedUser,
-          hint: Text(S.of(context).select_user),
-          style: GoogleFonts.openSans(fontSize: 17),
-          onChanged: (String value) {
-            setState(() {
-              _selectedUser = value;
-            });
-          },
-          items: users
-              .map<DropdownMenuItem<String>>(
-                (e) => DropdownMenuItem<String>(
-                  value: e.id,
-                  child: Text('${e.data()['username']}'),
-                ),
-              )
-              .toList(),
-        );
-      },
-    );
-  }
-
   Widget divider() {
-    return Row(
-      children: [
-        Expanded(
-          child: Divider(
-            height: 50,
-            thickness: 1,
-            color: Color(0xFFD3D3D3),
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 20),
+      child: Row(
+        children: [
+          Expanded(
+            child: Divider(
+              height: 50,
+              thickness: 1,
+              color: Color(0xFFD3D3D3),
+            ),
           ),
-        ),
-        Container(
-          padding: EdgeInsets.all(10.0),
-          child: Text(S.of(context).or),
-        ),
-        Expanded(
-          child: Divider(
-            height: 50,
-            thickness: 1,
-            color: Color(0xFFD3D3D3),
+          Container(
+            padding: EdgeInsets.all(10.0),
+            child: Text(S.of(context).or),
           ),
-        ),
-      ],
+          Expanded(
+            child: Divider(
+              height: 50,
+              thickness: 1,
+              color: Color(0xFFD3D3D3),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   void _login() async {
-    if (_selectedUser == null) {
-      AppToast.info(context, S.of(context).select_user_toast);
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text;
+
+    if (username == null || username == '') {
+      AppToast.error(context, S.of(context).invalid_username);
       return;
     }
 
-    UserModel user = await UserRepository.getUser(_selectedUser);
-
-    if (_passwordController.text == user.password) {
-      SessionManager.write(SessionKey.userId, user.id);
-      SessionManager.write(SessionKey.username, user.username);
-
-      Navigator.pushNamed(context, RouteGenerator.homePage);
-    } else {
-      AppToast.error(context, S.of(context).wrong_password);
+    if (password == null || password == '') {
+      AppToast.error(context, S.of(context).invalid_password);
+      return;
     }
+
+    await UserRepository.getUser(username).then((user) {
+      if (user != null) {
+        if (password == user.password) {
+          SessionManager.write(SessionKey.userId, user.id);
+          SessionManager.write(SessionKey.username, user.username);
+
+          Navigator.pushNamed(context, RouteGenerator.homePage);
+        } else {
+          AppToast.error(context, S.of(context).wrong_password);
+          return;
+        }
+      } else {
+        AppToast.error(context, S.of(context).user_not_found);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }
