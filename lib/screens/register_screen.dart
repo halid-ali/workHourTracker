@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:work_hour_tracker/data/model/settings_model.dart';
 import 'package:work_hour_tracker/data/model/user_model.dart';
+import 'package:work_hour_tracker/data/repo/settings_repo.dart';
 import 'package:work_hour_tracker/data/repo/user_repo.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/routes.dart';
@@ -170,6 +172,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
 
       UserRepository.addUser(user).then((value) {
+        SettingsRepository.addSettings(SettingsModel(
+          userId: value,
+          language: 'en',
+        ));
         AppToast.success(context, S.of(context).successful_register_message);
         Navigator.pushNamed(context, RouteGenerator.loginPage);
       }).catchError((error) {

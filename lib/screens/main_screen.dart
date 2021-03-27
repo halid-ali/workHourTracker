@@ -6,8 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:work_hour_tracker/data/model/settings_model.dart';
 import 'package:work_hour_tracker/data/model/slot_model.dart';
+import 'package:work_hour_tracker/data/repo/settings_repo.dart';
 import 'package:work_hour_tracker/data/repo/slot_repo.dart';
+import 'package:work_hour_tracker/main.dart';
 import 'package:work_hour_tracker/utils/session_manager.dart';
 import 'package:work_hour_tracker/utils/status.dart';
 import 'package:work_hour_tracker/utils/work_hour_slot.dart';
@@ -28,10 +31,10 @@ class MainScreen extends StatefulWidget {
   MainScreen({Key key}) : super(key: key);
 
   @override
-  _MainLoadScreen createState() => _MainLoadScreen();
+  _MainScreen createState() => _MainScreen();
 }
 
-class _MainLoadScreen extends State<MainScreen> {
+class _MainScreen extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -77,75 +80,103 @@ class _MainLoadScreen extends State<MainScreen> {
                   final userId = snapshot.data;
 
                   return StreamBuilder(
-                    stream:
-                        SlotRepository.getWorkHourSlotsByDate(getDayStart()),
+                    stream: SettingsRepository.getSettingsByUserId(userId),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
-                        return AppLoading(S.of(context).workhour_data_load);
+                        return AppLoading(S.of(context).settings_data_load);
                       }
 
                       if (snapshot.hasError) {
-                        return Text(S.of(context).workhour_data_load_error);
+                        return Text(S.of(context).settings_data_load_error);
                       }
 
-                      final slots = snapshot.data.docs
-                          .map((e) => SlotModel.fromJson(e.id, e.data()))
-                          .where((e) => e.userId == userId)
-                          .toList();
+                      final settingsData = snapshot.data.docs.first;
+                      final settings = SettingsModel.fromJson(
+                        settingsData.id,
+                        settingsData.data(),
+                      );
+                      SessionManager.write(SessionKey.settingsId, settings.id);
+                      final lang = settings.language;
 
                       return StreamBuilder(
-                        stream: OptionRepository.getWorkHourOptions(userId),
+                        stream: SlotRepository.getWorkHourSlotsByDate(
+                            getDayStart()),
                         builder:
                             (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (!snapshot.hasData) {
-                            return AppLoading(S.of(context).option_data_load);
+                            return AppLoading(S.of(context).workhour_data_load);
                           }
 
                           if (snapshot.hasError) {
-                            return Text(S.of(context).option_data_load_error);
+                            return Text(S.of(context).workhour_data_load_error);
                           }
 
-                          var options = snapshot.data.docs
-                              .map((e) => OptionModel.fromJson(e.id, e.data()))
+                          final slots = snapshot.data.docs
+                              .map((e) => SlotModel.fromJson(e.id, e.data()))
+                              .where((e) => e.userId == userId)
                               .toList();
-                          options.sort((a, b) => a.name.compareTo(b.name));
 
-                          if (slots.isEmpty ||
-                              slots.last.timerStatus == Status.stopped.value) {
-                            return MainScreenContent(
-                              userId: userId,
-                              lastOption: null,
-                              options: options,
-                              slots: slots,
-                            );
-                          } else {
-                            return FutureBuilder(
-                              future: OptionRepository.getWorkHourOption(
-                                  slots.last.optionId),
-                              builder: (context,
-                                  AsyncSnapshot<OptionModel> snapshot) {
-                                if (!snapshot.hasData) {
-                                  return AppLoading(
-                                      S.of(context).last_option_data_load);
-                                }
+                          return StreamBuilder(
+                            stream: OptionRepository.getWorkHourOptions(userId),
+                            builder: (context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (!snapshot.hasData) {
+                                return AppLoading(
+                                    S.of(context).option_data_load);
+                              }
 
-                                if (snapshot.hasError) {
-                                  return Text(S
-                                      .of(context)
-                                      .last_option_data_load_error);
-                                }
+                              if (snapshot.hasError) {
+                                return Text(
+                                    S.of(context).option_data_load_error);
+                              }
 
-                                final option = snapshot.data;
+                              var options = snapshot.data.docs
+                                  .map((e) =>
+                                      OptionModel.fromJson(e.id, e.data()))
+                                  .toList();
+                              options.sort((a, b) => a.name.compareTo(b.name));
 
+                              if (slots.isEmpty ||
+                                  slots.last.timerStatus ==
+                                      Status.stopped.value) {
                                 return MainScreenContent(
+                                  lang: lang,
                                   userId: userId,
-                                  lastOption: option,
+                                  lastOption: null,
                                   options: options,
                                   slots: slots,
                                 );
-                              },
-                            );
-                          }
+                              } else {
+                                return FutureBuilder(
+                                  future: OptionRepository.getWorkHourOption(
+                                      slots.last.optionId),
+                                  builder: (context,
+                                      AsyncSnapshot<OptionModel> snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return AppLoading(
+                                          S.of(context).last_option_data_load);
+                                    }
+
+                                    if (snapshot.hasError) {
+                                      return Text(S
+                                          .of(context)
+                                          .last_option_data_load_error);
+                                    }
+
+                                    final option = snapshot.data;
+
+                                    return MainScreenContent(
+                                      lang: lang,
+                                      userId: userId,
+                                      lastOption: option,
+                                      options: options,
+                                      slots: slots,
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                          );
                         },
                       );
                     },
@@ -167,12 +198,19 @@ class _MainLoadScreen extends State<MainScreen> {
 }
 
 class MainScreenContent extends StatefulWidget {
+  final String lang;
   final String userId;
   final OptionModel lastOption;
   final List<OptionModel> options;
   final List<SlotModel> slots;
 
-  MainScreenContent({this.userId, this.lastOption, this.options, this.slots});
+  MainScreenContent({
+    this.lang,
+    this.userId,
+    this.lastOption,
+    this.options,
+    this.slots,
+  });
 
   @override
   _MainScreenContent createState() => _MainScreenContent();
@@ -196,6 +234,9 @@ class _MainScreenContent extends State<MainScreenContent> {
       }
     });
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => WorkHourTracker.of(context).setLocale(Locale(widget.lang)),
+    );
 
     Timer.periodic(
       displayFormat == DisplayFormat.hourMinute

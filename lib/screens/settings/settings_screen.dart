@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/routes.dart';
+import 'package:work_hour_tracker/screens/settings/languages_screen.dart';
 import 'package:work_hour_tracker/screens/settings/options_screen.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/widgets/fade_transition.dart';
@@ -71,45 +72,38 @@ class SettingsScreen extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
+                          Container(
+                            child: Text(
+                              S.of(context).application_settings,
+                              style: GoogleFonts.openSans(
+                                fontSize: 17,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            padding: EdgeInsets.all(10.0),
+                            alignment: Alignment.centerLeft,
+                          ),
+                          _buildTextButton(
+                            S.of(context).work_hour_options,
+                            () => _onWorkHourOptionsClick(context),
+                          ),
                           SizedBox(height: 40),
-                          TextButton(
-                            child: Container(
-                              padding: EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                border: Border.symmetric(
-                                  horizontal: BorderSide(
-                                    width: 1,
-                                    color: Color(0xFFD3D3D3),
-                                  ),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    child: Text(
-                                      S.of(context).work_hour_options,
-                                      style: GoogleFonts.openSans(
-                                        fontSize: 17,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                  Icon(
-                                    Icons.arrow_forward_ios_sharp,
-                                    color: Colors.black,
-                                    size: 17,
-                                  ),
-                                ],
+                          Container(
+                            child: Text(
+                              S.of(context).display_settings,
+                              style: GoogleFonts.openSans(
+                                fontSize: 17,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
-                            onPressed: () => Navigator.push(
-                              context,
-                              FadeRouteTransition(
-                                page: OptionsScreen(),
-                              ),
-                            ),
+                            padding: EdgeInsets.all(10.0),
+                            alignment: Alignment.centerLeft,
+                          ),
+                          _buildTextButton(
+                            S.of(context).language,
+                            () => _onLanguageOptionsClick(context),
                           ),
                         ],
                       ),
@@ -120,6 +114,60 @@ class SettingsScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextButton(String text, Function clickCallback) {
+    return TextButton(
+      child: Container(
+        padding: EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+          border: Border.symmetric(
+            horizontal: BorderSide(
+              width: 1,
+              color: Color(0xFFD3D3D3),
+            ),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              child: Text(
+                text,
+                style: GoogleFonts.openSans(
+                  fontSize: 17,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios_sharp,
+              color: Colors.black,
+              size: 17,
+            ),
+          ],
+        ),
+      ),
+      onPressed: clickCallback,
+    );
+  }
+
+  void _onWorkHourOptionsClick(BuildContext context) {
+    Navigator.push(
+      context,
+      FadeRouteTransition(
+        page: OptionsScreen(),
+      ),
+    );
+  }
+
+  void _onLanguageOptionsClick(BuildContext context) {
+    Navigator.push(
+      context,
+      FadeRouteTransition(
+        page: LanguagesScreen(),
       ),
     );
   }

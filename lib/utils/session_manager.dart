@@ -38,7 +38,7 @@ class SessionManager {
   }
 }
 
-enum SessionKey { userId, username }
+enum SessionKey { settingsId, userId, username }
 
 extension ParseToString on SessionKey {
   String get value => this.toString().split('.').last;

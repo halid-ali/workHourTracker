@@ -8,6 +8,7 @@ import 'package:work_hour_tracker/routes.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/utils/session_manager.dart';
 import 'package:work_hour_tracker/widgets/app_button.dart';
+import 'package:work_hour_tracker/widgets/app_loading.dart';
 import 'package:work_hour_tracker/widgets/app_text_field.dart';
 import 'package:work_hour_tracker/widgets/app_toast.dart';
 
@@ -163,8 +164,8 @@ class _LoginScreenState extends State<LoginScreen> {
         if (snapshot.hasError) {
           return Text(S.of(context).error_occurred);
         }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+        if (!snapshot.hasData) {
+          return AppLoading('Users are being loaded.');
         }
 
         var users = snapshot.data.docs;
@@ -174,6 +175,8 @@ class _LoginScreenState extends State<LoginScreen> {
               .toString()
               .compareTo(b.data()['username'].toString()),
         );
+
+        //TODO: change dropdown button by a textfield
         return DropdownButton<String>(
           isExpanded: true,
           value: _selectedUser,

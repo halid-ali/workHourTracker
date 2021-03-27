@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
-import 'package:work_hour_tracker/main.dart';
 import 'package:work_hour_tracker/routes.dart';
 import 'package:work_hour_tracker/utils/login.dart';
 import 'package:work_hour_tracker/widgets/app_drawer_menu.dart';
@@ -19,10 +18,8 @@ class AppDrawer extends StatelessWidget {
           return Drawer(
             child: Column(
               children: [
-                _buildLanguagesRow(context),
-                Divider(height: 20),
                 Container(
-                  height: 180,
+                  height: 200,
                   child: Image.asset(
                     'chronometer.png',
                     width: 180,
@@ -43,33 +40,6 @@ class AppDrawer extends StatelessWidget {
             ),
           );
         });
-  }
-
-  Widget _buildLanguagesRow(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      padding: EdgeInsets.only(top: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildButton(context, 'england', 'en'),
-          Text('|'),
-          _buildButton(context, 'deutschland', 'de'),
-          Text('|'),
-          _buildButton(context, 'turkiye', 'tr'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildButton(BuildContext context, String flag, String locale) {
-    return InkWell(
-      onTap: () => WorkHourTracker.of(context).setLocale(Locale(locale)),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Text(locale.toUpperCase()),
-      ),
-    );
   }
 
   Widget _getButtons(BuildContext context) {

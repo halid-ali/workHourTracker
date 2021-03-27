@@ -21,8 +21,14 @@ class UserRepository {
     });
   }
 
-  static Future<void> addUser(UserModel user) async {
-    await _dbProvider.database.collection('users').doc().set(user.toJson());
+  static Future<String> addUser(UserModel user) async {
+    String id;
+    await _dbProvider.database
+        .collection('users')
+        .add(user.toJson())
+        .then((value) => id = value.id);
+
+    return id;
   }
 
   static Future<void> updateUser(UserModel user) async {
