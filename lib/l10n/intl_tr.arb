@@ -84,5 +84,8 @@
     "settings_data_load_error": "Ayarlar yüklenirken hata oluştu.",
     "session_data_load": "Oturum bilgileri yükleniyor.",
     "session_data_load_error": "Oturum bilgileri yüklenirken hata oluştu.",
-    "user_not_found": "Kullanıcı adı bulunamadı."
+    "user_not_found": "Kullanıcı adı bulunamadı.",
+    "history": "Geçmiş",
+    "history_load": "Geçmiş yükleniyor.",
+    "history_load_error": "Geçmiş yüklenirken hata oluştu."
 }

@@ -50,7 +50,7 @@ class _MainScreen extends State<MainScreen> {
                 style: GoogleFonts.notoSerif(fontSize: 25, letterSpacing: 0.7),
               ),
               Text(
-                'v1.1',
+                'v1.2',
                 style: GoogleFonts.notoSerif(fontSize: 25, letterSpacing: 0.7),
               ),
             ],

@@ -339,5 +339,17 @@
     "user_not_found": "Username cannot be found.",
     "@user_not_found": {
         "description": "Error message when username not found during login"
+    },
+    "history": "History",
+    "@history": {
+        "description": "History screen/button text"
+    },
+    "history_load": "History is being loaded.",
+    "@history_load": {
+        "description": "Loading message while history is being loaded"
+    },
+    "history_load_error": "Error occurred while loading history.",
+    "@history_load_error": {
+        "description": "Error message when history load fails"
     }
 }

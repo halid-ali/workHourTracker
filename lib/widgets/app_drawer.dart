@@ -53,6 +53,13 @@ class AppDrawer extends StatelessWidget {
             children: [
               Divider(height: 5),
               DrawerMenu(
+                text: S.of(context).history,
+                icon: Icons.history_sharp,
+                func: () =>
+                    Navigator.pushNamed(context, RouteGenerator.historyPage),
+              ),
+              Divider(height: 5),
+              DrawerMenu(
                 text: S.of(context).settings,
                 icon: Icons.settings_sharp,
                 func: () =>

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
+import 'package:work_hour_tracker/screens/history/history_screen.dart';
 import 'package:work_hour_tracker/screens/login_screen.dart';
 import 'package:work_hour_tracker/screens/main_screen.dart';
 import 'package:work_hour_tracker/screens/register_screen.dart';
@@ -10,6 +11,7 @@ class RouteGenerator {
   static const loginPage = '/login';
   static const registerPage = '/register';
   static const settingsPage = '/settings';
+  static const historyPage = '/history';
 
   const RouteGenerator._();
 
@@ -30,6 +32,10 @@ class RouteGenerator {
       case settingsPage:
         return MaterialPageRoute<SettingsScreen>(
           builder: (_) => SettingsScreen(),
+        );
+      case historyPage:
+        return MaterialPageRoute<HistoryScreen>(
+          builder: (_) => HistoryScreen(),
         );
       default:
         throw RouteException(S.current.route_exception_message);
