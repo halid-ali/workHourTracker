@@ -15,8 +15,12 @@ class AppLoading extends StatelessWidget {
           strokeWidth: 1,
           valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF495057)),
         ),
-        SizedBox(height: 20),
-        Text(text),
+        text.isNotEmpty
+            ? Container(
+                padding: EdgeInsets.only(top: 20),
+                child: Text(text),
+              )
+            : Container(),
       ],
     );
   }

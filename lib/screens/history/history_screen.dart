@@ -6,10 +6,13 @@ import 'package:work_hour_tracker/data/model/slot_model.dart';
 import 'package:work_hour_tracker/data/repo/slot_repo.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/routes.dart';
+import 'package:work_hour_tracker/screens/history/history_detail_screen.dart';
 import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/utils/session_manager.dart';
+import 'package:work_hour_tracker/utils/util.dart';
 import 'package:work_hour_tracker/widgets/app_loading.dart';
 import "package:collection/collection.dart";
+import 'package:work_hour_tracker/widgets/fade_transition.dart';
 
 class HistoryScreen extends StatefulWidget {
   HistoryScreen({Key key}) : super(key: key);
@@ -166,37 +169,49 @@ class _HistoryScreenState extends State<HistoryScreen> {
       items.add(
         Container(
           padding: EdgeInsets.all(10.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: InkWell(
+            onTap: () => Navigator.push(
+              context,
+              FadeRouteTransition(
+                page: HistoryDetailScreen(formatted, slot.value),
+              ),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        formatted,
+                        style: GoogleFonts.openSans(fontSize: 21),
+                      ),
+                    ],
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(
-                      formatted,
-                      style: GoogleFonts.openSans(fontSize: 21),
+                    Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        Util.formatDuration(totalWorkDuration),
+                        style: GoogleFonts.openSans(fontSize: 21),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 5.0),
+                      alignment: Alignment.centerRight,
+                      child: buildDifferenceIndicator(difference),
                     ),
                   ],
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                      formatDuration(totalWorkDuration),
-                      style: GoogleFonts.openSans(fontSize: 21),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(top: 5.0),
-                    alignment: Alignment.centerRight,
-                    child: buildDifferenceIndicator(difference),
-                  ),
-                ],
-              ),
-            ],
+                Container(
+                  padding: EdgeInsets.only(left: 20.0),
+                  child: Icon(Icons.arrow_forward_ios_sharp),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -238,7 +253,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           height: 20,
           alignment: Alignment.centerRight,
           child: Text(
-            formatDuration(duration, addSign: true),
+            Util.formatDuration(duration, addSign: true),
             style: GoogleFonts.robotoMono(),
           ),
         ),
@@ -258,24 +273,5 @@ class _HistoryScreenState extends State<HistoryScreen> {
         .fold(Duration.zero, (p, e) => p + e);
 
     return totalDuration - totalPauseDuration;
-  }
-
-  String formatDuration(Duration duration, {bool addSign = false}) {
-    var buffer = StringBuffer();
-    if (addSign) {
-      buffer.write(duration.isNegative ? '-' : '+');
-    }
-
-    duration = Duration(milliseconds: duration.inMilliseconds.abs());
-
-    var hours = duration.inHours.remainder(60);
-    var minutes = duration.inMinutes.remainder(60);
-
-    buffer.write(
-        hours > 0 ? hours.toString() + S.of(context).hour_unit + ' ' : '');
-    buffer.write(
-        minutes > 0 ? minutes.toString() + S.of(context).minute_unit : '');
-
-    return buffer.toString().padLeft(7, ' ');
   }
 }
