@@ -24,6 +24,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
   final TextEditingController optionDescController = TextEditingController();
   String panelHeader = '';
   String buttonTitle = '';
+  bool isActive = false;
   bool isAddPanelVisible = false;
   bool isEditPanelVisible = false;
   OptionModel workHourOption;
@@ -118,6 +119,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                     setState(() {
                                       isEditPanelVisible = false;
                                       isAddPanelVisible = true;
+                                      isActive = false;
                                       panelHeader = S.of(context).add_option;
                                       workHourOption = OptionModel();
                                       buttonTitle = S.of(context).add;
@@ -257,6 +259,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
                             isEditPanelVisible = true;
                             panelHeader = S.of(context).edit_option;
                             workHourOption = option;
+                            isActive = workHourOption.isActive;
                             buttonTitle = S.of(context).edit;
                           });
                         },
@@ -299,6 +302,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
       userId: userId,
       name: optionNameController.text.trim(),
       description: optionDescController.text.trim(),
+      isActive: isActive,
     );
 
     OptionRepository.addWorkHourOption(workHourOption).then((value) {
@@ -326,6 +330,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
       userId: userId,
       name: optionNameController.text.trim(),
       description: optionDescController.text.trim(),
+      isActive: isActive,
     );
 
     OptionRepository.updateWorkHourOption(updatedOption).then((value) {
@@ -431,6 +436,24 @@ class _OptionsScreenState extends State<OptionsScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                Container(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Checkbox(
+                    value: isActive,
+                    onChanged: (value) {
+                      setState(() {
+                        isActive = value;
+                      });
+                    },
+                  ),
+                ),
+                Text(
+                  S.of(context).active,
+                  style: GoogleFonts.openSans(
+                    fontSize: 15,
+                  ),
+                ),
+                Expanded(child: Container()),
                 Container(
                   padding: EdgeInsets.only(
                     top: 10,

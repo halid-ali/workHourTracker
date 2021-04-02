@@ -351,5 +351,9 @@
     "history_load_error": "Error occurred while loading history.",
     "@history_load_error": {
         "description": "Error message when history load fails"
+    },
+    "active": "Active",
+    "@active": {
+        "description": "Checkbox text in options"
     }
 }

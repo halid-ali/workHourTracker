@@ -87,5 +87,6 @@
     "user_not_found": "Kullanıcı adı bulunamadı.",
     "history": "Geçmiş",
     "history_load": "Geçmiş yükleniyor.",
-    "history_load_error": "Geçmiş yüklenirken hata oluştu."
+    "history_load_error": "Geçmiş yüklenirken hata oluştu.",
+    "active": "Aktif"
 }

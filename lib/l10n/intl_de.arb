@@ -87,5 +87,6 @@
     "user_not_found": "Benutzername kann nicht gefunden werden.",
     "history": "Verlauf",
     "history_load": "Verlauf wird geladen.",
-    "history_load_error": "Beim Laden dem Verlauf ist ein Fehler aufgetreten."
+    "history_load_error": "Beim Laden dem Verlauf ist ein Fehler aufgetreten.",
+    "active": "Aktiv"
 }
