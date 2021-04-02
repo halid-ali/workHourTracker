@@ -558,7 +558,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  contentString.replaceAll('#', '\n').replaceAll('\$', '  '),
+                  contentString,
                   style: GoogleFonts.ibmPlexMono(),
                 ),
               ],
