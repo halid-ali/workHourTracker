@@ -326,6 +326,8 @@ class _MainScreenContent extends State<MainScreenContent> {
     List<DropdownMenuItem<OptionModel>> menuItems = [];
 
     for (var option in widget.options) {
+      if (!option.isActive) continue;
+
       menuItems.add(
         DropdownMenuItem<OptionModel>(
           value: option,
@@ -704,7 +706,7 @@ class _MainScreenContent extends State<MainScreenContent> {
   bool isNone() => getStatus() == Status.none;
 
   void startFunc() {
-    if (isRunning() || isStopped()) return;
+    if (_currentSlot == null || isRunning() || isStopped()) return;
 
     setState(() {
       _currentSlot.start();
@@ -715,7 +717,7 @@ class _MainScreenContent extends State<MainScreenContent> {
   }
 
   void stopFunc() {
-    if (isStopped() || isNone()) return;
+    if (_currentSlot == null || isStopped() || isNone()) return;
 
     setState(() {
       _currentSlot.stop();
@@ -728,6 +730,8 @@ class _MainScreenContent extends State<MainScreenContent> {
   }
 
   void breakFunc() {
+    if (_currentSlot == null || isPaused() || isStopped() || isNone()) return;
+
     setState(() {
       _currentSlot.pause();
     });
