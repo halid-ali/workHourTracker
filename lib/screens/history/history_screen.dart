@@ -242,36 +242,39 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        duration.isNegative
-            ? Transform.rotate(
-                angle: -.78, // -45 deg
-                child: CircleAvatar(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  maxRadius: 10,
-                  child: Icon(
-                    Icons.arrow_downward_sharp,
-                    size: 15,
+        Container(
+          padding: EdgeInsets.only(right: 5.0),
+          child: duration.isNegative
+              ? Transform.rotate(
+                  angle: -.78, // -45 deg
+                  child: CircleAvatar(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    maxRadius: 10,
+                    child: Icon(
+                      Icons.arrow_downward_sharp,
+                      size: 15,
+                    ),
+                  ),
+                )
+              : Transform.rotate(
+                  angle: .78, // 45 deg
+                  child: CircleAvatar(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    maxRadius: 10,
+                    child: Icon(
+                      Icons.arrow_upward_sharp,
+                      size: 15,
+                    ),
                   ),
                 ),
-              )
-            : Transform.rotate(
-                angle: .78, // 45 deg
-                child: CircleAvatar(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
-                  maxRadius: 10,
-                  child: Icon(
-                    Icons.arrow_upward_sharp,
-                    size: 15,
-                  ),
-                ),
-              ),
+        ),
         Container(
           height: 20,
           alignment: Alignment.centerRight,
           child: Text(
-            Util.formatDuration(duration, addSign: true),
+            Util.formatDuration(duration, addSign: true, padLeft: false),
             style: GoogleFonts.robotoMono(),
           ),
         ),
