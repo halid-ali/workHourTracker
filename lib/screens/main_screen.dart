@@ -218,6 +218,7 @@ class MainScreenContent extends StatefulWidget {
 
 class _MainScreenContent extends State<MainScreenContent> {
   final SlidableController _slidableController = SlidableController();
+  final TextEditingController commentController = TextEditingController();
   final DisplayFormat displayFormat = AppSettings.displayFormat;
 
   scheme.ColorScheme _colorScheme;
@@ -386,7 +387,7 @@ class _MainScreenContent extends State<MainScreenContent> {
           TrackButton(
             icon: Icons.save_sharp,
             color: Color(0xFF22333B),
-            onPressCallback: showCommentDialog,
+            onPressCallback: () {},
             isActiveCallback: () => true,
           ),
         ],
@@ -645,8 +646,8 @@ class _MainScreenContent extends State<MainScreenContent> {
     );
   }
 
-  void showCommentDialog() {
-    showDialog<AlertDialog>(
+  Future<void> showCommentDialog() {
+    return showDialog<AlertDialog>(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -681,7 +682,7 @@ class _MainScreenContent extends State<MainScreenContent> {
               children: [
                 TextFormField(
                   maxLines: 9,
-                  controller: null,
+                  controller: commentController,
                   style: GoogleFonts.openSans(),
                   decoration: InputDecoration(
                     hintText: 'Comment about the option',
@@ -698,7 +699,7 @@ class _MainScreenContent extends State<MainScreenContent> {
                 ),
                 SizedBox(height: 20.0),
                 InkWell(
-                  onTap: () => print('save and stop'),
+                  onTap: () => Navigator.of(context, rootNavigator: true).pop(),
                   child: Container(
                     padding: EdgeInsets.symmetric(
                       vertical: 10,
@@ -793,15 +794,17 @@ class _MainScreenContent extends State<MainScreenContent> {
     print('start tapped at ${DateFormat('HH:mm.ss').format(DateTime.now())}');
   }
 
-  void stopFunc() {
+  void stopFunc() async {
     if (_currentSlot == null || isStopped() || isNone()) return;
 
+    await showCommentDialog();
     setState(() {
-      _currentSlot.stop();
+      _currentSlot.stop(commentController.text);
       _currentOption = null;
       _currentSlot = null;
     });
 
+    commentController.clear();
     AppToast.info(context, S.of(context).timer_stopped);
     print('stopp tapped at ${DateFormat('HH:mm.ss').format(DateTime.now())}');
   }

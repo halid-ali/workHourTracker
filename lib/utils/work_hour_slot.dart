@@ -42,7 +42,7 @@ class WorkHourSlot {
     }
   }
 
-  void stop() {
+  void stop(String comment) {
     workSlot.stopTime = DateTime.now();
 
     if (status == Status.paused) {
@@ -51,6 +51,7 @@ class WorkHourSlot {
     }
 
     workSlot.timerStatus = Status.stopped.value;
+    workSlot.comment = comment;
     SlotRepository.updateWorkHourSlot(workSlot);
   }
 

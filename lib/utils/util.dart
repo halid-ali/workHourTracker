@@ -11,6 +11,9 @@ class Util {
 
     var hours = duration.inHours.remainder(60);
     var minutes = duration.inMinutes.remainder(60);
+    var seconds = duration.inSeconds.remainder(60);
+
+    if (seconds > 0) minutes++;
 
     buffer.write(hours > 0 ? '$hours${S.current.hour_unit} ' : '');
     buffer.write(minutes > 0 ? '$minutes${S.current.minute_unit}' : '');
