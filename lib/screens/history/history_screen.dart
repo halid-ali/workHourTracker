@@ -129,21 +129,24 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     ),
                                   );
 
-                                  return ListView.separated(
-                                    shrinkWrap: true,
-                                    itemCount: groupedSlots.length,
-                                    separatorBuilder: (context, index) {
-                                      return Divider(thickness: 1, height: 1);
-                                    },
-                                    itemBuilder: (context, index) {
-                                      return getSlotList(groupedSlots)[index];
-                                    },
+                                  return Scrollbar(
+                                    thickness: 5,
+                                    hoverThickness: 5,
+                                    showTrackOnHover: true,
+                                    isAlwaysShown: true,
+                                    radius: Radius.zero,
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: groupedSlots.length,
+                                      itemBuilder: (context, index) {
+                                        return getSlotList(groupedSlots)[index];
+                                      },
+                                    ),
                                   );
                                 },
                               );
                             },
                           ),
-                          Divider(thickness: 1, height: 1),
                         ],
                       ),
                     ),
@@ -168,7 +171,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
       items.add(
         Container(
-          padding: EdgeInsets.all(10.0),
+          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
           child: InkWell(
             onTap: () => Navigator.push(
               context,
@@ -176,41 +179,56 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 page: HistoryDetailScreen(formatted, slot.value),
               ),
             ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
+            child: Container(
+              padding: EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                color: Color(0xFFDEE2E6),
+                border: Border.all(
+                  width: 1,
+                  color: Color(0xFFADB5BD),
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         formatted,
                         style: GoogleFonts.openSans(fontSize: 21),
                       ),
+                      Container(
+                        padding: EdgeInsets.only(top: 5.0),
+                        child: Text(
+                          '${slot.value.length} records',
+                          style: GoogleFonts.openSans(
+                            fontSize: 14,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        Util.formatDuration(totalWorkDuration),
-                        style: GoogleFonts.openSans(fontSize: 21),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Container(
+                        child: Text(
+                          Util.formatDuration(totalWorkDuration),
+                          style: GoogleFonts.openSans(fontSize: 21),
+                        ),
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(top: 5.0),
-                      alignment: Alignment.centerRight,
-                      child: buildDifferenceIndicator(difference),
-                    ),
-                  ],
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 20.0),
-                  child: Icon(Icons.arrow_forward_ios_sharp),
-                ),
-              ],
+                      Container(
+                        padding: EdgeInsets.only(top: 5.0, right: 3.0),
+                        child: buildDifferenceIndicator(difference),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

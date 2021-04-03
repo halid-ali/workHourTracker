@@ -259,7 +259,7 @@ class _MainScreenContent extends State<MainScreenContent> {
         SizedBox(height: 20),
         buildButtons(),
         SizedBox(height: 20),
-        _buildListHeader(),
+        buildListHeader(),
         SizedBox(height: 2),
         Expanded(
           child: Container(
@@ -386,8 +386,8 @@ class _MainScreenContent extends State<MainScreenContent> {
           TrackButton(
             icon: Icons.save_sharp,
             color: Color(0xFF22333B),
-            onPressCallback: () {},
-            isActiveCallback: () => false,
+            onPressCallback: showCommentDialog,
+            isActiveCallback: () => true,
           ),
         ],
       ),
@@ -457,7 +457,7 @@ class _MainScreenContent extends State<MainScreenContent> {
     );
   }
 
-  Widget _buildListHeader() {
+  Widget buildListHeader() {
     return HeaderFooter(
       columns: [
         HeaderFooterColumn(
@@ -568,7 +568,7 @@ class _MainScreenContent extends State<MainScreenContent> {
                   padding: EdgeInsets.only(right: 5),
                   alignment: Alignment.centerRight,
                   child: AutoSizeText(
-                    _formatDisplay(breakDuration, true),
+                    formatDisplay(breakDuration, true),
                     minFontSize: 1,
                     maxFontSize: 23,
                     maxLines: 1,
@@ -585,7 +585,7 @@ class _MainScreenContent extends State<MainScreenContent> {
                   padding: EdgeInsets.only(right: 5),
                   alignment: Alignment.centerRight,
                   child: AutoSizeText(
-                    _formatDisplay(totalWorkHour, true),
+                    formatDisplay(totalWorkHour, true),
                     minFontSize: 1,
                     maxFontSize: 23,
                     maxLines: 1,
@@ -614,7 +614,7 @@ class _MainScreenContent extends State<MainScreenContent> {
         .map<Duration>((e) => e.getPauseDuration())
         .fold(Duration.zero, (p, e) => p + e);
 
-    _setColorScheme(totalWork);
+    setColorScheme(totalWork);
 
     return HeaderFooter(
       columns: [
@@ -627,7 +627,7 @@ class _MainScreenContent extends State<MainScreenContent> {
         ),
         HeaderFooterColumn(
           flex: 2,
-          text: _formatDisplay(totalBreak, false),
+          text: formatDisplay(totalBreak, false),
           textColor: _colorScheme.textColor,
           borderColor: _colorScheme.borderColor,
           backgroundColor: _colorScheme.backgroundColor,
@@ -635,7 +635,7 @@ class _MainScreenContent extends State<MainScreenContent> {
         ),
         HeaderFooterColumn(
           flex: 2,
-          text: _formatDisplay(totalWork, false),
+          text: formatDisplay(totalWork, false),
           textColor: _colorScheme.textColor,
           borderColor: _colorScheme.borderColor,
           backgroundColor: _colorScheme.backgroundColor,
@@ -645,7 +645,84 @@ class _MainScreenContent extends State<MainScreenContent> {
     );
   }
 
-  String _formatDisplay(Duration duration, bool isDigitalDisplay) {
+  void showCommentDialog() {
+    showDialog<AlertDialog>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          insetPadding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * .1,
+          ),
+          backgroundColor: Colors.grey[200],
+          title: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Comment'),
+                  InkWell(
+                    onTap: () =>
+                        Navigator.of(context, rootNavigator: true).pop(),
+                    child: Icon(Icons.close_sharp),
+                  ),
+                ],
+              ),
+              Divider(thickness: 1, color: Colors.black),
+            ],
+          ),
+          titlePadding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+          contentPadding: EdgeInsets.all(20.0),
+          shape: Border.all(width: 1, color: Colors.black),
+          content: Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                TextFormField(
+                  maxLines: 9,
+                  controller: null,
+                  style: GoogleFonts.openSans(),
+                  decoration: InputDecoration(
+                    hintText: 'Comment about the option',
+                    hintStyle: GoogleFonts.openSans(color: Color(0xFFCED4DA)),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(0),
+                      borderSide: BorderSide(color: Color(0xFFADB5BD)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(0),
+                      borderSide: BorderSide(color: Color(0xFF6C757D)),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20.0),
+                InkWell(
+                  onTap: () => print('save and stop'),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 30,
+                    ),
+                    color: Color(0xFF6C757D),
+                    child: Text(
+                      'Save and Stop',
+                      style: GoogleFonts.openSans(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  String formatDisplay(Duration duration, bool isDigitalDisplay) {
     String prefix;
     String suffix;
     String prefixUnit = displayFormat == DisplayFormat.hourMinute
@@ -668,7 +745,7 @@ class _MainScreenContent extends State<MainScreenContent> {
         : '$prefix$prefixUnit $suffix$suffixUnit';
   }
 
-  void _setColorScheme(Duration duration) {
+  void setColorScheme(Duration duration) {
     int workHourLimit = 480; // 8 hours
     int overTimeLimit = 570; // 9.5 hours
 

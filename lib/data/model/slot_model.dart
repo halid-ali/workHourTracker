@@ -9,6 +9,7 @@ class SlotModel {
   DateTime stopTime;
   int pauseDuration;
   String timerStatus;
+  String comment;
 
   SlotModel({
     this.id,
@@ -19,6 +20,7 @@ class SlotModel {
     this.stopTime,
     this.pauseDuration = 0,
     this.timerStatus = 'none',
+    this.comment,
   });
 
   factory SlotModel.fromJson(String id, Map<String, dynamic> data) {
@@ -45,6 +47,7 @@ class SlotModel {
       stopTime: stopDatetime,
       pauseDuration: data['pauseDuration'] as int,
       timerStatus: data['timerStatus'] as String,
+      comment: data['comment'] as String,
     );
   }
 
@@ -56,5 +59,6 @@ class SlotModel {
         'stopTime': stopTime,
         'pauseDuration': pauseDuration,
         'timerStatus': timerStatus,
+        'comment': comment,
       };
 }
