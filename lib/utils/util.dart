@@ -24,9 +24,8 @@ class Util {
     buffer.write(hours > 0 ? '$hours${S.current.hour_unit} ' : '');
     buffer.write(minutes > 0 ? '$minutes${S.current.minute_unit}' : '');
 
-    var result = padLeft
-        ? buffer.toString().padLeft(7, ' ')
-        : buffer.toString().padRight(7, ' ');
+    var result = buffer.toString().isEmpty ? '0m' : buffer.toString();
+    result = padLeft ? result.padLeft(7, ' ') : result.padRight(7, ' ');
 
     return result;
   }
