@@ -7,6 +7,7 @@ import 'package:work_hour_tracker/data/repo/option_repo.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 import 'package:work_hour_tracker/utils/util.dart';
 import 'package:work_hour_tracker/widgets/app_loading.dart';
+import 'package:work_hour_tracker/widgets/app_tooltip.dart';
 
 class HistoryItem extends StatefulWidget {
   final SlotModel slot;
@@ -81,14 +82,9 @@ class _HistoryItemState extends State<HistoryItem> {
                       ),
                     ),
                     Expanded(child: Container()),
-                    Tooltip(
-                      message: 'Start time',
-                      padding: EdgeInsets.all(5.0),
-                      margin: EdgeInsets.all(0.0),
-                      textStyle: GoogleFonts.openSans(
-                          fontSize: 15, color: Colors.white),
-                      decoration: BoxDecoration(color: Color(0xFF212529)),
-                      child: Icon(
+                    AppTooltip(
+                      'Start time',
+                      Icon(
                         Icons.timer_sharp,
                         color: Color(0xFF38B000),
                       ),
@@ -102,14 +98,9 @@ class _HistoryItemState extends State<HistoryItem> {
                       ),
                     ),
                     SizedBox(width: 30),
-                    Tooltip(
-                      message: 'Finish time',
-                      padding: EdgeInsets.all(5.0),
-                      margin: EdgeInsets.all(0.0),
-                      textStyle: GoogleFonts.openSans(
-                          fontSize: 15, color: Colors.white),
-                      decoration: BoxDecoration(color: Color(0xFF212529)),
-                      child: Icon(
+                    AppTooltip(
+                      'Finish time',
+                      Icon(
                         Icons.timer_off_sharp,
                         color: Color(0xFFD00000),
                       ),
@@ -129,6 +120,7 @@ class _HistoryItemState extends State<HistoryItem> {
                   color: Color(0xFFADB5BD),
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,15 +141,9 @@ class _HistoryItemState extends State<HistoryItem> {
                       children: [
                         Row(
                           children: [
-                            Tooltip(
-                              message: 'Break',
-                              padding: EdgeInsets.all(5.0),
-                              margin: EdgeInsets.all(0.0),
-                              textStyle: GoogleFonts.openSans(
-                                  fontSize: 15, color: Colors.white),
-                              decoration:
-                                  BoxDecoration(color: Color(0xFF212529)),
-                              child: Icon(
+                            AppTooltip(
+                              'Break',
+                              Icon(
                                 Icons.pause_circle_outline_sharp,
                               ),
                             ),
@@ -171,15 +157,9 @@ class _HistoryItemState extends State<HistoryItem> {
                         SizedBox(height: 10),
                         Row(
                           children: [
-                            Tooltip(
-                              message: 'Work',
-                              padding: EdgeInsets.all(5.0),
-                              margin: EdgeInsets.all(0.0),
-                              textStyle: GoogleFonts.openSans(
-                                  fontSize: 15, color: Colors.white),
-                              decoration:
-                                  BoxDecoration(color: Color(0xFF212529)),
-                              child: Icon(
+                            AppTooltip(
+                              'Work',
+                              Icon(
                                 Icons.play_circle_outline_sharp,
                               ),
                             ),
@@ -234,7 +214,15 @@ class _HistoryItemState extends State<HistoryItem> {
               GestureDetector(
                 child: InkWell(
                   onTap: increasePauseDuration,
-                  child: Icon(Icons.keyboard_arrow_up_sharp, size: 15),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(width: 1, color: Colors.blue),
+                        bottom: BorderSide(width: 1, color: Colors.blue),
+                      ),
+                    ),
+                    child: Icon(Icons.keyboard_arrow_up_sharp, size: 15),
+                  ),
                 ),
                 onLongPress: () => onLongPressCallback(increasePauseDuration),
                 onLongPressEnd: onLongPressEndCallback,
@@ -243,7 +231,14 @@ class _HistoryItemState extends State<HistoryItem> {
               GestureDetector(
                 child: InkWell(
                   onTap: decreasePauseDuration,
-                  child: Icon(Icons.keyboard_arrow_down_sharp, size: 15),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(width: 1, color: Colors.blue),
+                      ),
+                    ),
+                    child: Icon(Icons.keyboard_arrow_down_sharp, size: 15),
+                  ),
                 ),
                 onLongPress: () => onLongPressCallback(decreasePauseDuration),
                 onLongPressEnd: onLongPressEndCallback,
@@ -264,8 +259,8 @@ class _HistoryItemState extends State<HistoryItem> {
         ),
       ),
       child: SizedBox(
-        width: 85,
-        height: 27,
+        width: 86,
+        height: 31,
         child: Container(
           child: TextField(
             maxLines: 1,

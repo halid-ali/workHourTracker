@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:work_hour_tracker/generated/l10n.dart';
 
 class Util {
@@ -28,5 +29,15 @@ class Util {
     result = padLeft ? result.padLeft(7, ' ') : result.padRight(7, ' ');
 
     return result;
+  }
+
+  static DateTime getDayStart() {
+    DateTime toTime = DateTime.now();
+    return DateTime(toTime.year, toTime.month, toTime.day);
+  }
+
+  static Timestamp getDayStartTimestamp() {
+    return Timestamp.fromMillisecondsSinceEpoch(
+        getDayStart().millisecondsSinceEpoch);
   }
 }

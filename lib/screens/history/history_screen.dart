@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,6 +13,7 @@ import 'package:work_hour_tracker/utils/session_manager.dart';
 import 'package:work_hour_tracker/utils/util.dart';
 import 'package:work_hour_tracker/widgets/app_loading.dart';
 import "package:collection/collection.dart";
+import 'package:work_hour_tracker/widgets/app_tooltip.dart';
 import 'package:work_hour_tracker/widgets/fade_transition.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -22,6 +24,9 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
+  FilterBy filterBy = FilterBy.weekly;
+  bool isAscendingSort = true;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -70,7 +75,63 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   Container(
                     height: 10,
                     color: Color(0xFFE63946),
-                    margin: EdgeInsets.only(bottom: 20),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10.0),
+                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFF5F3F4),
+                      border: Border.all(
+                        width: 1,
+                        color: Color(0xFFD3D3D3),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        DropdownButton<FilterBy>(
+                          icon: Icon(Icons.filter_list_sharp),
+                          underline: Container(),
+                          value: filterBy,
+                          items: [
+                            buildDropdownMenuItem(FilterBy.weekly),
+                            buildDropdownMenuItem(FilterBy.monthly),
+                            buildDropdownMenuItem(FilterBy.yearly),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              filterBy = value;
+                            });
+                          },
+                        ),
+                        Expanded(child: Container()),
+                        InkWell(
+                          child: Icon(Icons.arrow_back_ios_sharp),
+                        ),
+                        SizedBox(width: 20),
+                        InkWell(
+                          child: Icon(Icons.arrow_forward_ios_sharp),
+                        ),
+                        SizedBox(width: 20),
+                        AppTooltip(
+                          isAscendingSort
+                              ? 'Sort descending'
+                              : 'Sort ascending',
+                          InkWell(
+                            child: Transform(
+                              alignment: Alignment.center,
+                              transform: Matrix4.rotationX(
+                                  isAscendingSort ? 0 : math.pi),
+                              child: Icon(Icons.sort_sharp),
+                            ),
+                            onTap: () {
+                              setState(() {
+                                isAscendingSort = !isAscendingSort;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Expanded(
                     child: Container(
@@ -82,72 +143,73 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           color: Color(0xFFD3D3D3),
                         ),
                       ),
-                      child: Column(
-                        children: [
-                          FutureBuilder(
-                            future: SessionManager.read(SessionKey.userId),
-                            builder: (context, AsyncSnapshot<String> snapshot) {
+                      child: FutureBuilder(
+                        future: SessionManager.read(SessionKey.userId),
+                        builder: (context, AsyncSnapshot<String> snapshot) {
+                          if (!snapshot.hasData) {
+                            return AppLoading(S.of(context).user_data_load);
+                          }
+
+                          if (snapshot.hasError) {
+                            return Text(S.of(context).user_data_load_error);
+                          }
+
+                          final userId = snapshot.data;
+
+                          return StreamBuilder(
+                            stream:
+                                SlotRepository.getWorkHourSlotsByUser(userId),
+                            builder: (context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
                               if (!snapshot.hasData) {
-                                return AppLoading(S.of(context).user_data_load);
+                                return AppLoading(S.of(context).history_load);
                               }
 
                               if (snapshot.hasError) {
-                                return Text(S.of(context).user_data_load_error);
+                                return Text(S.of(context).history_load_error);
                               }
 
-                              final userId = snapshot.data;
+                              final slotModelDocs = snapshot.data.docs;
+                              final slotModels = slotModelDocs
+                                  .where((e) =>
+                                      SlotModel.fromJson(e.id, e.data())
+                                          .startTime
+                                          .compareTo(Util.getDayStart()) <
+                                      0)
+                                  .map(
+                                      (e) => SlotModel.fromJson(e.id, e.data()))
+                                  .toList();
 
-                              return StreamBuilder(
-                                stream: SlotRepository.getWorkHourSlotsByUser(
-                                    userId),
-                                builder: (context,
-                                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return AppLoading(
-                                        S.of(context).history_load);
-                                  }
+                              isAscendingSort
+                                  ? sortAscending(slotModels)
+                                  : sortDescending(slotModels);
 
-                                  if (snapshot.hasError) {
-                                    return Text(
-                                        S.of(context).history_load_error);
-                                  }
+                              var groupedSlots = groupBy<SlotModel, DateTime>(
+                                slotModels,
+                                (e) => DateTime(
+                                  e.startTime.year,
+                                  e.startTime.month,
+                                  e.startTime.day,
+                                ),
+                              );
 
-                                  final slotModelDocs = snapshot.data.docs;
-                                  final slotModels = slotModelDocs
-                                      .map((e) =>
-                                          SlotModel.fromJson(e.id, e.data()))
-                                      .toList();
-                                  slotModels.sort((a, b) =>
-                                      a.startTime.compareTo(b.startTime));
-                                  var groupedSlots =
-                                      groupBy<SlotModel, DateTime>(
-                                    slotModels,
-                                    (e) => DateTime(
-                                      e.startTime.year,
-                                      e.startTime.month,
-                                      e.startTime.day,
-                                    ),
-                                  );
-
-                                  return Scrollbar(
-                                    thickness: 5,
-                                    hoverThickness: 5,
-                                    showTrackOnHover: true,
-                                    isAlwaysShown: true,
-                                    radius: Radius.zero,
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: groupedSlots.length,
-                                      itemBuilder: (context, index) {
-                                        return getSlotList(groupedSlots)[index];
-                                      },
-                                    ),
-                                  );
-                                },
+                              return Scrollbar(
+                                thickness: 5,
+                                hoverThickness: 5,
+                                showTrackOnHover: true,
+                                isAlwaysShown: true,
+                                radius: Radius.zero,
+                                child: ListView.builder(
+                                  itemCount: groupedSlots.length,
+                                  itemBuilder: (context, index) {
+                                    return getSlotList(
+                                        groupedSlots, index)[index];
+                                  },
+                                ),
                               );
                             },
-                          ),
-                        ],
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -160,8 +222,19 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 
-  List<Widget> getSlotList(Map<DateTime, List<SlotModel>> slots) {
+  Widget buildDropdownMenuItem(FilterBy filter) {
+    return DropdownMenuItem<FilterBy>(
+      value: filter,
+      child: Container(
+        padding: EdgeInsets.only(right: 10),
+        child: Text(filter.value.toUpperCase()),
+      ),
+    );
+  }
+
+  List<Widget> getSlotList(Map<DateTime, List<SlotModel>> slots, int index) {
     List<Widget> items = [];
+    double bottom = index == slots.length - 1 ? 10 : 0;
 
     for (var slot in slots.entries) {
       DateFormat formatter = DateFormat('dd MMM yyyy, EEEE');
@@ -171,7 +244,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
       items.add(
         Container(
-          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, bottom),
           child: InkWell(
             onTap: () => Navigator.push(
               context,
@@ -295,4 +368,22 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
     return totalDuration - totalPauseDuration;
   }
+
+  void sortAscending(List<SlotModel> slotModels) {
+    slotModels.sort((a, b) => b.startTime.compareTo(a.startTime));
+  }
+
+  void sortDescending(List<SlotModel> slotModels) {
+    slotModels.sort((a, b) => a.startTime.compareTo(b.startTime));
+  }
+}
+
+enum FilterBy {
+  weekly,
+  monthly,
+  yearly,
+}
+
+extension FilterByExtension on FilterBy {
+  String get value => this.toString().split('.').last;
 }

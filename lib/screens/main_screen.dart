@@ -13,6 +13,7 @@ import 'package:work_hour_tracker/data/repo/slot_repo.dart';
 import 'package:work_hour_tracker/main.dart';
 import 'package:work_hour_tracker/utils/session_manager.dart';
 import 'package:work_hour_tracker/utils/status.dart';
+import 'package:work_hour_tracker/utils/util.dart';
 import 'package:work_hour_tracker/utils/work_hour_slot.dart';
 import 'package:work_hour_tracker/data/model/option_model.dart';
 import 'package:work_hour_tracker/data/repo/option_repo.dart';
@@ -22,6 +23,7 @@ import 'package:work_hour_tracker/utils/settings.dart';
 import 'package:work_hour_tracker/widgets/app_drawer.dart';
 import 'package:work_hour_tracker/widgets/app_loading.dart';
 import 'package:work_hour_tracker/widgets/app_toast.dart';
+import 'package:work_hour_tracker/widgets/app_tooltip.dart';
 import 'package:work_hour_tracker/widgets/header_footer.dart';
 import 'package:work_hour_tracker/widgets/header_footer_column.dart';
 import 'package:work_hour_tracker/widgets/track_button.dart';
@@ -100,7 +102,7 @@ class _MainScreen extends State<MainScreen> {
 
                       return StreamBuilder(
                         stream: SlotRepository.getWorkHourSlotsByDate(
-                            getDayStart()),
+                            Util.getDayStartTimestamp()),
                         builder:
                             (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (!snapshot.hasData) {
@@ -188,12 +190,6 @@ class _MainScreen extends State<MainScreen> {
         ),
       ),
     );
-  }
-
-  Timestamp getDayStart() {
-    DateTime toTime = DateTime.now();
-    toTime = DateTime(toTime.year, toTime.month, toTime.day);
-    return Timestamp.fromMillisecondsSinceEpoch(toTime.millisecondsSinceEpoch);
   }
 }
 
@@ -339,14 +335,9 @@ class _MainScreenContent extends State<MainScreenContent> {
                 option.name,
                 style: GoogleFonts.openSans(fontSize: 21),
               ),
-              Tooltip(
-                message: option.description,
-                padding: EdgeInsets.all(5.0),
-                margin: EdgeInsets.all(20.0),
-                textStyle:
-                    GoogleFonts.openSans(fontSize: 15, color: Colors.white),
-                decoration: BoxDecoration(color: Color(0xFF212529)),
-                child: Icon(Icons.info_outline_rounded),
+              AppTooltip(
+                option.description,
+                Icon(Icons.info_outline_rounded),
               ),
             ],
           ),
@@ -765,12 +756,6 @@ class _MainScreenContent extends State<MainScreenContent> {
         _colorScheme = scheme.ColorScheme.red();
       }
     });
-  }
-
-  Timestamp getDayStart() {
-    DateTime toTime = DateTime.now();
-    toTime = DateTime(toTime.year, toTime.month, toTime.day);
-    return Timestamp.fromMillisecondsSinceEpoch(toTime.millisecondsSinceEpoch);
   }
 
   Status getStatus() => _currentSlot?.status ?? null;

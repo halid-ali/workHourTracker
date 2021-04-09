@@ -9,6 +9,7 @@ import 'package:work_hour_tracker/utils/platform_info.dart';
 import 'package:work_hour_tracker/utils/session_manager.dart';
 import 'package:work_hour_tracker/widgets/app_loading.dart';
 import 'package:work_hour_tracker/widgets/app_toast.dart';
+import 'package:work_hour_tracker/widgets/app_tooltip.dart';
 import 'package:work_hour_tracker/widgets/fade_transition.dart';
 
 class OptionsScreen extends StatefulWidget {
@@ -107,14 +108,9 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                   fontSize: 19,
                                 ),
                               ),
-                              Tooltip(
-                                message: S.of(context).add_new_option,
-                                padding: EdgeInsets.all(5.0),
-                                textStyle: GoogleFonts.openSans(
-                                    fontSize: 15, color: Colors.white),
-                                decoration:
-                                    BoxDecoration(color: Color(0xFF212529)),
-                                child: InkWell(
+                              AppTooltip(
+                                S.of(context).add_new_option,
+                                InkWell(
                                   onTap: () {
                                     setState(() {
                                       isEditPanelVisible = false;
@@ -228,13 +224,9 @@ class _OptionsScreenState extends State<OptionsScreen> {
                         style: GoogleFonts.openSans(fontSize: 17),
                       ),
                     ),
-                    Tooltip(
-                      message: S.of(context).details,
-                      padding: EdgeInsets.all(5.0),
-                      textStyle: GoogleFonts.openSans(
-                          fontSize: 15, color: Colors.white),
-                      decoration: BoxDecoration(color: Color(0xFF212529)),
-                      child: InkWell(
+                    AppTooltip(
+                      S.of(context).details,
+                      InkWell(
                         onTap: () => _onDetailsTapped(
                           option.name,
                           option.description,
@@ -246,13 +238,9 @@ class _OptionsScreenState extends State<OptionsScreen> {
                       ),
                     ),
                     SizedBox(width: 10),
-                    Tooltip(
-                      message: S.of(context).edit,
-                      padding: EdgeInsets.all(5.0),
-                      textStyle: GoogleFonts.openSans(
-                          fontSize: 15, color: Colors.white),
-                      decoration: BoxDecoration(color: Color(0xFF212529)),
-                      child: InkWell(
+                    AppTooltip(
+                      S.of(context).edit,
+                      InkWell(
                         onTap: () {
                           setState(() {
                             isAddPanelVisible = false;
@@ -270,13 +258,9 @@ class _OptionsScreenState extends State<OptionsScreen> {
                       ),
                     ),
                     SizedBox(width: 10),
-                    Tooltip(
-                      message: S.of(context).delete,
-                      padding: EdgeInsets.all(5.0),
-                      textStyle: GoogleFonts.openSans(
-                          fontSize: 15, color: Colors.white),
-                      decoration: BoxDecoration(color: Color(0xFF212529)),
-                      child: InkWell(
+                    AppTooltip(
+                      S.of(context).delete,
+                      InkWell(
                         onTap: () => _onDeleteTapped(
                           option.id,
                           option.name,
